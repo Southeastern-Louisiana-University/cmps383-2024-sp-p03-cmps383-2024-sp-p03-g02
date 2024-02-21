@@ -4,6 +4,7 @@ using Selu383.SP24.Api.Features.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 // test
+// New Dev-Branch, branch off of this and merge back as you complete things.
 // Add services to the container.
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DataContext")));
 
