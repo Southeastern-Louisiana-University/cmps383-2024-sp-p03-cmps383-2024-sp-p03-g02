@@ -59,7 +59,7 @@ function App() {
         </a>
       </div>
       <h1>Vite + React</h1>
-      {user !== null ? <div>Hello<button onClick = {handleSignout}>Logout</button></div>  :
+      {user !== null ? <div>Hello {user.userName}<button onClick = {handleSignout}>Logout</button></div>  :
       <div className="card">
         <form action="/api/authentication/login" method="POST" 
         style ={{ display: "flex", flexDirection: "column" }} onSubmit={handleSubmit}>
