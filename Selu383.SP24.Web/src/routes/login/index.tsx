@@ -34,7 +34,9 @@ export default function Login(){
         }).then(async x => {
             const userResp = await x.json();
             setUser(userResp);
+            window.location.reload();
         });
+        
     }
     
       useEffect(() => {
