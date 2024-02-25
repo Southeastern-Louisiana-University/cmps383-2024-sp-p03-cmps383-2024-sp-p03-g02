@@ -6,14 +6,14 @@ import {
   RouterProvider,
 } from "react-router-dom"
 import './index.css'
-import Navbar from './routes/nav/index.tsx'
+import NavbarLayout from './routes/nav/index.tsx'
 import Login from './routes/login/index.tsx'
 import Home from './routes/home/index.tsx'
 
 const router = createBrowserRouter([
   {
     path:"",
-    element: <Navbar />,
+    element: <NavbarLayout />,
     children:[
       {
         path:"/",
