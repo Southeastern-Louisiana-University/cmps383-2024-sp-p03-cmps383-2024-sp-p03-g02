@@ -25,7 +25,7 @@ export default function NavbarLayout(){
         <>
             <>
             <Navbar className="navbar navbar-light bg-light">
-                <span className="navbar-brand mb-0 h1">Enstay</span>
+            <Link to={'/'}><span className="navbar-brand mb-0 h1">Enstay</span></Link>
                  <ul className="navbar-nav ml-auto"> 
                     <li className="nav-item"> 
                     {user !== null ? <div><Button className="btn-light" onClick = {handleSignout}>Logout</Button></div>  : 
