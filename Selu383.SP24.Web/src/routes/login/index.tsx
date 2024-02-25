@@ -1,5 +1,6 @@
 import { useState, ChangeEvent, FormEvent, useEffect } from 'react'
 import { Button, Card } from 'react-bootstrap'
+import { useNavigate } from "react-router-dom"
 
 interface UserDto {
 	userName?: string;
@@ -12,6 +13,7 @@ export default function Login(){
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [user, setUser] = useState<UserDto | null>(null);
+    const navigate = useNavigate();
 
     function handleUserNameChange(e: ChangeEvent<HTMLInputElement>){
         setUsername(e.target.value);
@@ -33,8 +35,11 @@ export default function Login(){
             })
         }).then(async x => {
             const userResp = await x.json();
-            setUser(userResp);
-            window.location.reload();
+            if(x.status == 200){
+              setUser(userResp);
+              navigate('/');
+              window.location.reload();
+            }
         });
         
     }
@@ -47,7 +52,7 @@ export default function Login(){
 
     return(
     <>
-        {user !== null ? <div>Already logged in</div>  :
+        {user !== null ? <div></div>  :
         <div className="mt-5 d-flex align-items-center justify-content-center">
         <Card style={{ width: '18rem' }}>
             <Card.Header>
