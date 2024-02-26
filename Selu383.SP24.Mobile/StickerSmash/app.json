@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Selu383-SP24-Mobile-p03-g02",
-    "slug": "Selu383-SP24-Mobile-p03-g02",
+    "name": "StickerSmash",
+    "slug": "StickerSmash",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -21,17 +21,15 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      },
-      "package": "com.selu383.sp24.p03.g02"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "c6755459-60f5-4bf3-9a44-0fc082582d29"
+        "projectId": "2b6ea839-8e20-4432-9a01-644b1946a53d"
       }
-    },
-    "owner": "calebpat24"
+    }
   }
 }
