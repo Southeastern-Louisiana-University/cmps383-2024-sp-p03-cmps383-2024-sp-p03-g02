@@ -1,5 +1,5 @@
 import { Link, Outlet } from "react-router-dom"
-import { useState, ChangeEvent, FormEvent, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Button, Navbar } from 'react-bootstrap'
 
 
@@ -12,7 +12,7 @@ export default function NavbarLayout(){
     const [user, setUser] = useState<UserDto | null>(null);
 
     function handleSignout(){
-        return fetch("/api/authentication/logout",{method: "POST"}).then(async x => setUser(null));
+        return fetch("/api/authentication/logout",{method: "POST"}).then(async () => setUser(null));
         }
     
         useEffect(() => {
