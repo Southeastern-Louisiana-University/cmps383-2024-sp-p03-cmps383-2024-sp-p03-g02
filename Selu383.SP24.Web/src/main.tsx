@@ -9,6 +9,7 @@ import './index.css'
 import NavbarLayout from './routes/nav/index.tsx'
 import Login from './routes/login/index.tsx'
 import Home from './routes/home/index.tsx'
+import Hotel from './routes/hotels/index.tsx'
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         path:"/Login",
         element:<Login/>,
+      },
+      {
+        path:"/Hotels",
+        element:<Hotel/>,
       },
     ]
   }
