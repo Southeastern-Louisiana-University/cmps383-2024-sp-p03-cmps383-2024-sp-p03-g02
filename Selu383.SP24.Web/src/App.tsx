@@ -19,7 +19,7 @@ function App() {
   }
 
   function handleSignout(){
-    return fetch("/api/authentication/logout",{method: "POST"}).then(async x => setUser(null));
+    return fetch("/api/authentication/logout",{method: "POST"}).then(async () => setUser(null));
     }
 
   function handlePasswordChange(e: ChangeEvent<HTMLInputElement>){
@@ -80,7 +80,3 @@ function App() {
 
 
 export default App
-function async(x: any): ((value: Response) => Response | PromiseLike<Response>) | null | undefined {
-  throw new Error('Function not implemented.');
-}
-
