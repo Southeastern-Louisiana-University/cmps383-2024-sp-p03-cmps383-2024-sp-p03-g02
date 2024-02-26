@@ -1,6 +1,7 @@
+// HotelListPage.tsx
 import React, { useState, useEffect } from 'react';
 import { Card, Button } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 interface HotelDto {
   id?: number;
@@ -16,7 +17,6 @@ const HotelListPage: React.FC = () => {
   useEffect(() => {
     const fetchHotels = async () => {
       try {
-
         const response = await fetch('api/hotels');
         const data = await response.json();
         setHotels(data);
@@ -37,14 +37,18 @@ const HotelListPage: React.FC = () => {
             <Card.Title>{hotel.name}</Card.Title>
             <Card.Subtitle className="mb-2 text-muted">{hotel.address}</Card.Subtitle>
             <Card.Text>(Placeholder Price)</Card.Text>
-            <Button variant="primary" onClick={() => navigate(`/hotel/${hotel.id}`)}>
+            <Button variant="primary" onClick={() => navigate(`/hotels/${hotel.id}`)}>
               View Details
             </Button>
           </Card.Body>
         </Card>
       ))}
+      <Link to="/add-hotel">
+        <Button variant="success">Add Hotel</Button>
+      </Link>
     </div>
   );
 };
 
 export default HotelListPage;
+
