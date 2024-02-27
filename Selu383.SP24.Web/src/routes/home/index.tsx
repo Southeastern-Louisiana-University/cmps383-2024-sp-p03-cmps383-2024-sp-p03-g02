@@ -4,6 +4,7 @@ import { Card, Button } from 'react-bootstrap';
 import '../../styles/home.css';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import '../../styles/home.css';
 
 const HotelSearchBar = () => {
   const today = new Date();
@@ -31,7 +32,11 @@ const HotelSearchBar = () => {
 
   return (
     <>
-    <center><h1>Welcome to EnStay!</h1></center>
+    <div className="wrapper">
+      <center><h1>Welcome to EnStay!</h1>
+      </center>
+    </div>
+
     <div className="wrapper">
     <div className="hotel-search-bar">
       <DatePicker
@@ -70,11 +75,12 @@ const HotelSearchBar = () => {
       <button onClick={handleSearch}>Search</button>
     </div>
     </div>
-      
+      <div className="wrapper">
       <center>
         <Link to="/hotels">
         <Button variant="primary">Go to Hotels</Button>
       </Link></center>
+      </div>
     </>
   );
 }
