@@ -9,7 +9,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow */
     padding: 10px; /* Add padding to give space for the shadow */
     border-radius: 15px; /* Make the search bar round */
-    width: 40%; /* Set width to 20% of the page */
+    
   }
   
   .wrapper input[type="date"],

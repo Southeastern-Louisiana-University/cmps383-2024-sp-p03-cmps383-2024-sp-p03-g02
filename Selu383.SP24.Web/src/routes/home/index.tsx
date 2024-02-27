@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Card, Button } from 'react-bootstrap';
-import '../../styles/home.css';
+import { Button } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../../styles/home.css';
@@ -32,56 +31,64 @@ const HotelSearchBar = () => {
 
   return (
     <>
-    <div className="wrapper">
-      <center><h1>Welcome to EnStay!</h1>
-      </center>
-    </div>
+      <div className="wrapper" style={{ marginBottom: '30px' }}>
+        <center>
+          <h1>Welcome to EnStay!</h1>
+        </center>
+      </div>
 
-    <div className="wrapper">
-    <div className="hotel-search-bar">
-      <DatePicker
-        selected={checkInDate}
-        onChange={date => setCheckInDate(date || today)}
-        selectsStart
-        startDate={checkInDate}
-        endDate={checkOutDate}
-        placeholderText="From"
-      />
-      <DatePicker
-        selected={checkOutDate}
-        onChange={date => setCheckOutDate(date || tomorrow)}
-        selectsEnd
-        startDate={checkInDate}
-        endDate={checkOutDate}
-        minDate={checkInDate}
-        placeholderText="To"
-      />
-      <select
-        value={numGuests}
-        onChange={(e) => setNumGuests(parseInt(e.target.value))}
-      >
-        {[...Array(10).keys()].map(num => (
-          <option key={num} value={num+1}>{num+1} Guest(s)</option>
-        ))}
-      </select>
-      <select
-        value={numRooms}
-        onChange={(e) => setNumRooms(parseInt(e.target.value))}
-      >
-        {[...Array(5).keys()].map(num => (
-          <option key={num} value={num+1}>{num+1} Room(s)</option>
-        ))}
-      </select>
-      <button onClick={handleSearch}>Search</button>
-    </div>
-    </div>
       <div className="wrapper">
-      <center>
-        <Link to="/hotels">
-        <Button variant="primary">Go to Hotels</Button>
-      </Link></center>
+        <div className="hotel-search-bar">
+          <DatePicker
+            selected={checkInDate}
+            onChange={(date) => setCheckInDate(date || today)}
+            selectsStart
+            startDate={checkInDate}
+            endDate={checkOutDate}
+            placeholderText="From"
+          />
+          <DatePicker
+            selected={checkOutDate}
+            onChange={(date) => setCheckOutDate(date || tomorrow)}
+            selectsEnd
+            startDate={checkInDate}
+            endDate={checkOutDate}
+            minDate={checkInDate}
+            placeholderText="To"
+          />
+          <select
+            value={numGuests}
+            onChange={(e) => setNumGuests(parseInt(e.target.value))}
+          >
+            {[...Array(10).keys()].map((num) => (
+              <option key={num} value={num + 1}>
+                {num + 1} Guest(s)
+              </option>
+            ))}
+          </select>
+          <select
+            value={numRooms}
+            onChange={(e) => setNumRooms(parseInt(e.target.value))}
+          >
+            {[...Array(5).keys()].map((num) => (
+              <option key={num} value={num + 1}>
+                {num + 1} Room(s)
+              </option>
+            ))}
+          </select>
+          <button onClick={handleSearch}>Search</button>
+        </div>
+      </div>
+
+      <div className="wrapper" style={{ marginTop: '40px' }}>
+        <center>
+          <Link to="/hotels">
+            <Button variant="primary">Go to Hotels</Button>
+          </Link>
+        </center>
       </div>
     </>
   );
-}
+};
+
 export default HotelSearchBar;
