@@ -1,10 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import './index.css';
-import NavbarLayout from './routes/nav/index.tsx';
-import Login from './routes/login/index.tsx';
-import Home from './routes/home/index.tsx';
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom"
+import './index.css'
+import NavbarLayout from './routes/nav/index.tsx'
+import Login from './routes/login/index.tsx'
+import Home from './routes/home/index.tsx'
 import HotelListPage from './routes/hotels/index.tsx';
 import HotelDetailsPage from './routes/hotels/hotel/id/HotelDetailPage.tsx';
 
