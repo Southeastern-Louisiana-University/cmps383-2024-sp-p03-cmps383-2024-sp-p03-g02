@@ -8,26 +8,36 @@ import './index.css'
 import NavbarLayout from './routes/nav/index.tsx'
 import Login from './routes/login/index.tsx'
 import Home from './routes/home/index.tsx'
+import HotelListPage from './routes/hotels/index.tsx';
+import HotelDetailsPage from './routes/hotels/hotel/id/HotelDetailPage.tsx';
 
 const router = createBrowserRouter([
   {
-    path:"",
+    path: '',
     element: <NavbarLayout />,
-    children:[
+    children: [
       {
-        path:"/",
-        element: <Home/>,
+        path: '/',
+        element: <Home />,
       },
       {
-        path:"/Login",
-        element:<Login/>,
+        path: '/Login',
+        element: <Login />,
       },
-    ]
-  }
+      {
+        path: '/Hotels',
+        element: <HotelListPage />,
+      },
+      {
+        path: '/Hotels/:id',
+        element: <HotelDetailsPage onDelete={() => {}} />,
+      },
+    ],
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <RouterProvider router={router} />
   </React.StrictMode>,
-)
+);
