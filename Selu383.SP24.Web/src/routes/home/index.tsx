@@ -1,6 +1,5 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-import { Card, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 export default function Home() {
   return (
