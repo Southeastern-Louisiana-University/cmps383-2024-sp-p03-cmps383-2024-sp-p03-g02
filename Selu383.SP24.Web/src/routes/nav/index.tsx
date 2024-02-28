@@ -12,7 +12,7 @@ export default function NavbarLayout(){
     const [user, setUser] = useState<UserDto | null>(null);
 
     function handleSignout(){
-        return fetch("/api/authentication/logout",{method: "POST"}).then(async x => setUser(null));
+        return fetch("/api/authentication/logout",{method: "POST"}).then(async () => setUser(null));
         }
     
         useEffect(() => {
