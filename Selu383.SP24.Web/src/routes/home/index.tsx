@@ -104,7 +104,7 @@ const HotelSearchBar = () => {
           </Link>
         </div>
       </div>
-
+<center>
       <div className="discover">  
         <h2>Discover the best time to book your next stay</h2>
         <div className="wrapper2">
@@ -149,6 +149,7 @@ const HotelSearchBar = () => {
           )}
         </div>
       </div>
+      </center>
     </>
   );
 };
