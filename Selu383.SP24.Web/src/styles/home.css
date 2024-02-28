@@ -10,24 +10,74 @@
     padding: 10px; /* Add padding to give space for the shadow */
     border-radius: 15px; /* Make the search bar round */
     
-  }
+}
   
-  .wrapper input[type="date"],
-  .wrapper select {
-    margin-right: 10px;
-    padding: 5px;
-  }
-  
-  .wrapper button {
-    padding: 8px 16px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .wrapper button:hover {
-    background-color: #0056b3;
-  }
-  
+.wrapper input[type="date"],
+.wrapper select {
+  margin-right: 10px;
+  padding: 5px;
+}
+
+.wrapper button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.wrapper button:hover {
+  background-color: #0056b3;
+}
+
+.discover
+{
+  position: center;
+  display: inline-block;
+  width: 40%;
+}
+
+.discover h2{
+  padding-top: 20%;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.discover button {
+  padding: 8px 16px;
+  background-color: #ffffff;
+  color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.wrapper2{
+  background-image: url('https://i.imgur.com/mJJ1z1v.jpeg');
+  border-radius: 35px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow */
+  size: 30%;
+}
+
+.months-column
+{
+  padding-top: 10px;
+  float: left;
+  padding: 10px;
+}
+
+.months-column button{
+  margin-bottom: 10px;
+  display: block;
+  width: 280px;
+  text-align: start;
+}
+
+.city-buttons
+{
+  display: flex;
+  justify-content: center;
+  font-size: 12px;
+  padding-top: 10px;
+}
