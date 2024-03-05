@@ -1,4 +1,4 @@
-import { useState, FormEvent } from 'react';
+import React, { useState, FormEvent } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
@@ -6,19 +6,31 @@ function Register() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [registrationSuccess, setRegistrationSuccess] = useState(false);
+  const [passwordMismatch, setPasswordMismatch] = useState(false); // State for password mismatch
+  const [registrationSuccess, setRegistrationSuccess] = useState(false); // State for registration success
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Perform validation if needed
-    // Ensure passwords match
+    // Perform validation
     if (password !== confirmPassword) {
-      alert('Passwords do not match');
+      setPasswordMismatch(true);
+      return;
+    }
+    
+    if (username.length < 2) {
+      alert('Username must be at least 2 characters long.');
+      return;
+    }
+
+    // Password must contain a special character
+    const specialCharacters = /[!@#$%^&*(),.?":{}|<>]/;
+    if (!specialCharacters.test(password)) {
+      alert('Password must contain a special character.');
       return;
     }
 
     try {
-      const response = await fetch('/api/authentication/register', {
+      const response = await fetch('/api/authentication/signUp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -83,7 +95,9 @@ function Register() {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
+            className={passwordMismatch ? 'password-mismatch' : ''} // Apply CSS class if password mismatch
           />
+          {passwordMismatch && <p className="text-danger">Passwords do not match</p>} {/* Display error message */}
         </Form.Group>
         <Button variant="primary" type="submit">
           Register
