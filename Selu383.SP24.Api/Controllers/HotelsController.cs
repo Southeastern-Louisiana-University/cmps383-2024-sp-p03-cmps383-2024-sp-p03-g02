@@ -85,6 +85,7 @@ public class HotelsController : ControllerBase
             LocationId = dto.LocationId,
             ContactNumber = dto.ContactNumber,
             Email = dto.Email,
+            Image = dto.Image,
         };
         hotels.Add(hotel);
 
@@ -127,6 +128,7 @@ public class HotelsController : ControllerBase
         hotel.LocationId = dto.LocationId;
         hotel.ContactNumber = dto.ContactNumber;
         hotel.Email = dto.Email;
+        hotel.Image = dto.Image;
         if (User.IsInRole(RoleNames.Admin))
         {
             hotel.ManagerId = dto.ManagerId;
@@ -197,6 +199,7 @@ public class HotelsController : ControllerBase
                 LocationId = x.Location.Id,
                 ContactNumber = x.ContactNumber,
                 Email = x.Email,
+                Image = x.Image,
             });
     }
 }
