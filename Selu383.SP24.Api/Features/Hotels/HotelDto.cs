@@ -12,4 +12,5 @@ public class HotelDto
     public int? LocationId { get; set; }
     public string Email { get; set; }
     public string ContactNumber { get; set; }
+    public string Image { get; set; }
 }
