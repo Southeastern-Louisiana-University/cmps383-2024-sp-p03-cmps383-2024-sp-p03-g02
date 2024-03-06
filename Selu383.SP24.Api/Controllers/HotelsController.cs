@@ -6,6 +6,7 @@ using Selu383.SP24.Api.Extensions;
 using Selu383.SP24.Api.Features.Authorization;
 using Selu383.SP24.Api.Features.Cities;
 using Selu383.SP24.Api.Features.Hotels;
+using Selu383.SP24.Api.Features.Rooms;
 
 namespace Selu383.SP24.Api.Controllers;
 
@@ -15,6 +16,7 @@ public class HotelsController : ControllerBase
 {
     private readonly DbSet<Hotel> hotels;
     private readonly DbSet<City> cities;
+    private readonly DbSet<Room> rooms;
     private readonly DataContext dataContext;
 
     public HotelsController(DataContext dataContext)
@@ -22,12 +24,29 @@ public class HotelsController : ControllerBase
         this.dataContext = dataContext;
         hotels = dataContext.Set<Hotel>();
         cities = dataContext.Set<City>();
+        rooms = dataContext.Set<Room>();
     }
 
     [HttpGet]
     public IQueryable<HotelDto> GetAllHotels()
     {
         return GetHotelDtos(hotels);
+    }
+    [HttpGet]
+    [Route("rooms/{id}")]
+    public IActionResult GetRoomsByHotelId(int id)
+    {
+        var allRooms = rooms.Where(x => x.HotelId == id)
+            .Select(x => new RoomDto
+            {
+                Id = x.Id,
+                HotelId = x.HotelId,
+                Rate = x.Rate,
+                RoomNumber = x.RoomNumber
+            })
+            .ToList();
+
+        return Ok(allRooms);
     }
 
     [HttpGet]
