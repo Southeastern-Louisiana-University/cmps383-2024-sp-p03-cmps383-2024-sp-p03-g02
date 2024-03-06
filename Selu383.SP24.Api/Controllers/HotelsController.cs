@@ -33,7 +33,7 @@ public class HotelsController : ControllerBase
         return GetHotelDtos(hotels);
     }
     [HttpGet]
-    [Route("rooms/{id}")]
+    [Route("{id}/rooms")]
     public IActionResult GetRoomsByHotelId(int id)
     {
         var allRooms = rooms.Where(x => x.HotelId == id)
