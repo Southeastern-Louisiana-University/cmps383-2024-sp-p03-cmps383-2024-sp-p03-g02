@@ -30,7 +30,8 @@ public class RoomsController : ControllerBase
                 Id = x.Id,
                 HotelId = x.HotelId,
                 Rate = x.Rate,
-                RoomNumber = x.RoomNumber
+                RoomNumber = x.RoomNumber,
+                Image = x.Image,
             })
             .ToList();
 
@@ -52,7 +53,8 @@ public class RoomsController : ControllerBase
             Id = id,
             HotelId = targetRoom.HotelId,
             Rate = targetRoom.Rate,
-            RoomNumber = targetRoom.RoomNumber
+            RoomNumber = targetRoom.RoomNumber,
+            Image = targetRoom.Image,
         };
         return Ok(roomToReturn);
     }
@@ -71,7 +73,8 @@ public class RoomsController : ControllerBase
         {
             HotelId = dto.HotelId,
             Rate = dto.Rate,
-            RoomNumber = dto.RoomNumber
+            RoomNumber = dto.RoomNumber,
+            Image = dto.Image,
         };
 
         rooms.Add(room);
@@ -82,7 +85,8 @@ public class RoomsController : ControllerBase
             Id = room.Id,
             HotelId = room.HotelId,
             Rate = room.Rate,
-            RoomNumber = room.RoomNumber
+            RoomNumber = room.RoomNumber,
+            Image = room.Image,
         };
 
         return CreatedAtAction(nameof(GetbyId), new { id = roomToReturn.Id }, roomToReturn);
@@ -108,6 +112,7 @@ public class RoomsController : ControllerBase
         targetRoom.HotelId = dto.HotelId;
         targetRoom.Rate = dto.Rate;
         targetRoom.RoomNumber = dto.RoomNumber;
+        targetRoom.Image = dto.Image;
 
         _dataContext.SaveChanges();
 
@@ -116,7 +121,8 @@ public class RoomsController : ControllerBase
             Id = targetRoom.Id,
             HotelId = targetRoom.HotelId,
             Rate = targetRoom.Rate,
-            RoomNumber = targetRoom.Rate
+            RoomNumber = targetRoom.Rate,
+            Image = targetRoom.Image
         };
         return Ok(roomToReturn);
     }
@@ -140,7 +146,8 @@ public class RoomsController : ControllerBase
             Id = roomToDelete.Id,
             HotelId = roomToDelete.HotelId,
             Rate = roomToDelete.Rate,
-            RoomNumber = roomToDelete.Rate
+            RoomNumber = roomToDelete.Rate,
+            Image = roomToDelete.Image
         };
 
         return Ok(roomToReturn);
