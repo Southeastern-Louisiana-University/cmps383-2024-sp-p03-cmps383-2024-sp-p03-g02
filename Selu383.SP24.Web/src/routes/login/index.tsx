@@ -56,8 +56,8 @@ export default function Login(){
     <>
     {user !== null ? <div></div>  :
     <div className="userMenu">
-    <Card style={{ width: '18rem' }}>
-        <Card.Header>
+    <Card style={{ width: '18rem',}}>
+        <Card.Header style={{ backgroundColor: '#FDBA74' }}>
             Login
         </Card.Header>
         <Card.Body>
@@ -68,7 +68,7 @@ export default function Login(){
             <input type = "password" name = "password" id = "password" value = {password} onChange = {handlePasswordChange}/>
             <br/>
             <div className="button-container">
-                <Button type="submit">Log In</Button>
+                <Button style={{ backgroundColor: '#FDBA74' }} type="submit">Log In</Button>
                 <Button onClick={() => navigate('/register')} variant="secondary">Sign Up</Button>
             </div>
         </form>
