@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Selu383.SP24.Api.Features.Authorization;
+using Selu383.SP24.Api.Features.Cities;
 using Selu383.SP24.Api.Features.Hotels;
+using Selu383.SP24.Api.Features.Rooms;
 
 namespace Selu383.SP24.Api.Data;
 
@@ -15,8 +17,9 @@ public static class SeedHelper
 
         await AddRoles(serviceProvider);
         await AddUsers(serviceProvider);
-
+        await AddCities(dataContext);
         await AddHotels(dataContext);
+        await AddRooms(dataContext);
     }
 
     private static async Task AddUsers(IServiceProvider serviceProvider)
@@ -69,6 +72,34 @@ public static class SeedHelper
         });
     }
 
+    private static async Task AddCities(DataContext dataContext)
+    {
+        var cities = dataContext.Set<City>();
+        if (await cities.AnyAsync())
+        {
+            return;
+        }
+
+        dataContext.Set<City>()
+            .Add(new City
+            {
+                Name = "Hammond"
+            });
+
+        dataContext.Set<City>()
+            .Add(new City
+            {
+                Name = "New Orleans"
+            });
+
+        dataContext.Set<City>()
+            .Add(new City
+            {
+                Name = "Baton Rouge"
+            });
+        await dataContext.SaveChangesAsync();
+    }
+
     private static async Task AddHotels(DataContext dataContext)
     {
         var hotels = dataContext.Set<Hotel>();
@@ -78,16 +109,169 @@ public static class SeedHelper
             return;
         }
 
-        for (int i = 0; i < 4; i++)
-        {
-            dataContext.Set<Hotel>()
+        dataContext.Set<Hotel>()
                 .Add(new Hotel
                 {
-                    Name = "Hammond " + i,
-                    Address = "1234 Place st"
+                    Name = "The Grand Motel",
+                    Address = "1234 Place st",
+                    ManagerId = 2,
+                    LocationId = 1,
+                    Image = ""
                 });
+
+        dataContext.Set<Hotel>()
+                .Add(new Hotel
+                {
+                    Name = "Hotel 7",
+                    Address = "1234 Place st",
+                    ManagerId = 3,
+                    LocationId = 1,
+                    Image = ""
+                });
+
+        dataContext.Set<Hotel>()
+                .Add(new Hotel
+                {
+                    Name = "Plaza Hotel",
+                    Address = "1234 Place st",
+                    ManagerId = 3,
+                    LocationId = 1,
+                    Image = ""
+                });
+
+        dataContext.Set<Hotel>()
+                .Add(new Hotel
+                {
+                    Name ="Quality Hotel",
+                    Address = "1234 Place st",
+                    ManagerId = 3,
+                    LocationId = 2,
+                    Image = ""
+                });
+
+        dataContext.Set<Hotel>()
+                .Add(new Hotel
+                {
+                    Name = "La Vigesimo Séptima Inn",
+                    Address = "1234 Place st",
+                    ManagerId = 3,
+                    LocationId = 2,
+                    Image = ""
+                });
+
+        dataContext.Set<Hotel>()
+                .Add(new Hotel
+                {
+                    Name = "Hotel 7",
+                    Address = "1234 Place st",
+                    ManagerId = 3,
+                    LocationId = 2,
+                    Image = ""
+                });
+        dataContext.Set<Hotel>()
+                .Add(new Hotel
+                {
+                    Name = "Better Eastern",
+                    Address = "1234 Place st",
+                    ManagerId = 3,
+                    LocationId = 3,
+                    Image = ""
+                });
+        dataContext.Set<Hotel>()
+                .Add(new Hotel
+                {
+                    Name = "Night Inn and Suites",
+                    Address = "1234 Place st",
+                    ManagerId = 3,
+                    LocationId = 3,
+                    Image = ""
+                });
+        dataContext.Set<Hotel>()
+                .Add(new Hotel
+                {
+                    Name = "The Town Inn",
+                    Address = "1234 Place st",
+                    ManagerId = 3,
+                    LocationId = 3,
+                    Image = ""
+                });
+
+        await dataContext.SaveChangesAsync();
+    }
+
+    private static async Task AddRooms(DataContext dataContext)
+    {
+        var rooms = dataContext.Set<Room>();
+
+        if (await rooms.AnyAsync())
+        {
+            return;
+        }
+
+        for (int i = 1; i <= 4; i++)
+        {
+            for (int j = 100; j < 105; j++)
+            {
+                dataContext.Set<Room>()
+                .Add(new Room
+                {
+                    HotelId = i,
+                    Rate = 100,
+                    RoomNumber = j,
+                    Image = ""
+                });
+            }
+            for (int k = 200; k < 205; k++)
+            {
+                dataContext.Set<Room>()
+                .Add(new Room
+                {
+                    HotelId = i,
+                    Rate = 150,
+                    RoomNumber = k,
+                    Image = ""
+                });
+            }
         }
 
         await dataContext.SaveChangesAsync();
     }
+
+    /*    private static async Task AddRooms(DataContext dataContext)
+    {
+        var rooms = dataContext.Set<Room>();
+
+        if (await rooms.AnyAsync())
+        {
+            return;
+        }
+
+        for (int i = 1; i <=9; i++)
+        {
+            for(int j = 100; j<105; j++)
+            {
+                dataContext.Set<Room>()
+                .Add(new Room
+                {
+                    HotelId = i,
+                    Rate = 100,
+                    RoomNumber = j,
+                    Image = ""
+                });
+            }
+            for (int k = 200; k < 205; k++)
+            {
+                dataContext.Set<Room>()
+                .Add(new Room
+                {
+                    HotelId = i,
+                    Rate = 100,
+                    RoomNumber = k,
+                    Image = ""
+                });
+            }
+        }
+
+        await dataContext.SaveChangesAsync();
+    }*/
 }
