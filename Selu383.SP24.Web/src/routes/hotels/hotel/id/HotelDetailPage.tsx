@@ -36,10 +36,9 @@ const HotelDetailsPage: React.FC = () => {
   }, [id]);
 
   return (
-    <Container className="mt-4">
+    <Container className="mt-4" style={{ border: "1px solid #dddddd", borderRadius: "8px", padding: "20px", boxShadow: "0 0 10px #FDBA74",  }}>
       {hotel && (
         <div>
-          {/* Hotel name at the top */}
           <h1
             className="text-center"
             style={{
@@ -51,10 +50,9 @@ const HotelDetailsPage: React.FC = () => {
             {hotel.name}
           </h1>
 
-          {/* Container with centered image on the left */}
           <Row className="justify-content-center">
             <Col xs={12} sm={6} md={4} lg={3} className="mb-3">
-              <Card style={{ width: "100%", textAlign: "center" }}>
+              <Card style={{ width: "100%", textAlign: "center", boxShadow: "0 0 10px #FDBA74", }}>
                 {/* Placeholder image */}
                 <Card.Img
                   variant="top"
@@ -66,7 +64,6 @@ const HotelDetailsPage: React.FC = () => {
             </Col>
           </Row>
 
-          {/* Right side with address, description, and return button */}
           <Row className="mt-4 justify-content-center">
             <Col xs={12} md={8} lg={6}>
               <p>
