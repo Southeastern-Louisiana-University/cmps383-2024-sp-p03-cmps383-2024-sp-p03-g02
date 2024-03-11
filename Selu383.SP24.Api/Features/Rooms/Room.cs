@@ -1,4 +1,5 @@
 ﻿using Selu383.SP24.Api.Features.Hotels;
+using Selu383.SP24.Api.Features.RTypes;
 
 namespace Selu383.SP24.Api.Features.Rooms
 {
@@ -6,10 +7,12 @@ namespace Selu383.SP24.Api.Features.Rooms
     {
         public int Id { get; set; }
         public int HotelId { get; set; }
-        public Hotel hotel { get; set; }
+        public Hotel Hotel { get; set; }
         public int Rate { get; set; }
         public int RoomNumber { get; set; }
         public string Image { get; set; }
+        public int RTypeId { get; set; }
+        public RType RoomType { get; set; }
     }
 
     public class RoomDto
@@ -19,6 +22,8 @@ namespace Selu383.SP24.Api.Features.Rooms
         public int Rate { get; set; }
         public int RoomNumber { get; set; }
         public string Image { get; set; }
+        public int RTypeId { get; set; }
+        public RTypeDto RoomType { get; set; }
     }
 
     public class RoomUpdateDto
@@ -27,5 +32,6 @@ namespace Selu383.SP24.Api.Features.Rooms
         public int Rate { get; set; }
         public int RoomNumber { get; set; }
         public string Image { get; set; }
+        public int RTypeId { get; set; }
     }
 }
