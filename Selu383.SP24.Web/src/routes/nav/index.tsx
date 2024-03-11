@@ -25,7 +25,7 @@ export default function NavbarLayout(){
         <>
             <>
             <Navbar className="navbar navbar-light bg-light">
-            <Link to={'/'}><span style={{ color: '#FDBA74' }} className="navbar-brand mb-0 h1">Enstay</span></Link>
+            <Link to={'/'}><span style={{ color: '#FDBA74' }} className="navbar-brand mb-0 h1">EnStay</span></Link>
                  <ul className="navbar-nav ml-auto"> 
                     <li className="nav-item"> 
                     {user !== null ? <div><Button style={{ backgroundColor: '#FDBA74' }} className="btn-light" onClick = {handleSignout}>Logout</Button></div>  : 
