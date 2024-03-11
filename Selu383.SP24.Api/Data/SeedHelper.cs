@@ -113,69 +113,83 @@ public static class SeedHelper
                 .Add(new Hotel
                 {
                     Name = "The Grand Motel",
-                    Address = "1234 Place st",
+                    Address = "1234 Place St",
                     ManagerId = 2,
-                    LocationId = 1,
-                    Image = ""
+                    LocationId = 2,
+                    Image = "",
+                    ContactNumber = "18009999999",
+                    Email = "grandmotel@gmail.com"
                 });
 
         dataContext.Set<Hotel>()
                 .Add(new Hotel
                 {
-                    Name = "Hotel 7",
-                    Address = "1234 Place st",
+                    Name = "Nice Suites",
+                    Address = "1234 Place Ave",
                     ManagerId = 3,
-                    LocationId = 1,
-                    Image = ""
+                    LocationId = 2,
+                    Image = "",
+                    ContactNumber = "18007896087",
+                    Email = "nicesuites@gmail.com"
                 });
 
         dataContext.Set<Hotel>()
                 .Add(new Hotel
                 {
                     Name = "Plaza Hotel",
-                    Address = "1234 Place st",
+                    Address = "12 Plack St",
                     ManagerId = 3,
-                    LocationId = 1,
-                    Image = ""
+                    LocationId = 2,
+                    Image = "",
+                    ContactNumber = "18007516238",
+                    Email = "plazahotel@gmail.com"
                 });
 
         dataContext.Set<Hotel>()
                 .Add(new Hotel
                 {
                     Name ="Quality Hotel",
-                    Address = "1234 Place st",
+                    Address = "234 Venue Ave",
                     ManagerId = 3,
-                    LocationId = 2,
-                    Image = ""
+                    LocationId = 3,
+                    Image = "",
+                    ContactNumber = "18003517345",
+                    Email = "qualityhotels@gmail.com"
                 });
 
         dataContext.Set<Hotel>()
                 .Add(new Hotel
                 {
                     Name = "La Vigesimo Séptima Inn",
-                    Address = "1234 Place st",
+                    Address = "5382 Gerry Ln",
                     ManagerId = 3,
-                    LocationId = 2,
-                    Image = ""
+                    LocationId = 3,
+                    Image = "",
+                    ContactNumber = "18001234567",
+                    Email = "septimainn@gmail.com"
                 });
 
         dataContext.Set<Hotel>()
                 .Add(new Hotel
                 {
                     Name = "Hotel 7",
-                    Address = "1234 Place st",
+                    Address = "4 Ferry Ln",
                     ManagerId = 3,
-                    LocationId = 2,
-                    Image = ""
+                    LocationId = 3,
+                    Image = "",
+                    ContactNumber = "18007654321",
+                    Email = "hotel7@gmail.com"
                 });
         dataContext.Set<Hotel>()
                 .Add(new Hotel
                 {
                     Name = "Better Eastern",
-                    Address = "1234 Place st",
+                    Address = "1 First St",
                     ManagerId = 3,
-                    LocationId = 3,
-                    Image = ""
+                    LocationId = 4,
+                    Image = "",
+                    ContactNumber = "18003421642",
+                    Email = "better@gmail.com"
                 });
         dataContext.Set<Hotel>()
                 .Add(new Hotel
@@ -183,17 +197,21 @@ public static class SeedHelper
                     Name = "Night Inn and Suites",
                     Address = "1234 Place st",
                     ManagerId = 3,
-                    LocationId = 3,
-                    Image = ""
+                    LocationId = 4,
+                    Image = "",
+                    ContactNumber = "18001237654",
+                    Email = "nigthinn@gmail.com"
                 });
         dataContext.Set<Hotel>()
                 .Add(new Hotel
                 {
                     Name = "The Town Inn",
-                    Address = "1234 Place st",
+                    Address = "12 Plaque Rd",
                     ManagerId = 3,
-                    LocationId = 3,
-                    Image = ""
+                    LocationId = 4,
+                    Image = "",
+                    ContactNumber = "18009996721",
+                    Email = "towninn@gmail.com"
                 });
 
         await dataContext.SaveChangesAsync();
@@ -208,7 +226,7 @@ public static class SeedHelper
             return;
         }
 
-        for (int i = 1; i <= 4; i++)
+        for (int i = 6; i <= 14; i++)
         {
             for (int j = 100; j < 105; j++)
             {
@@ -237,41 +255,4 @@ public static class SeedHelper
         await dataContext.SaveChangesAsync();
     }
 
-    /*    private static async Task AddRooms(DataContext dataContext)
-    {
-        var rooms = dataContext.Set<Room>();
-
-        if (await rooms.AnyAsync())
-        {
-            return;
-        }
-
-        for (int i = 1; i <=9; i++)
-        {
-            for(int j = 100; j<105; j++)
-            {
-                dataContext.Set<Room>()
-                .Add(new Room
-                {
-                    HotelId = i,
-                    Rate = 100,
-                    RoomNumber = j,
-                    Image = ""
-                });
-            }
-            for (int k = 200; k < 205; k++)
-            {
-                dataContext.Set<Room>()
-                .Add(new Room
-                {
-                    HotelId = i,
-                    Rate = 100,
-                    RoomNumber = k,
-                    Image = ""
-                });
-            }
-        }
-
-        await dataContext.SaveChangesAsync();
-    }*/
 }
