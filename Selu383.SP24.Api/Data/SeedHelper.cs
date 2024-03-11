@@ -4,6 +4,7 @@ using Selu383.SP24.Api.Features.Authorization;
 using Selu383.SP24.Api.Features.Cities;
 using Selu383.SP24.Api.Features.Hotels;
 using Selu383.SP24.Api.Features.Rooms;
+using Selu383.SP24.Api.Features.RTypes;
 
 namespace Selu383.SP24.Api.Data;
 
@@ -18,8 +19,9 @@ public static class SeedHelper
         await AddRoles(serviceProvider);
         await AddUsers(serviceProvider);
         await AddCities(dataContext);
-        await AddHotels(dataContext);
-        await AddRooms(dataContext);
+        await AddTypes(dataContext);
+        /*await AddHotels(dataContext);*/
+/*        await AddRooms(dataContext);*/
     }
 
     private static async Task AddUsers(IServiceProvider serviceProvider)
@@ -100,7 +102,33 @@ public static class SeedHelper
         await dataContext.SaveChangesAsync();
     }
 
-    private static async Task AddHotels(DataContext dataContext)
+    private static async Task AddTypes(DataContext dataContext)
+    {
+        var types = dataContext.Set<RType>();
+        if (await types.AnyAsync())
+        {
+            return;
+        }
+
+        dataContext.Set<RType>()
+            .Add(new RType
+            {
+                Name = "Single Queen",
+                Description = "Room with one queen bed"
+            });
+
+        dataContext.Set<RType>()
+            .Add(new RType
+            {
+                Name = "Double Queen",
+                Description = "Room with two queen beds"
+            });
+
+
+        await dataContext.SaveChangesAsync();
+    }
+
+    /*private static async Task AddHotels(DataContext dataContext)
     {
         var hotels = dataContext.Set<Hotel>();
 
@@ -215,9 +243,9 @@ public static class SeedHelper
                 });
 
         await dataContext.SaveChangesAsync();
-    }
+    }*/
 
-    private static async Task AddRooms(DataContext dataContext)
+/*    private static async Task AddRooms(DataContext dataContext)
     {
         var rooms = dataContext.Set<Room>();
 
@@ -236,7 +264,8 @@ public static class SeedHelper
                     HotelId = i,
                     Rate = 100,
                     RoomNumber = j,
-                    Image = ""
+                    Image = "",
+                    RTypeId = 1,
                 });
             }
             for (int k = 200; k < 205; k++)
@@ -247,12 +276,13 @@ public static class SeedHelper
                     HotelId = i,
                     Rate = 150,
                     RoomNumber = k,
-                    Image = ""
+                    Image = "",
+                    RTypeId = 2,
                 });
             }
         }
-
+*//*
         await dataContext.SaveChangesAsync();
     }
-
+*/
 }
