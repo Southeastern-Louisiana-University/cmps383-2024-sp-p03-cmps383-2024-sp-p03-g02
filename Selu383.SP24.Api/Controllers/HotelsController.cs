@@ -42,7 +42,8 @@ public class HotelsController : ControllerBase
                 Id = x.Id,
                 HotelId = x.HotelId,
                 Rate = x.Rate,
-                RoomNumber = x.RoomNumber
+                RoomNumber = x.RoomNumber,
+                RTypeId = x.RTypeId,
             })
             .ToList();
 
@@ -184,7 +185,9 @@ public class HotelsController : ControllerBase
         return string.IsNullOrWhiteSpace(dto.Name) ||
                dto.Name.Length > 120 ||
                string.IsNullOrWhiteSpace(dto.Address) ||
-               InvalidManagerId(dto.ManagerId);
+               InvalidManagerId(dto.ManagerId) ||
+               string.IsNullOrWhiteSpace(dto.ContactNumber) ||
+               string.IsNullOrWhiteSpace(dto.Email);
     }
 
     private static IQueryable<HotelDto> GetHotelDtos(IQueryable<Hotel> hotels)
@@ -197,6 +200,10 @@ public class HotelsController : ControllerBase
                 Address = x.Address,
                 ManagerId = x.ManagerId,
                 LocationId = x.Location.Id,
+                Location = new CityDto
+                {
+                    Name = x.Location.Name,
+                },
                 ContactNumber = x.ContactNumber,
                 Email = x.Email,
                 Image = x.Image,
