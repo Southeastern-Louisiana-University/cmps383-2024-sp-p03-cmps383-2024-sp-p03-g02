@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Button} from 'react-bootstrap'
 import { Link } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -99,8 +100,9 @@ const HotelSearchBar = () => {
             ))}
           </select>
           <Link to="/hotels">
-            <button onClick={handleSearch}>Search</button>
+            <Button style={{ backgroundColor: '#FDBA74' }} onClick={handleSearch}> Search</Button>
           </Link>
+
         </div>
       </div>
 <center>

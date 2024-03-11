@@ -1,6 +1,8 @@
 import { useState, ChangeEvent, FormEvent, useEffect } from 'react'
 import { Button, Card } from 'react-bootstrap'
 import { useNavigate } from "react-router-dom"
+import '../../styles/login.css';
+
 
 interface UserDto {
 	userName?: string;
@@ -52,25 +54,27 @@ export default function Login(){
 
     return(
     <>
-        {user !== null ? <div></div>  :
-        <div className="mt-5 d-flex align-items-center justify-content-center">
-        <Card style={{ width: '18rem' }}>
-            <Card.Header>
-                Login
-            </Card.Header>
-            <Card.Body>
-                <form action="/api/authentication/login" method="POST" style ={{ display: "flex", flexDirection: "column" }} onSubmit={handleSubmit}>
-                <label htmlFor='username'>Username</label>
-                <input type = "text" name = "username" id = "username" value = {username} onChange = {handleUserNameChange}/>
-                <label htmlFor='password'>Password</label>
-                <input type = "password" name = "password" id = "password" value = {password} onChange = {handlePasswordChange}/>
-                <br/>
-                <Button type="submit">Log in</Button>
-                </form>
-            </Card.Body>
-        </Card>
-        </div>
-        
+    {user !== null ? <div></div>  :
+    <div className="userMenu">
+    <Card style={{ width: '18rem',}}>
+        <Card.Header style={{ backgroundColor: '#FDBA74' }}>
+            Login
+        </Card.Header>
+        <Card.Body>
+        <form action="/api/authentication/login" method="POST" style ={{ display: "flex", flexDirection: "column" }} onSubmit={handleSubmit}>
+            <label htmlFor='username'>Username</label>
+            <input type = "text" name = "username" id = "username" value = {username} onChange = {handleUserNameChange}/>
+            <label htmlFor='password'>Password</label>
+            <input type = "password" name = "password" id = "password" value = {password} onChange = {handlePasswordChange}/>
+            <br/>
+            <div className="button-container">
+                <Button style={{ backgroundColor: '#FDBA74' }} type="submit">Log In</Button>
+                <Button onClick={() => navigate('/register')} variant="secondary">Sign Up</Button>
+            </div>
+        </form>
+      </Card.Body>
+  </Card>
+  </div>
 }
     </>
     )

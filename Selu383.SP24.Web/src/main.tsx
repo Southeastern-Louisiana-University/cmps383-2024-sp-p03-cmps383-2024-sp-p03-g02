@@ -10,6 +10,8 @@ import Login from './routes/login/index.tsx'
 import Home from './routes/home/index.tsx'
 import HotelListPage from './routes/hotels/index.tsx';
 import HotelDetailsPage from './routes/hotels/hotel/id/HotelDetailPage.tsx';
+import RegisterPage from './routes/signUp/signUp.tsx';
+
 
 const router = createBrowserRouter([
   {
@@ -31,6 +33,10 @@ const router = createBrowserRouter([
       {
         path: '/Hotels/:id',
         element: <HotelDetailsPage onDelete={() => {}} />,
+      },
+      {
+        path: '/register',
+        element: <RegisterPage />,
       },
     ],
   },
