@@ -130,6 +130,11 @@ public class RoomsController : ControllerBase
     public IActionResult PutRoom([FromBody] RoomUpdateDto dto, [FromRoute] int id)
     {
         var hotel = hotels.FirstOrDefault(x => x.Id == dto.HotelId);
+        var roomType = types.FirstOrDefault(x => x.Id == dto.RTypeId);
+        if(roomType == null)
+        {
+            return BadRequest();
+        }
         if (hotel == null)
         {
             return BadRequest();
@@ -147,6 +152,7 @@ public class RoomsController : ControllerBase
         targetRoom.RoomNumber = dto.RoomNumber;
         targetRoom.Image = dto.Image;
         targetRoom.RTypeId = dto.RTypeId;
+        targetRoom.RoomType = roomType;
 
         _dataContext.SaveChanges();
 
@@ -182,22 +188,6 @@ public class RoomsController : ControllerBase
         rooms.Remove(roomToDelete);
         _dataContext.SaveChanges();
 
-        var roomToReturn = new RoomDto
-        {
-            Id = roomToDelete.Id,
-            HotelId = roomToDelete.HotelId,
-            Rate = roomToDelete.Rate,
-            RoomNumber = roomToDelete.Rate,
-            Image = roomToDelete.Image,
-            RTypeId = roomToDelete.RTypeId,
-            RoomType = new RTypeDto
-            {
-                Id = roomToDelete.RTypeId,
-                Name = roomToDelete.RoomType.Name,
-                Description = roomToDelete.RoomType.Description
-            }
-        };
-
-        return Ok(roomToReturn);
+        return Ok();
     }
 }
