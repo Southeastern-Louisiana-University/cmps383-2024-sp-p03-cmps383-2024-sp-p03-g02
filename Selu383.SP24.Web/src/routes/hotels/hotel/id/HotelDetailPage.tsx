@@ -6,6 +6,7 @@ interface HotelDto {
   id?: number;
   name?: string;
   address?: string;
+  email?: string;
 }
 
 const HotelDetailsPage: React.FC = () => {
@@ -75,6 +76,9 @@ const HotelDetailsPage: React.FC = () => {
                 placerat, nec feugiat dui posuere. In hac habitasse platea
                 dictumst. Nulla facilisi. Sed euismod nisl vel magna vehicula,
                 ut egestas elit vestibulum.
+              </p>
+              <p>
+                <strong>Contact Email: </strong>{hotel.email}
               </p>
               <Link to="/hotels" className="btn btn-warning">
                 Back
