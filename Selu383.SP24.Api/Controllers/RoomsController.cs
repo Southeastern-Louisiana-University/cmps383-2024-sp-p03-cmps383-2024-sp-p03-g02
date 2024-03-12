@@ -14,12 +14,14 @@ public class RoomsController : ControllerBase
     private readonly DataContext _dataContext;
     private readonly DbSet<Room> rooms;
     private readonly DbSet<Hotel> hotels;
+    private readonly DbSet<RType> types;
 
     public RoomsController(DataContext dataContext)
     {
         _dataContext = dataContext;
         rooms = dataContext.Set<Room>();
         hotels = dataContext.Set<Hotel>();
+        types = dataContext.Set<RType>();
     }
 
     [HttpGet]
@@ -50,6 +52,7 @@ public class RoomsController : ControllerBase
     public IActionResult GetbyId(int id)
     {
         var targetRoom = rooms.FirstOrDefault(x => x.Id == id);
+        var roomType = types.FirstOrDefault(x => x.Id == targetRoom.RTypeId);
 
         if (targetRoom == null)
         {
@@ -66,9 +69,9 @@ public class RoomsController : ControllerBase
             RTypeId = targetRoom.RTypeId,
             RoomType = new RTypeDto
             {
-                Id = targetRoom.RTypeId,
-                Name = targetRoom.RoomType.Name,
-                Description = targetRoom.RoomType.Description
+                Id = roomType!.Id,
+                Name = roomType!.Name,
+                Description = roomType!.Description
             }
         };
         return Ok(roomToReturn);
@@ -76,11 +79,17 @@ public class RoomsController : ControllerBase
 
     [HttpPost]
     [Authorize(Roles = RoleNames.Admin)]
-    public IActionResult CreateRoom(RoomUpdateDto dto)
+    public IActionResult CreateRoom(RoomDto dto)
     {
 
         var hotel = hotels.FirstOrDefault(x => x.Id == dto.HotelId);
+        var roomType = types.FirstOrDefault(x => x.Id == dto.RTypeId);
         if (hotel == null)
+        {
+            return BadRequest();
+        }
+
+        if(roomType == null)
         {
             return BadRequest();
         }
@@ -90,7 +99,8 @@ public class RoomsController : ControllerBase
             Rate = dto.Rate,
             RoomNumber = dto.RoomNumber,
             Image = dto.Image,
-            RTypeId = dto.RTypeId
+            RTypeId = dto.RTypeId,
+            RoomType = roomType
         };
 
         rooms.Add(room);
