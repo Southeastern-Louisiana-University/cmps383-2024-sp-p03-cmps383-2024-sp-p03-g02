@@ -10,8 +10,21 @@ interface HotelDto {
   locationId: number;
 }
 
-interface CityDto{
+interface CityDto {
   name?: string;
+}
+
+interface RoomDto {
+  id: number;
+  hotelId?: number;
+  rTypeId?: number;
+  rate?: number;
+  roomNumber?: number;
+  image?: string;
+  roomType?: {
+    id: number;
+    name: string;
+  };
 }
 
 const HotelDetailsPage: React.FC = () => {
@@ -19,8 +32,7 @@ const HotelDetailsPage: React.FC = () => {
   const [hotel, setHotel] = useState<HotelDto | null>(null);
   const [city, setCity] = useState<CityDto | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-
+  const [rooms, setRooms] = useState<RoomDto[]>([]);
 
   useEffect(() => {
     const fetchHotelDetails = async () => {
@@ -31,17 +43,24 @@ const HotelDetailsPage: React.FC = () => {
             `Failed to fetch hotel details. Status: ${hotelResponse.status}`
           );
         }
-        
         const hotelData: HotelDto = await hotelResponse.json();
         setHotel(hotelData);
-  
+
+        const roomResponse = await fetch(`/api/hotels/${id}/rooms`);
+        if (!roomResponse.ok) {
+          throw new Error(
+            `Failed to fetch room details. Status: ${roomResponse.status}`
+          );
+        }
+        const roomData: RoomDto[] = await roomResponse.json();
+        setRooms(roomData);
+
         const cityResponse = await fetch(`/api/cities/${hotelData.locationId}`);
         if (!cityResponse.ok) {
           throw new Error(
             `Failed to fetch city details. Status: ${cityResponse.status}`
           );
         }
-  
         const cityData: CityDto = await cityResponse.json();
         setCity(cityData);
       } catch (error) {
@@ -49,13 +68,20 @@ const HotelDetailsPage: React.FC = () => {
         setError("Failed to fetch hotel details. Please try again.");
       }
     };
-  
+
     fetchHotelDetails();
   }, [id]);
-  
 
   return (
-    <Container className="mt-4" style={{ border: "1px solid #dddddd", borderRadius: "8px", padding: "20px", boxShadow: "0 0 10px #FDBA74",  }}>
+    <Container
+      className="mt-4"
+      style={{
+        border: "1px solid #dddddd",
+        borderRadius: "8px",
+        padding: "20px",
+        boxShadow: "0 0 10px #FDBA74",
+      }}
+    >
       {hotel && (
         <div>
           <h1
@@ -68,21 +94,31 @@ const HotelDetailsPage: React.FC = () => {
           >
             {hotel.name}
           </h1>
-
           <Row className="justify-content-center">
-            <Col xs={12} sm={6} md={4} lg={3} className="mb-3">
-              <Card style={{ width: "100%", textAlign: "center", boxShadow: "0 0 10px #FDBA74", }}>
-                {/* Placeholder image */}
-                <Card.Img
-                  variant="top"
-                  src="https://imgur.com/f6DUjOS.png"
-                  alt="Hotel Placeholder"
-                  style={{ width: "100%" }}
-                />
-              </Card>
-            </Col>
+            {rooms.map((room) => (
+              <Col xs={12} sm={6} md={4} lg={3} className="mb-3" key={room.id}>
+                <Card
+                  style={{ width: "100%", textAlign: "center", boxShadow: "0 0 10px #FDBA74" }}
+                >
+                  <Card.Img
+                    variant="top"
+                    src={room.image}
+                    alt="Room Placeholder"
+                    style={{ width: "100%" }}
+                  />
+                  <Card.Body>
+                    <Card.Title>{room.roomType?.name}</Card.Title>
+                    <Card.Text>
+                      <strong>Rate: ~$</strong>{room.rate}
+                    </Card.Text>
+                    <Card.Text>
+                      <strong>Room Number:</strong> {room.roomNumber}
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
           </Row>
-
           <Row className="mt-4 justify-content-center">
             <Col xs={12} md={8} lg={6}>
               <p>
@@ -96,10 +132,12 @@ const HotelDetailsPage: React.FC = () => {
                 ut egestas elit vestibulum.
               </p>
               <p>
-                <strong>Contact Email: </strong>{hotel.email}
+                <strong>Contact Email: </strong>
+                {hotel.email}
               </p>
               <p>
-                <strong>City: </strong>{city?.name}
+                <strong>City: </strong>
+                {city?.name}
               </p>
               <Link to="/hotels" className="btn btn-warning">
                 Back
