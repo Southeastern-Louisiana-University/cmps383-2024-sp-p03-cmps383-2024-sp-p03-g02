@@ -9,9 +9,31 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow */
     padding: 10px; /* Add padding to give space for the shadow */
     border-radius: 15px; /* Make the search bar round */
-    
+    top:0;
 }
-  
+
+.wrapper.collapsed {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.hotel-search-bar.collapsed {
+  padding: 10px 20px;
+}
+
+.sticky-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 .wrapper input[type="date"],
 .wrapper select {
   margin-right: 10px;

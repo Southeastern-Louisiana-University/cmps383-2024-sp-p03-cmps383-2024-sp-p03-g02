@@ -14,11 +14,27 @@ const HotelSearchBar = () => {
   const [numRooms, setNumRooms] = useState(1);
   const [selectedMonth, setSelectedMonth] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
+  const [isHeaderCollapsed, setIsHeaderCollapsed] = useState(false);
+
+
 
   useEffect(() => {
     const currentMonth = today.toLocaleString('default', { month: 'long' });
     setSelectedMonth(currentMonth);
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const handleScroll = () => {
+    const scrollPosition = window.scrollY;
+    if (scrollPosition > 50) {
+      setIsHeaderCollapsed(true);
+    } else {
+      setIsHeaderCollapsed(false);
+    }
+  };
+  
 
   const cities = ['New Orleans', 'Hammond', 'Baton Rouge'];
   const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -54,15 +70,13 @@ const HotelSearchBar = () => {
 
   return (
     <>
-      <div className="wrapper" >
-        <center>
-          <h1>Welcome to EnStay!</h1>
-        </center>
-      </div>
-
-      <div className="wrapper">
+      <div className={`wrapper ${isHeaderCollapsed ? 'collapsed' : ''}`}>
         <div className="hotel-search-bar">
-          <DatePicker
+          <center>
+            <h1>
+              Welcome to EnStay!
+            </h1>
+            <DatePicker
             selected={checkInDate}
             onChange={(date) => setCheckInDate(date || today)}
             selectsStart
@@ -102,9 +116,11 @@ const HotelSearchBar = () => {
           <Link to="/hotels">
             <Button style={{ backgroundColor: '#FDBA74' }} onClick={handleSearch}> Search</Button>
           </Link>
-
+          </center>
         </div>
       </div>
+
+      
 <center>
       <div className="discover">  
         <h2>Discover the best time to book your next stay</h2>
