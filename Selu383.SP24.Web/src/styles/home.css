@@ -81,3 +81,23 @@
   font-size: 12px;
   padding-top: 10px;
 }
+
+.fullscreen-calendar-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Optionally add a semi-transparent background */
+  z-index: 999; /* Ensure the calendar appears above other elements */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  display: none;
+}
+
+.fullscreen-calendar {
+  /* Adjust width and height as needed for full-screen display */
+  width: 80%;
+  height: 80%;
+}

@@ -1,8 +1,15 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import '../../styles/home.css';
+import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+import "react-datepicker/dist/react-datepicker.css";
+import "../../styles/home.css";
+
+import { DateRange } from "react-date-range";
+
+import format from "date-fns/format";
+import { addDays } from "date-fns";
+
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
 
 const HotelSearchBar = () => {
   const today = new Date();
@@ -11,35 +18,14 @@ const HotelSearchBar = () => {
   const [checkOutDate, setCheckOutDate] = useState(tomorrow);
   const [numGuests, setNumGuests] = useState(1);
   const [numRooms, setNumRooms] = useState(1);
-  const [selectedMonth, setSelectedMonth] = useState('');
-  const [selectedCity, setSelectedCity] = useState('');
-
-  useEffect(() => {
-    const currentMonth = today.toLocaleString('default', { month: 'long' });
-    setSelectedMonth(currentMonth);
-  }, []);
-
-  const cities = ['New Orleans', 'Hammond', 'Baton Rouge'];
-  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  const housingPrices = [
-    { city: 'New Orleans', prices: [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160] },
-    { city: 'Hammond', prices: [60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170] },
-    { city: 'Baton Rouge', prices: [90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200] }
-  ];
 
   const handleSearch = () => {
-    console.log('Search with parameters:', {
+    console.log("Search with parameters:", {
       checkInDate,
       checkOutDate,
       numGuests,
       numRooms,
-      selectedMonth,
-      selectedCity
     });
-  };
-
-  const handleCitySelect = (city: string) => {
-    setSelectedCity(city);
   };
 
   function getNextDay(date: Date) {
@@ -48,12 +34,24 @@ const HotelSearchBar = () => {
     return nextDay;
   }
 
-  const monthsRow1 = months.slice(0, 6);
-  const monthsRow2 = months.slice(6);
+  // date state
+  const [range, setRange] = useState([
+    {
+      startDate: new Date(),
+      endDate: addDays(new Date(), 7),
+      key: "selection",
+    },
+  ]);
+
+  // open close
+  const [open, setOpen] = useState(false);
+
+  // get the target element to toggle
+  const refOne = useRef(null);
 
   return (
     <>
-      <div className="wrapper" >
+      <div className="wrapper">
         <center>
           <h1>Welcome to EnStay!</h1>
         </center>
@@ -61,23 +59,35 @@ const HotelSearchBar = () => {
 
       <div className="wrapper">
         <div className="hotel-search-bar">
-          <DatePicker
-            selected={checkInDate}
-            onChange={(date) => setCheckInDate(date || today)}
-            selectsStart
-            startDate={checkInDate}
-            endDate={checkOutDate}
-            placeholderText="From"
+          <input
+            value={`${format(range[0].startDate, "MM/dd/yyyy")} to ${format(
+              range[0].endDate,
+              "MM/dd/yyyy"
+            )}`}
+            readOnly
+            className="inputBox"
+            onClick={() => setOpen((open) => !open)}
           />
-          <DatePicker
-            selected={checkOutDate}
-            onChange={(date) => setCheckOutDate(date || tomorrow)}
-            selectsEnd
-            startDate={checkInDate}
-            endDate={checkOutDate}
-            minDate={checkInDate}
-            placeholderText="To"
-          />
+
+          <div ref={refOne}>
+            {open && (
+              <DateRange
+                onChange={(ranges) => {
+                  const startDate = ranges.selection.startDate ?? new Date(); // Ensure startDate is not undefined
+                  const endDate =
+                    ranges.selection.endDate ?? addDays(new Date(), 7); // Ensure endDate is not undefined
+                  setRange([{ startDate, endDate, key: "selection" }]);
+                }}
+                editableDateInputs={true}
+                moveRangeOnFirstSelection={false}
+                ranges={range}
+                months={1}
+                direction="horizontal"
+                className="calendarElement"
+                minDate={new Date()} // Prevent selection of dates before today
+              />
+            )}
+          </div>
           <select
             value={numGuests}
             onChange={(e) => setNumGuests(parseInt(e.target.value))}
@@ -103,52 +113,6 @@ const HotelSearchBar = () => {
           </Link>
         </div>
       </div>
-<center>
-      <div className="discover">  
-        <h2>Discover the best time to book your next stay</h2>
-        <div className="wrapper2">
-          <div className="city-buttons">
-            {cities.map(city => (
-              <button key={city} onClick={() => handleCitySelect(city)}>{city}</button>
-            ))}
-          </div>
-          {selectedMonth && (
-            <div className="wrapper">
-              <div className='months-column'>
-                {monthsRow1.map((month, index) => {
-                  const selectedCityPrices = housingPrices.find(item => item.city === selectedCity)?.prices;
-                  return (
-                    <Link to="/hotels">
-                    <button 
-                      key={month} 
-                      onClick={() => setSelectedMonth(month)}
-                    >
-                      {month} - {selectedCityPrices ? `$${selectedCityPrices[index]}` : 'Price not available'}
-                    </button>
-                    </Link>
-                  );
-                })}
-              </div>
-              <div className='months-column'>
-                {monthsRow2.map((month, index) => {
-                  const selectedCityPrices = housingPrices.find(item => item.city === selectedCity)?.prices;
-                  return (
-                    <Link to="/hotels">
-                    <button 
-                      key={month} 
-                      onClick={() => setSelectedMonth(month)}
-                    >
-                      {month} - {selectedCityPrices ? `$${selectedCityPrices[index + 6]}` : 'Price not available'}
-                    </button>
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-      </center>
     </>
   );
 };
