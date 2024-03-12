@@ -20,8 +20,7 @@ public static class SeedHelper
         await AddUsers(serviceProvider);
         await AddCities(dataContext);
         await AddTypes(dataContext);
-        /*await AddHotels(dataContext);*/
-/*        await AddRooms(dataContext);*/
+        await AddHotels(dataContext);
     }
 
     private static async Task AddUsers(IServiceProvider serviceProvider)
@@ -128,7 +127,7 @@ public static class SeedHelper
         await dataContext.SaveChangesAsync();
     }
 
-    /*private static async Task AddHotels(DataContext dataContext)
+    private static async Task AddHotels(DataContext dataContext)
     {
         var hotels = dataContext.Set<Hotel>();
 
@@ -176,7 +175,7 @@ public static class SeedHelper
         dataContext.Set<Hotel>()
                 .Add(new Hotel
                 {
-                    Name ="Quality Hotel",
+                    Name = "Quality Hotel",
                     Address = "234 Venue Ave",
                     ManagerId = 3,
                     LocationId = 3,
@@ -243,46 +242,6 @@ public static class SeedHelper
                 });
 
         await dataContext.SaveChangesAsync();
-    }*/
-
-/*    private static async Task AddRooms(DataContext dataContext)
-    {
-        var rooms = dataContext.Set<Room>();
-
-        if (await rooms.AnyAsync())
-        {
-            return;
-        }
-
-        for (int i = 6; i <= 14; i++)
-        {
-            for (int j = 100; j < 105; j++)
-            {
-                dataContext.Set<Room>()
-                .Add(new Room
-                {
-                    HotelId = i,
-                    Rate = 100,
-                    RoomNumber = j,
-                    Image = "",
-                    RTypeId = 1,
-                });
-            }
-            for (int k = 200; k < 205; k++)
-            {
-                dataContext.Set<Room>()
-                .Add(new Room
-                {
-                    HotelId = i,
-                    Rate = 150,
-                    RoomNumber = k,
-                    Image = "",
-                    RTypeId = 2,
-                });
-            }
-        }
-*//*
-        await dataContext.SaveChangesAsync();
     }
-*/
+
 }
