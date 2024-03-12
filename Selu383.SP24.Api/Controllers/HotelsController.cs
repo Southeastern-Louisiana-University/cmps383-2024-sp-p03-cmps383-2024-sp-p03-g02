@@ -95,6 +95,7 @@ public class HotelsController : ControllerBase
             ContactNumber = dto.ContactNumber,
             Email = dto.Email,
             Image = dto.Image,
+            Location = city
         };
         hotels.Add(hotel);
 
@@ -138,6 +139,7 @@ public class HotelsController : ControllerBase
         hotel.ContactNumber = dto.ContactNumber;
         hotel.Email = dto.Email;
         hotel.Image = dto.Image;
+        hotel.Location = city;
         if (User.IsInRole(RoleNames.Admin))
         {
             hotel.ManagerId = dto.ManagerId;
