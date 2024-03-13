@@ -13,6 +13,7 @@ namespace Selu383.SP24.Api.Features.Rooms
         public string Image { get; set; }
         public int RTypeId { get; set; }
         public RType RoomType { get; set; }
+        public ICollection<Reservation> Reservations { get; set; }
     }
 
     public class RoomDto

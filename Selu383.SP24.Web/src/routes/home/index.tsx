@@ -1,9 +1,34 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import { Button} from 'react-bootstrap'
-import { Link } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import '../../styles/home.css';
+import "react-datepicker/dist/react-datepicker.css";
+import "../../styles/home.css";
+
+import { DateRange } from "react-date-range";
+
+import format from "date-fns/format";
+import { addDays } from "date-fns";
+
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
+
+interface RoomDto {
+  id: number;
+  hotelId: number;
+  rate: number;
+  roomNumber: number;
+  image: string;
+  rTypeId: number;
+  roomType: RTypeDto;
+}
+
+interface RTypeDto {
+  id: number;
+  name: string;
+  description: string;
+}
+
 
 const HotelSearchBar = () => {
   const today = new Date();
@@ -12,35 +37,48 @@ const HotelSearchBar = () => {
   const [checkOutDate, setCheckOutDate] = useState(tomorrow);
   const [numGuests, setNumGuests] = useState(1);
   const [numRooms, setNumRooms] = useState(1);
-  const [selectedMonth, setSelectedMonth] = useState('');
-  const [selectedCity, setSelectedCity] = useState('');
-
-  useEffect(() => {
-    const currentMonth = today.toLocaleString('default', { month: 'long' });
-    setSelectedMonth(currentMonth);
-  }, []);
-
-  const cities = ['New Orleans', 'Hammond', 'Baton Rouge'];
-  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  const housingPrices = [
-    { city: 'New Orleans', prices: [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160] },
-    { city: 'Hammond', prices: [60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170] },
-    { city: 'Baton Rouge', prices: [90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200] }
-  ];
-
-  const handleSearch = () => {
-    console.log('Search with parameters:', {
-      checkInDate,
-      checkOutDate,
-      numGuests,
-      numRooms,
-      selectedMonth,
-      selectedCity
-    });
+  const [searchResults, setSearchResults] = useState<Array<RoomDto>>([]);
+  
+  const handleReservation = async (room: RoomDto) => {
+    const reservationData = {
+      roomId: room.id,
+      hotelId: room.hotelId,
+      checkInDate: format(range[0].startDate, "yyyy-MM-dd"),
+      checkOutDate: format(range[0].endDate, "yyyy-MM-dd")
+    };
+  
+    try {
+      const response = await fetch("/api/reservations", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(reservationData)
+      });
+  
+      if (response.ok) {
+        alert("Room reserved successfully!");
+      } else {
+        const responseData = await response.json();
+        alert(`Failed to reserve room: ${response.status} - ${response.statusText}. ${responseData.message}`);
+      }
+    } catch (error) {
+      alert("Failed to reserve room. Please try again later.");
+      console.error("Reservation error:", error);
+    }
   };
+  
 
-  const handleCitySelect = (city: string) => {
-    setSelectedCity(city);
+  const handleSearch = async () => {
+    const url = `/api/rooms/available?selectedDate=${format(range[0].startDate, "yyyy-MM-dd")}&numGuests=${numGuests}`;
+    console.log(url);
+    const response = await fetch(url);
+    if (response.ok) {
+      const availableRooms: Array<RoomDto> = await response.json();
+      setSearchResults(availableRooms);
+    } else {
+      console.error('Failed to fetch available rooms');
+    }
   };
 
   function getNextDay(date: Date) {
@@ -49,12 +87,22 @@ const HotelSearchBar = () => {
     return nextDay;
   }
 
-  const monthsRow1 = months.slice(0, 6);
-  const monthsRow2 = months.slice(6);
+  // date state
+  const [range, setRange] = useState([
+    {
+      startDate: new Date(),
+      endDate: addDays(new Date(), 7),
+      key: "selection",
+    },
+  ]);
+
+  const [open, setOpen] = useState(false);
+
+  const refOne = useRef(null);
 
   return (
     <>
-      <div className="wrapper" >
+      <div className="wrapper">
         <center>
           <h1>Welcome to EnStay!</h1>
         </center>
@@ -62,23 +110,35 @@ const HotelSearchBar = () => {
 
       <div className="wrapper">
         <div className="hotel-search-bar">
-          <DatePicker
-            selected={checkInDate}
-            onChange={(date) => setCheckInDate(date || today)}
-            selectsStart
-            startDate={checkInDate}
-            endDate={checkOutDate}
-            placeholderText="From"
+          <input
+            value={`${format(range[0].startDate, "MM/dd/yyyy")} to ${format(
+              range[0].endDate,
+              "MM/dd/yyyy"
+            )}`}
+            readOnly
+            className="inputBox"
+            onClick={() => setOpen((open) => !open)}
           />
-          <DatePicker
-            selected={checkOutDate}
-            onChange={(date) => setCheckOutDate(date || tomorrow)}
-            selectsEnd
-            startDate={checkInDate}
-            endDate={checkOutDate}
-            minDate={checkInDate}
-            placeholderText="To"
-          />
+
+          <div ref={refOne}>
+            {open && (
+              <DateRange
+                onChange={(ranges) => {
+                  const startDate = ranges.selection.startDate ?? new Date(); 
+                  const endDate =
+                    ranges.selection.endDate ?? addDays(new Date(), 7); 
+                  setRange([{ startDate, endDate, key: "selection" }]);
+                }}
+                editableDateInputs={true}
+                moveRangeOnFirstSelection={false}
+                ranges={range}
+                months={1}
+                direction="horizontal"
+                className="calendarElement"
+                minDate={new Date()} 
+              />
+            )}
+          </div>
           <select
             value={numGuests}
             onChange={(e) => setNumGuests(parseInt(e.target.value))}
@@ -99,58 +159,21 @@ const HotelSearchBar = () => {
               </option>
             ))}
           </select>
-          <Link to="/hotels">
-            <Button style={{ backgroundColor: '#FDBA74' }} onClick={handleSearch}> Search</Button>
-          </Link>
+          <Button style={{ backgroundColor: '#FDBA74' }} onClick={handleSearch}>Search</Button>
+        </div>
+      </div>
 
-        </div>
+      <div className="wrapper">
+        <h2>Search Results:</h2>
+        <ul>
+          {searchResults.map(room => (
+            <li key={room.id}>
+              Hotel ID: {room.hotelId}, Room Number: {room.roomNumber}, Rate: {room.rate}
+              <button onClick={() => handleReservation(room)}>Reserve</button>
+            </li>
+          ))}
+        </ul>
       </div>
-<center>
-      <div className="discover">  
-        <h2>Discover the best time to book your next stay</h2>
-        <div className="wrapper2">
-          <div className="city-buttons">
-            {cities.map(city => (
-              <button key={city} onClick={() => handleCitySelect(city)}>{city}</button>
-            ))}
-          </div>
-          {selectedMonth && (
-            <div className="wrapper">
-              <div className='months-column'>
-                {monthsRow1.map((month, index) => {
-                  const selectedCityPrices = housingPrices.find(item => item.city === selectedCity)?.prices;
-                  return (
-                    <Link to="/hotels">
-                    <button 
-                      key={month} 
-                      onClick={() => setSelectedMonth(month)}
-                    >
-                      {month} - {selectedCityPrices ? `$${selectedCityPrices[index]}` : 'Price not available'}
-                    </button>
-                    </Link>
-                  );
-                })}
-              </div>
-              <div className='months-column'>
-                {monthsRow2.map((month, index) => {
-                  const selectedCityPrices = housingPrices.find(item => item.city === selectedCity)?.prices;
-                  return (
-                    <Link to="/hotels">
-                    <button 
-                      key={month} 
-                      onClick={() => setSelectedMonth(month)}
-                    >
-                      {month} - {selectedCityPrices ? `$${selectedCityPrices[index + 6]}` : 'Price not available'}
-                    </button>
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-      </center>
     </>
   );
 };
