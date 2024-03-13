@@ -24,7 +24,7 @@ export default function NavbarLayout(){
     return(
         <>
             <>
-            <Navbar className="navbar navbar-light bg-light">
+            <Navbar className="navbar navbar-light bg-light" style={{ position: 'sticky', top: 0, zIndex: 1000 }}>
             <Link to={'/'}><span style={{ color: '#FDBA74' }} className="navbar-brand mb-0 h1">EnStay</span></Link>
                  <ul className="navbar-nav ml-auto"> 
                     <li className="nav-item"> 
