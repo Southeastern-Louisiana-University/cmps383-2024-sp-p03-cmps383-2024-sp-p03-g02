@@ -1,22 +1,15 @@
 import { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
-import { Button, Card, Col, Container, Row} from 'react-bootstrap'
-import DatePicker from 'react-datepicker';
-import "react-datepicker/dist/react-datepicker.css";
-import "../../styles/home.css";
-
+import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 import { DateRange } from "react-date-range";
-
 import format from "date-fns/format";
 import { addDays } from "date-fns";
-
+import "react-datepicker/dist/react-datepicker.css";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 
 interface RoomDto {
   id: number;
   hotelId: number;
-  hotel: HotelDto;
   rate: number;
   roomNumber: number;
   image: string;
@@ -30,17 +23,16 @@ interface RTypeDto {
   description: string;
 }
 
-interface HotelDto{
+interface HotelDto {
   id: number;
-  Name: string;
-  Address: string;
-  LocationId: number;
+  name?: string;
+  address: string;
+  locationId: number;
 }
-
 
 const HotelSearchBar = () => {
   const [selectedCheckInDate, setSelectedCheckInDate] = useState<Date | null>(null);
-const [selectedCheckOutDate, setSelectedCheckOutDate] = useState<Date | null>(null);
+  const [selectedCheckOutDate, setSelectedCheckOutDate] = useState<Date | null>(null);
   const [numGuests, setNumGuests] = useState(1);
   const [numRooms, setNumRooms] = useState(1);
   const [searchResults, setSearchResults] = useState<Array<RoomDto>>([]);
@@ -60,13 +52,12 @@ const [selectedCheckOutDate, setSelectedCheckOutDate] = useState<Date | null>(nu
     fetchHotels();
   }, []);
 
-  
   const handleReservation = async (room: RoomDto, checkInDate: Date | null, checkOutDate: Date | null) => {
     if (!checkInDate || !checkOutDate) {
       alert("Please select check-in and check-out dates.");
       return;
     }
-  
+
     const reservationData = {
       roomId: room.id,
       hotelId: room.hotelId,
@@ -81,7 +72,7 @@ const [selectedCheckOutDate, setSelectedCheckOutDate] = useState<Date | null>(nu
         },
         body: JSON.stringify(reservationData)
       });
-  
+
       if (response.ok) {
         alert("Room reserved successfully!");
       } else {
@@ -93,7 +84,6 @@ const [selectedCheckOutDate, setSelectedCheckOutDate] = useState<Date | null>(nu
       console.error("Reservation error:", error);
     }
   };
-  
 
   const handleSearch = async () => {
     const url = `/api/rooms/available?selectedDate=${format(range[0].startDate, "yyyy-MM-dd")}&numGuests=${numGuests}`;
@@ -108,7 +98,6 @@ const [selectedCheckOutDate, setSelectedCheckOutDate] = useState<Date | null>(nu
       console.error('Failed to fetch available rooms');
     }
   };
-  
 
   function getNextDay(date: Date) {
     const nextDay = new Date(date);
@@ -116,7 +105,6 @@ const [selectedCheckOutDate, setSelectedCheckOutDate] = useState<Date | null>(nu
     return nextDay;
   }
 
-  // date state
   const [range, setRange] = useState([
     {
       startDate: new Date(),
@@ -138,12 +126,13 @@ const [selectedCheckOutDate, setSelectedCheckOutDate] = useState<Date | null>(nu
       </div>
 
       <div className="wrapper">
+          <center>
         <div className="hotel-search-bar">
           <input
             value={`${format(range[0].startDate, "MM/dd/yyyy")} to ${format(
               range[0].endDate,
               "MM/dd/yyyy"
-            )}`}
+              )}`}
             readOnly
             className="inputBox"
             onClick={() => setOpen((open) => !open)}
@@ -152,19 +141,19 @@ const [selectedCheckOutDate, setSelectedCheckOutDate] = useState<Date | null>(nu
           <div ref={refOne}>
             {open && (
               <DateRange
-              onChange={(ranges) => {
-                const startDate = ranges.selection?.startDate ?? new Date(); // Provide a default value if startDate is undefined
-                const endDate = ranges.selection?.endDate ?? addDays(new Date(), 7); // Provide a default value if endDate is undefined
-                setRange([{ startDate, endDate, key: "selection" }]);
-              }}
-              editableDateInputs={true}
-              moveRangeOnFirstSelection={false}
-              ranges={range}
-              months={1}
-              direction="horizontal"
-              className="calendarElement"
-              minDate={new Date()} 
-            />
+                onChange={(ranges) => {
+                  const startDate = ranges.selection?.startDate ?? new Date(); // Provide a default value if startDate is undefined
+                  const endDate = ranges.selection?.endDate ?? addDays(new Date(), 7); // Provide a default value if endDate is undefined
+                  setRange([{ startDate, endDate, key: "selection" }]);
+                }}
+                editableDateInputs={true}
+                moveRangeOnFirstSelection={false}
+                ranges={range}
+                months={1}
+                direction="horizontal"
+                className="calendarElement"
+                minDate={new Date()} 
+              />
             )}
           </div>
           <select
@@ -189,6 +178,7 @@ const [selectedCheckOutDate, setSelectedCheckOutDate] = useState<Date | null>(nu
           </select>
           <Button style={{ backgroundColor: '#FDBA74' }} onClick={handleSearch}>Search</Button>
         </div>
+        </center>
       </div>
 
       <div className="wrapper">
@@ -205,9 +195,10 @@ const [selectedCheckOutDate, setSelectedCheckOutDate] = useState<Date | null>(nu
                   className="shadow"
                 >
                   <Card.Img variant="top" src={room.image} alt="Room Image" />
-
                   <Card.Body>
-                    <Card.Title style={{ color: "#000000", fontWeight: "bold", textShadow: "2px 2px 5px #FDBA74" }}>Hotel Name: {room.hotel.Name}  </Card.Title>
+                    <Card.Title style={{ color: "#000000", fontWeight: "bold", textShadow: "2px 2px 5px #FDBA74" }}>
+                      Hotel Name: {hotels.find(hotel => hotel.id === room.hotelId)?.name ?? 'Unknown'}
+                    </Card.Title>
                     <Card.Text>Room Number: {room.roomNumber}</Card.Text>
                     <Card.Text>Rate: {room.rate}</Card.Text>
                     <Card.Text>Description: {room.roomType.description}</Card.Text>
