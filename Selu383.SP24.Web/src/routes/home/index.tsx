@@ -11,6 +11,22 @@ import { addDays } from "date-fns";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 
+interface RoomDto {
+  id: number;
+  hotelId: number;
+  rate: number;
+  roomNumber: number;
+  image: string;
+  rTypeId: number;
+  roomType: RTypeDto;
+}
+
+interface RTypeDto {
+  id: number;
+  name: string;
+  description: string;
+}
+
 const HotelSearchBar = () => {
   const today = new Date();
   const tomorrow = getNextDay(today);
@@ -18,14 +34,48 @@ const HotelSearchBar = () => {
   const [checkOutDate, setCheckOutDate] = useState(tomorrow);
   const [numGuests, setNumGuests] = useState(1);
   const [numRooms, setNumRooms] = useState(1);
+  const [searchResults, setSearchResults] = useState<Array<RoomDto>>([]);
+  
+  const handleReservation = async (room: RoomDto) => {
+    const reservationData = {
+      roomId: room.id,
+      hotelId: room.hotelId,
+      checkInDate: format(range[0].startDate, "yyyy-MM-dd"),
+      checkOutDate: format(range[0].endDate, "yyyy-MM-dd")
+    };
+  
+    try {
+      const response = await fetch("/api/reservations", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(reservationData)
+      });
+  
+      if (response.ok) {
+        alert("Room reserved successfully!");
+      } else {
+        const responseData = await response.json();
+        alert(`Failed to reserve room: ${response.status} - ${response.statusText}. ${responseData.message}`);
+      }
+    } catch (error) {
+      alert("Failed to reserve room. Please try again later.");
+      console.error("Reservation error:", error);
+    }
+  };
+  
 
-  const handleSearch = () => {
-    console.log("Search with parameters:", {
-      checkInDate,
-      checkOutDate,
-      numGuests,
-      numRooms,
-    });
+  const handleSearch = async () => {
+    const url = `/api/rooms/available?selectedDate=${format(range[0].startDate, "yyyy-MM-dd")}&numGuests=${numGuests}`;
+    console.log(url);
+    const response = await fetch(url);
+    if (response.ok) {
+      const availableRooms: Array<RoomDto> = await response.json();
+      setSearchResults(availableRooms);
+    } else {
+      console.error('Failed to fetch available rooms');
+    }
   };
 
   function getNextDay(date: Date) {
@@ -43,10 +93,8 @@ const HotelSearchBar = () => {
     },
   ]);
 
-  // open close
   const [open, setOpen] = useState(false);
 
-  // get the target element to toggle
   const refOne = useRef(null);
 
   return (
@@ -73,9 +121,9 @@ const HotelSearchBar = () => {
             {open && (
               <DateRange
                 onChange={(ranges) => {
-                  const startDate = ranges.selection.startDate ?? new Date(); // Ensure startDate is not undefined
+                  const startDate = ranges.selection.startDate ?? new Date(); 
                   const endDate =
-                    ranges.selection.endDate ?? addDays(new Date(), 7); // Ensure endDate is not undefined
+                    ranges.selection.endDate ?? addDays(new Date(), 7); 
                   setRange([{ startDate, endDate, key: "selection" }]);
                 }}
                 editableDateInputs={true}
@@ -84,7 +132,7 @@ const HotelSearchBar = () => {
                 months={1}
                 direction="horizontal"
                 className="calendarElement"
-                minDate={new Date()} // Prevent selection of dates before today
+                minDate={new Date()} 
               />
             )}
           </div>
@@ -108,10 +156,20 @@ const HotelSearchBar = () => {
               </option>
             ))}
           </select>
-          <Link to="/hotels">
-            <button onClick={handleSearch}>Search</button>
-          </Link>
+          <button onClick={handleSearch}>Search</button>
         </div>
+      </div>
+
+      <div className="wrapper">
+        <h2>Search Results:</h2>
+        <ul>
+          {searchResults.map(room => (
+            <li key={room.id}>
+              Hotel ID: {room.hotelId}, Room Number: {room.roomNumber}, Rate: {room.rate}
+              <button onClick={() => handleReservation(room)}>Reserve</button>
+            </li>
+          ))}
+        </ul>
       </div>
     </>
   );
