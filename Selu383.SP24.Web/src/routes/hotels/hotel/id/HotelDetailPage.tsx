@@ -139,7 +139,7 @@ const HotelDetailsPage: React.FC = () => {
                 <strong>City: </strong>
                 {city?.name}
               </p>
-              <Link to="/hotels" className="btn btn-warning">
+              <Link to="/hotels" className="btn btn-warning" style={{ backgroundColor: "#FDBA74" }}>
                 Back
               </Link>
             </Col>
