@@ -1,83 +1,155 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import '../../styles/home.css';
+import { useState, useEffect, useRef } from "react";
+import { Button, Card, Col, Container, Row } from 'react-bootstrap';
+import { DateRange } from "react-date-range";
+import format from "date-fns/format";
+import { addDays } from "date-fns";
+import "react-datepicker/dist/react-datepicker.css";
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
+
+interface RoomDto {
+  id: number;
+  hotelId: number;
+  rate: number;
+  roomNumber: number;
+  image: string;
+  rTypeId: number;
+  roomType: RTypeDto;
+}
+
+interface RTypeDto {
+  id: number;
+  name: string;
+  description: string;
+}
+
+interface HotelDto {
+  id: number;
+  name?: string;
+  address: string;
+  locationId: number;
+}
 
 const HotelSearchBar = () => {
-  const today = new Date();
-  const tomorrow = getNextDay(today);
-  const [checkInDate, setCheckInDate] = useState(today);
-  const [checkOutDate, setCheckOutDate] = useState(tomorrow);
+  const [selectedCheckInDate, setSelectedCheckInDate] = useState<Date | null>(null);
+  const [selectedCheckOutDate, setSelectedCheckOutDate] = useState<Date | null>(null);
   const [numGuests, setNumGuests] = useState(1);
   const [numRooms, setNumRooms] = useState(1);
-  const [selectedMonth, setSelectedMonth] = useState('');
-  const [selectedCity, setSelectedCity] = useState('');
+  const [searchResults, setSearchResults] = useState<Array<RoomDto>>([]);
+  const [hotels, setHotels] = useState<HotelDto[]>([]);
 
   useEffect(() => {
-    const currentMonth = today.toLocaleString('default', { month: 'long' });
-    setSelectedMonth(currentMonth);
+    const fetchHotels = async () => {
+      try {
+        const response = await fetch('/api/hotels');
+        const data: HotelDto[] = await response.json();
+        setHotels(data);
+      } catch (error) {
+        console.error('Error fetching hotels:', error);
+      }
+    };
+
+    fetchHotels();
   }, []);
 
-  const cities = ['New Orleans', 'Hammond', 'Baton Rouge'];
-  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  const housingPrices = [
-    { city: 'New Orleans', prices: [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160] },
-    { city: 'Hammond', prices: [60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170] },
-    { city: 'Baton Rouge', prices: [90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200] }
-  ];
+  const handleReservation = async (room: RoomDto, checkInDate: Date | null, checkOutDate: Date | null) => {
+    if (!checkInDate || !checkOutDate) {
+      alert("Please select check-in and check-out dates.");
+      return;
+    }
 
-  const handleSearch = () => {
-    console.log('Search with parameters:', {
-      checkInDate,
-      checkOutDate,
-      numGuests,
-      numRooms,
-      selectedMonth,
-      selectedCity
-    });
+    const reservationData = {
+      roomId: room.id,
+      hotelId: room.hotelId,
+      checkInDate: format(checkInDate, "yyyy-MM-dd"),
+      checkOutDate: format(checkOutDate, "yyyy-MM-dd")
+    };
+    try {
+      const response = await fetch("/api/rooms/reserve", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(reservationData)
+      });
+
+      if (response.ok) {
+        alert("Room reserved successfully!");
+      } else {
+        const responseData = await response.json();
+        alert(`Failed to reserve room: ${response.status} - ${response.statusText}. ${responseData.message}`);
+      }
+    } catch (error) {
+      alert("Failed to reserve room. Please try again later.");
+      console.error("Reservation error:", error);
+    }
   };
 
-  const handleCitySelect = (city: string) => {
-    setSelectedCity(city);
+  const handleSearch = async () => {
+    const url = `/api/rooms/available?selectedDate=${format(range[0].startDate, "yyyy-MM-dd")}&numGuests=${numGuests}`;
+    console.log(url);
+    const response = await fetch(url);
+    if (response.ok) {
+      const availableRooms: Array<RoomDto> = await response.json();
+      setSearchResults(availableRooms);
+      setSelectedCheckInDate(range[0].startDate); // Update selected check-in date
+      setSelectedCheckOutDate(range[0].endDate); // Update selected check-out date
+    } else {
+      console.error('Failed to fetch available rooms');
+    }
   };
 
-  function getNextDay(date: Date) {
-    const nextDay = new Date(date);
-    nextDay.setDate(date.getDate() + 1);
-    return nextDay;
-  }
+  const [range, setRange] = useState([
+    {
+      startDate: new Date(),
+      endDate: addDays(new Date(), 7),
+      key: "selection",
+    },
+  ]);
 
-  const monthsRow1 = months.slice(0, 6);
-  const monthsRow2 = months.slice(6);
+  const [open, setOpen] = useState(false);
+
+  const refOne = useRef(null);
 
   return (
     <>
-      <div className="wrapper" >
+      <div className="wrapper">
         <center>
           <h1>Welcome to EnStay!</h1>
         </center>
       </div>
 
       <div className="wrapper">
+          <center>
         <div className="hotel-search-bar">
-          <DatePicker
-            selected={checkInDate}
-            onChange={(date) => setCheckInDate(date || today)}
-            selectsStart
-            startDate={checkInDate}
-            endDate={checkOutDate}
-            placeholderText="From"
+          <input
+            value={`${format(range[0].startDate, "MM/dd/yyyy")} to ${format(
+              range[0].endDate,
+              "MM/dd/yyyy"
+              )}`}
+            readOnly
+            className="inputBox"
+            onClick={() => setOpen((open) => !open)}
           />
-          <DatePicker
-            selected={checkOutDate}
-            onChange={(date) => setCheckOutDate(date || tomorrow)}
-            selectsEnd
-            startDate={checkInDate}
-            endDate={checkOutDate}
-            minDate={checkInDate}
-            placeholderText="To"
-          />
+
+          <div ref={refOne}>
+            {open && (
+              <DateRange
+                onChange={(ranges) => {
+                  const startDate = ranges.selection?.startDate ?? new Date(); // Provide a default value if startDate is undefined
+                  const endDate = ranges.selection?.endDate ?? addDays(new Date(), 7); // Provide a default value if endDate is undefined
+                  setRange([{ startDate, endDate, key: "selection" }]);
+                }}
+                editableDateInputs={true}
+                moveRangeOnFirstSelection={false}
+                ranges={range}
+                months={1}
+                direction="horizontal"
+                className="calendarElement"
+                minDate={new Date()} 
+              />
+            )}
+          </div>
           <select
             value={numGuests}
             onChange={(e) => setNumGuests(parseInt(e.target.value))}
@@ -98,57 +170,40 @@ const HotelSearchBar = () => {
               </option>
             ))}
           </select>
-          <Link to="/hotels">
-            <button onClick={handleSearch}>Search</button>
-          </Link>
+          <Button style={{ backgroundColor: '#FDBA74' }} onClick={handleSearch}>Search</Button>
         </div>
+        </center>
       </div>
-<center>
-      <div className="discover">  
-        <h2>Discover the best time to book your next stay</h2>
-        <div className="wrapper2">
-          <div className="city-buttons">
-            {cities.map(city => (
-              <button key={city} onClick={() => handleCitySelect(city)}>{city}</button>
+
+      <div className="wrapper">
+        <Container fluid>
+          <Row>
+            {searchResults.map((room) => (
+              <Col key={room.id} xs={12} sm={6} md={4} lg={3} className="mb-3">
+                <Card
+                  style={{
+                    width: "100%",
+                    cursor: "pointer",
+                    transition: "box-shadow 0.3s",
+                  }}
+                  className="shadow"
+                >
+                  <Card.Img variant="top" src={room.image} alt="Room Image" />
+                  <Card.Body>
+                    <Card.Title style={{ color: "#000000", fontWeight: "bold", textShadow: "2px 2px 5px #FDBA74" }}>
+                      Hotel Name: {hotels.find(hotel => hotel.id === room.hotelId)?.name ?? 'Unknown'}
+                    </Card.Title>
+                    <Card.Text>Room Number: {room.roomNumber}</Card.Text>
+                    <Card.Text>Rate: ${room.rate}</Card.Text>
+                    <Card.Text>Description: {room.roomType.description}</Card.Text>
+                    <Button onClick={() => handleReservation(room, selectedCheckInDate, selectedCheckOutDate)}>Reserve</Button>
+                  </Card.Body>
+                </Card>
+              </Col>
             ))}
-          </div>
-          {selectedMonth && (
-            <div className="wrapper">
-              <div className='months-column'>
-                {monthsRow1.map((month, index) => {
-                  const selectedCityPrices = housingPrices.find(item => item.city === selectedCity)?.prices;
-                  return (
-                    <Link to="/hotels">
-                    <button 
-                      key={month} 
-                      onClick={() => setSelectedMonth(month)}
-                    >
-                      {month} - {selectedCityPrices ? `$${selectedCityPrices[index]}` : 'Price not available'}
-                    </button>
-                    </Link>
-                  );
-                })}
-              </div>
-              <div className='months-column'>
-                {monthsRow2.map((month, index) => {
-                  const selectedCityPrices = housingPrices.find(item => item.city === selectedCity)?.prices;
-                  return (
-                    <Link to="/hotels">
-                    <button 
-                      key={month} 
-                      onClick={() => setSelectedMonth(month)}
-                    >
-                      {month} - {selectedCityPrices ? `$${selectedCityPrices[index + 6]}` : 'Price not available'}
-                    </button>
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-        </div>
+          </Row>
+        </Container>
       </div>
-      </center>
     </>
   );
 };
