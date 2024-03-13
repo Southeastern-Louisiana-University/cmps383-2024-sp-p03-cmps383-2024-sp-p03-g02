@@ -7,7 +7,6 @@ public class Reservation
     public Room Room { get; set; }
     public DateTime CheckInDate { get; set; }
     public DateTime CheckOutDate { get; set; }
-    // Add more reservation-related properties as needed
 }
 
 public class ReservationDto

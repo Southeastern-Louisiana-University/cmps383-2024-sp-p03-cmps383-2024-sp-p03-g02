@@ -20,6 +20,7 @@ namespace Selu383.SP24.Api.Features.Rooms
     {
         public int Id { get; set; }
         public int HotelId { get; set; }
+        public HotelDto Hotel { get; set; }
         public int Rate { get; set; }
         public int RoomNumber { get; set; }
         public string Image { get; set; }

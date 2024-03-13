@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { Button} from 'react-bootstrap'
+import { Button, Card, Col, Container, Row} from 'react-bootstrap'
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import "../../styles/home.css";
@@ -16,6 +16,7 @@ import "react-date-range/dist/theme/default.css";
 interface RoomDto {
   id: number;
   hotelId: number;
+  hotel: HotelDto;
   rate: number;
   roomNumber: number;
   image: string;
@@ -29,26 +30,51 @@ interface RTypeDto {
   description: string;
 }
 
+interface HotelDto{
+  id: number;
+  Name: string;
+  Address: string;
+  LocationId: number;
+}
+
 
 const HotelSearchBar = () => {
-  const today = new Date();
-  const tomorrow = getNextDay(today);
-  const [checkInDate, setCheckInDate] = useState(today);
-  const [checkOutDate, setCheckOutDate] = useState(tomorrow);
+  const [selectedCheckInDate, setSelectedCheckInDate] = useState<Date | null>(null);
+const [selectedCheckOutDate, setSelectedCheckOutDate] = useState<Date | null>(null);
   const [numGuests, setNumGuests] = useState(1);
   const [numRooms, setNumRooms] = useState(1);
   const [searchResults, setSearchResults] = useState<Array<RoomDto>>([]);
+  const [hotels, setHotels] = useState<HotelDto[]>([]);
+
+  useEffect(() => {
+    const fetchHotels = async () => {
+      try {
+        const response = await fetch('/api/hotels');
+        const data: HotelDto[] = await response.json();
+        setHotels(data);
+      } catch (error) {
+        console.error('Error fetching hotels:', error);
+      }
+    };
+
+    fetchHotels();
+  }, []);
+
   
-  const handleReservation = async (room: RoomDto) => {
+  const handleReservation = async (room: RoomDto, checkInDate: Date | null, checkOutDate: Date | null) => {
+    if (!checkInDate || !checkOutDate) {
+      alert("Please select check-in and check-out dates.");
+      return;
+    }
+  
     const reservationData = {
       roomId: room.id,
       hotelId: room.hotelId,
-      checkInDate: format(range[0].startDate, "yyyy-MM-dd"),
-      checkOutDate: format(range[0].endDate, "yyyy-MM-dd")
+      checkInDate: format(checkInDate, "yyyy-MM-dd"),
+      checkOutDate: format(checkOutDate, "yyyy-MM-dd")
     };
-  
     try {
-      const response = await fetch("/api/reservations", {
+      const response = await fetch("/api/rooms/reserve", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -76,14 +102,17 @@ const HotelSearchBar = () => {
     if (response.ok) {
       const availableRooms: Array<RoomDto> = await response.json();
       setSearchResults(availableRooms);
+      setSelectedCheckInDate(range[0].startDate); // Update selected check-in date
+      setSelectedCheckOutDate(range[0].endDate); // Update selected check-out date
     } else {
       console.error('Failed to fetch available rooms');
     }
   };
+  
 
   function getNextDay(date: Date) {
     const nextDay = new Date(date);
-    nextDay.setDate(date.getDate() + 1);
+    nextDay.setDate(date.getDate() + 3);
     return nextDay;
   }
 
@@ -123,20 +152,19 @@ const HotelSearchBar = () => {
           <div ref={refOne}>
             {open && (
               <DateRange
-                onChange={(ranges) => {
-                  const startDate = ranges.selection.startDate ?? new Date(); 
-                  const endDate =
-                    ranges.selection.endDate ?? addDays(new Date(), 7); 
-                  setRange([{ startDate, endDate, key: "selection" }]);
-                }}
-                editableDateInputs={true}
-                moveRangeOnFirstSelection={false}
-                ranges={range}
-                months={1}
-                direction="horizontal"
-                className="calendarElement"
-                minDate={new Date()} 
-              />
+              onChange={(ranges) => {
+                const startDate = ranges.selection?.startDate ?? new Date(); // Provide a default value if startDate is undefined
+                const endDate = ranges.selection?.endDate ?? addDays(new Date(), 7); // Provide a default value if endDate is undefined
+                setRange([{ startDate, endDate, key: "selection" }]);
+              }}
+              editableDateInputs={true}
+              moveRangeOnFirstSelection={false}
+              ranges={range}
+              months={1}
+              direction="horizontal"
+              className="calendarElement"
+              minDate={new Date()} 
+            />
             )}
           </div>
           <select
@@ -164,15 +192,32 @@ const HotelSearchBar = () => {
       </div>
 
       <div className="wrapper">
-        <h2>Search Results:</h2>
-        <ul>
-          {searchResults.map(room => (
-            <li key={room.id}>
-              Hotel ID: {room.hotelId}, Room Number: {room.roomNumber}, Rate: {room.rate}
-              <button onClick={() => handleReservation(room)}>Reserve</button>
-            </li>
-          ))}
-        </ul>
+        <Container fluid>
+          <Row>
+            {searchResults.map((room) => (
+              <Col key={room.id} xs={12} sm={6} md={4} lg={3} className="mb-3">
+                <Card
+                  style={{
+                    width: "100%",
+                    cursor: "pointer",
+                    transition: "box-shadow 0.3s",
+                  }}
+                  className="shadow"
+                >
+                  <Card.Img variant="top" src={room.image} alt="Room Image" />
+
+                  <Card.Body>
+                    <Card.Title style={{ color: "#000000", fontWeight: "bold", textShadow: "2px 2px 5px #FDBA74" }}>Hotel Name: {room.hotel.Name}  </Card.Title>
+                    <Card.Text>Room Number: {room.roomNumber}</Card.Text>
+                    <Card.Text>Rate: {room.rate}</Card.Text>
+                    <Card.Text>Description: {room.roomType.description}</Card.Text>
+                    <Button onClick={() => handleReservation(room, selectedCheckInDate, selectedCheckOutDate)}>Reserve</Button>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </Container>
       </div>
     </>
   );

@@ -235,6 +235,13 @@ public class RoomsController : ControllerBase
                     Name = room.RoomType.Name,
                     Description = room.RoomType.Description,
                     Capacity = room.RoomType.Capacity  
+                },
+                Hotel = new HotelDto
+                {
+                    Id = room.Hotel.Id,
+                    Name = room.Hotel.Name,
+                    Address = room.Hotel.Address,
+                    LocationId = room.Hotel.LocationId
                 }
             })
             .ToList();
@@ -244,7 +251,7 @@ public class RoomsController : ControllerBase
 
     private bool IsRoomAvailable(int roomId, DateTime checkInDate, DateTime checkOutDate)
     {
-        return reservations.Any(r =>
+        return !reservations.Any(r =>
             r.RoomId == roomId &&
             (checkInDate < r.CheckOutDate && checkOutDate > r.CheckInDate));
     }
@@ -278,5 +285,20 @@ public class RoomsController : ControllerBase
         return Ok("Room reserved successfully.");
     }
 
+    [HttpDelete("DeleteReservation")]
+    [Authorize(Roles = RoleNames.Admin)]
+    public IActionResult DeleteAllReservations()
+    {
+        try
+        {
+            reservations.RemoveRange(reservations); // Delete all reservations
+            _dataContext.SaveChanges();
+            return Ok("All reservations deleted successfully.");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"An error occurred while deleting reservations: {ex.Message}");
+        }
+    }
 
 }
