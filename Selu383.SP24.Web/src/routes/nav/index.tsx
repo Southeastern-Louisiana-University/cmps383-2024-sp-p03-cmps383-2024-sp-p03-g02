@@ -26,6 +26,7 @@ export default function NavbarLayout(){
             <>
             <Navbar className="navbar navbar-light bg-light" style={{ position: 'sticky', top: 0, zIndex: 1000 }}>
             <Link to={'/'}><span style={{ color: '#FDBA74' }} className="navbar-brand mb-0 h1">EnStay</span></Link>
+            <Link to={'/Hotels'}><Button style={{ border: "1px solid black"} } className="btn-light">Hotels</Button></Link>
                  <ul className="navbar-nav ml-auto"> 
                     <li className="nav-item"> 
                     {user !== null ? <div><Button style={{ backgroundColor: '#FDBA74' }} className="btn-light" onClick = {handleSignout}>Logout</Button></div>  : 
