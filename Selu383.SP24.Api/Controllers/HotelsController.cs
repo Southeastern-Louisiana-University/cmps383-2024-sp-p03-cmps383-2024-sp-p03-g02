@@ -7,6 +7,7 @@ using Selu383.SP24.Api.Features.Authorization;
 using Selu383.SP24.Api.Features.Cities;
 using Selu383.SP24.Api.Features.Hotels;
 using Selu383.SP24.Api.Features.Rooms;
+using Selu383.SP24.Api.Features.RTypes;
 
 namespace Selu383.SP24.Api.Controllers;
 
@@ -44,6 +45,13 @@ public class HotelsController : ControllerBase
                 Rate = x.Rate,
                 RoomNumber = x.RoomNumber,
                 RTypeId = x.RTypeId,
+                Image = x.Image,
+                RoomType = new RTypeDto
+                {
+                    Id = x.RTypeId,
+                    Name = x.RoomType.Name,
+                    Description = x.RoomType.Description,
+                }
             })
             .ToList();
 
@@ -87,6 +95,7 @@ public class HotelsController : ControllerBase
             ContactNumber = dto.ContactNumber,
             Email = dto.Email,
             Image = dto.Image,
+            Location = city
         };
         hotels.Add(hotel);
 
@@ -130,6 +139,7 @@ public class HotelsController : ControllerBase
         hotel.ContactNumber = dto.ContactNumber;
         hotel.Email = dto.Email;
         hotel.Image = dto.Image;
+        hotel.Location = city;
         if (User.IsInRole(RoleNames.Admin))
         {
             hotel.ManagerId = dto.ManagerId;
@@ -202,6 +212,7 @@ public class HotelsController : ControllerBase
                 LocationId = x.Location.Id,
                 Location = new CityDto
                 {
+                    Id = x.Location.Id,
                     Name = x.Location.Name,
                 },
                 ContactNumber = x.ContactNumber,

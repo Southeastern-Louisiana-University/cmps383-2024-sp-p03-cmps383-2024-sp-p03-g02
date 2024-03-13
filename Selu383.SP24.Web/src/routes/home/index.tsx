@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import { Button} from 'react-bootstrap'
+import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import "../../styles/home.css";
 
@@ -26,6 +28,7 @@ interface RTypeDto {
   name: string;
   description: string;
 }
+
 
 const HotelSearchBar = () => {
   const today = new Date();
@@ -156,7 +159,7 @@ const HotelSearchBar = () => {
               </option>
             ))}
           </select>
-          <button onClick={handleSearch}>Search</button>
+          <Button style={{ backgroundColor: '#FDBA74' }} onClick={handleSearch}>Search</Button>
         </div>
       </div>
 
