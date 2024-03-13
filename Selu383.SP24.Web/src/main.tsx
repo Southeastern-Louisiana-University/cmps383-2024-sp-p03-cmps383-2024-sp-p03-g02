@@ -32,7 +32,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/Hotels/:id',
-        element: <HotelDetailsPage onDelete={() => {}} />,
+        element: <HotelDetailsPage/>,
       },
       {
         path: '/register',

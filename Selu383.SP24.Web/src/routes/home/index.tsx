@@ -99,12 +99,6 @@ const HotelSearchBar = () => {
     }
   };
 
-  function getNextDay(date: Date) {
-    const nextDay = new Date(date);
-    nextDay.setDate(date.getDate() + 3);
-    return nextDay;
-  }
-
   const [range, setRange] = useState([
     {
       startDate: new Date(),
@@ -200,7 +194,7 @@ const HotelSearchBar = () => {
                       Hotel Name: {hotels.find(hotel => hotel.id === room.hotelId)?.name ?? 'Unknown'}
                     </Card.Title>
                     <Card.Text>Room Number: {room.roomNumber}</Card.Text>
-                    <Card.Text>Rate: {room.rate}</Card.Text>
+                    <Card.Text>Rate: ${room.rate}</Card.Text>
                     <Card.Text>Description: {room.roomType.description}</Card.Text>
                     <Button onClick={() => handleReservation(room, selectedCheckInDate, selectedCheckOutDate)}>Reserve</Button>
                   </Card.Body>
