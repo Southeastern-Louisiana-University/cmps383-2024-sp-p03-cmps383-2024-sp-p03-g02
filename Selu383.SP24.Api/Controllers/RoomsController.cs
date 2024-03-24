@@ -305,4 +305,28 @@ public class RoomsController : ControllerBase
         }
     }
 
+    [HttpGet("rtype/{id}")]
+    public async Task<ActionResult<IEnumerable<RTypeDto>>> GetRTypesByHotel(int id)
+    {
+
+        var roomTypes = await rooms.Where(room => room.HotelId == id)
+            .Select(room => room.RoomType)
+            .Distinct()
+            .Select(roomType => new RTypeDto
+            {
+                Id = roomType.Id,
+                Name = roomType.Name,
+                Description = roomType.Description,
+                Capacity = roomType.Capacity,
+                CommonItems = roomType.CommonItems,
+            }).ToListAsync();
+
+        if (roomTypes == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(roomTypes);
+    }
+
 }
