@@ -42,7 +42,8 @@ public class RoomsController : ControllerBase
                     Id = x.RTypeId,
                     Name = x.RoomType.Name,
                     Description = x.RoomType.Description,
-                    Capacity = x.RoomType.Capacity
+                    Capacity = x.RoomType.Capacity,
+                    CommonItems = x.RoomType.CommonItems,
                 }
             })
             .ToList();
@@ -74,7 +75,8 @@ public class RoomsController : ControllerBase
                 Id = targetRoom.RTypeId,
                 Name = targetRoom.RoomType.Name,
                 Description = targetRoom.RoomType.Description,
-                Capacity = targetRoom.RoomType.Capacity
+                Capacity = targetRoom.RoomType.Capacity,
+                CommonItems = targetRoom.RoomType.CommonItems,
             }
         };
         return Ok(roomToReturn);
@@ -122,7 +124,8 @@ public class RoomsController : ControllerBase
                 Id = room.RTypeId,
                 Name = room.RoomType.Name,
                 Description = room.RoomType.Description,
-                Capacity = room.RoomType.Capacity
+                Capacity = room.RoomType.Capacity,
+                CommonItems = room.RoomType.CommonItems,
             }
         };
 
@@ -173,7 +176,8 @@ public class RoomsController : ControllerBase
                 Id = targetRoom.RTypeId,
                 Name = targetRoom.RoomType.Name,
                 Description = targetRoom.RoomType.Description,
-                Capacity = targetRoom.RoomType.Capacity
+                Capacity = targetRoom.RoomType.Capacity,
+                CommonItems = targetRoom.RoomType.CommonItems,
             } 
         };
         return Ok(roomToReturn);

@@ -29,7 +29,8 @@ namespace Selu383.SP24.Api.Controllers
                     Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
-                    Capacity = x.Capacity
+                    Capacity = x.Capacity,
+                    CommonItems = x.CommonItems
                 })
                 .ToList();
 
@@ -51,7 +52,8 @@ namespace Selu383.SP24.Api.Controllers
                 Id = id,
                 Name = targetType.Name,
                 Description = targetType.Description,
-                Capacity = targetType.Capacity
+                Capacity = targetType.Capacity,
+                CommonItems = targetType.CommonItems
             };
 
             return Ok(typeToReturn);
@@ -70,7 +72,8 @@ namespace Selu383.SP24.Api.Controllers
             {
                 Name = dto.Name,
                 Description = dto.Description,
-                Capacity = dto.Capacity
+                Capacity = dto.Capacity,
+                CommonItems = CommonList.CommonItems
             };
 
             types.Add(type);
@@ -81,7 +84,8 @@ namespace Selu383.SP24.Api.Controllers
                 Id = type.Id,
                 Name = type.Name,
                 Description = type.Description,
-                Capacity = type.Capacity
+                Capacity = type.Capacity,
+                CommonItems = type.CommonItems
             };
 
             return CreatedAtAction(nameof(GetbyId), new { id = typeToReturn.Id }, typeToReturn);
@@ -106,6 +110,7 @@ namespace Selu383.SP24.Api.Controllers
             targetType.Name = dto.Name;
             targetType.Description = dto.Description;
             targetType.Capacity = dto.Capacity;
+            targetType.CommonItems = CommonList.CommonItems;
 
             _dataContext.SaveChanges();
 
@@ -114,7 +119,8 @@ namespace Selu383.SP24.Api.Controllers
                 Id = targetType.Id,
                 Name = targetType.Name,
                 Description = targetType.Description,
-                Capacity = targetType.Capacity
+                Capacity = targetType.Capacity,
+                CommonItems = targetType.CommonItems
             };
 
             return Ok(typeToReturn);
@@ -139,7 +145,8 @@ namespace Selu383.SP24.Api.Controllers
                 Id = typeToDelete.Id,
                 Name = typeToDelete.Name,
                 Description = typeToDelete.Description,
-                Capacity = typeToDelete.Capacity
+                Capacity = typeToDelete.Capacity,
+                CommonItems = typeToDelete.CommonItems
             };
 
             return Ok(typeToDelete);
