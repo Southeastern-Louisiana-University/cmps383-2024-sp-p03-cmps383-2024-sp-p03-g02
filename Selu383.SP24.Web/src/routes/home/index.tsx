@@ -155,8 +155,8 @@ const HotelSearchBar = () => {
             onChange={(e) => setNumGuests(parseInt(e.target.value))}
           >
             {[...Array(10).keys()].map((num) => (
-              <option key={num} value={num + 1}>
-                {num + 1} Guest(s)
+              <option key={num} value={num + 2}>
+                {num + 2} Guests
               </option>
             ))}
           </select>

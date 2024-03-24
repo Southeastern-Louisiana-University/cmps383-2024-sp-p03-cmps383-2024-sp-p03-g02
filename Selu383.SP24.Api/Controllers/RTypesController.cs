@@ -61,7 +61,7 @@ namespace Selu383.SP24.Api.Controllers
         [Authorize(Roles = RoleNames.Admin)]
         public IActionResult CreateCity(RTypeDto dto)
         {
-            if (dto.Name == null || dto.Description == null || dto.Capacity <= 0)
+            if (dto.Name == null || dto.Description == null || dto.Capacity <= 1)
             {
                 return BadRequest("Name, Description, and Capacity are required.");
             }
@@ -98,7 +98,7 @@ namespace Selu383.SP24.Api.Controllers
                 return NotFound();
             }
 
-            if (dto.Name == null || dto.Description == null || dto.Capacity <= 0)
+            if (dto.Name == null || dto.Description == null || dto.Capacity <= 1)
             {
                 return BadRequest("Name, Description, and Capacity are required.");
             }
