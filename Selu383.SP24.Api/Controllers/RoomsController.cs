@@ -14,13 +14,14 @@ public class RoomsController : ControllerBase
     private readonly DataContext _dataContext;
     private readonly DbSet<Room> rooms;
     private readonly DbSet<Hotel> hotels;
+    private readonly DbSet<Reservation> reservations;
     private readonly DbSet<RType> types;
-
     public RoomsController(DataContext dataContext)
     {
         _dataContext = dataContext;
         rooms = dataContext.Set<Room>();
         hotels = dataContext.Set<Hotel>();
+        reservations = dataContext.Set<Reservation>();
         types = dataContext.Set<RType>();
     }
 
@@ -40,7 +41,8 @@ public class RoomsController : ControllerBase
                 {
                     Id = x.RTypeId,
                     Name = x.RoomType.Name,
-                    Description = x.RoomType.Description
+                    Description = x.RoomType.Description,
+                    Capacity = x.RoomType.Capacity
                 }
             })
             .ToList();
@@ -69,9 +71,10 @@ public class RoomsController : ControllerBase
             RTypeId = targetRoom.RTypeId,
             RoomType = new RTypeDto
             {
-                Id = roomType!.Id,
-                Name = roomType!.Name,
-                Description = roomType!.Description
+                Id = targetRoom.RTypeId,
+                Name = targetRoom.RoomType.Name,
+                Description = targetRoom.RoomType.Description,
+                Capacity = targetRoom.RoomType.Capacity
             }
         };
         return Ok(roomToReturn);
@@ -89,7 +92,7 @@ public class RoomsController : ControllerBase
             return BadRequest();
         }
 
-        if(roomType == null)
+        if (roomType == null)
         {
             return BadRequest();
         }
@@ -118,7 +121,8 @@ public class RoomsController : ControllerBase
             {
                 Id = room.RTypeId,
                 Name = room.RoomType.Name,
-                Description = room.RoomType.Description
+                Description = room.RoomType.Description,
+                Capacity = room.RoomType.Capacity
             }
         };
 
@@ -131,7 +135,7 @@ public class RoomsController : ControllerBase
     {
         var hotel = hotels.FirstOrDefault(x => x.Id == dto.HotelId);
         var roomType = types.FirstOrDefault(x => x.Id == dto.RTypeId);
-        if(roomType == null)
+        if (roomType == null)
         {
             return BadRequest();
         }
@@ -168,7 +172,8 @@ public class RoomsController : ControllerBase
             {
                 Id = targetRoom.RTypeId,
                 Name = targetRoom.RoomType.Name,
-                Description = targetRoom.RoomType.Description
+                Description = targetRoom.RoomType.Description,
+                Capacity = targetRoom.RoomType.Capacity
             }
         };
         return Ok(roomToReturn);
@@ -188,6 +193,112 @@ public class RoomsController : ControllerBase
         rooms.Remove(roomToDelete);
         _dataContext.SaveChanges();
 
-        return Ok();
+        var roomToReturn = new RoomDto
+        {
+            Id = roomToDelete.Id,
+            HotelId = roomToDelete.HotelId,
+            Rate = roomToDelete.Rate,
+            RoomNumber = roomToDelete.Rate,
+            Image = roomToDelete.Image,
+            RTypeId = roomToDelete.RTypeId,
+            RoomType = new RTypeDto
+            {
+                Id = roomToDelete.RTypeId,
+                Name = roomToDelete.RoomType.Name,
+                Description = roomToDelete.RoomType.Description,
+                Capacity = roomToDelete.RoomType.Capacity
+            }
+        };
+
+        return Ok(roomToReturn);
     }
+
+    [HttpGet("available")]
+    public IActionResult GetAvailableRooms(DateTime selectedDate, int numGuests)
+    {
+        var availableRooms = rooms
+            .Where(room => !room.Reservations.Any(reservation =>
+                selectedDate < reservation.CheckOutDate &&
+                selectedDate >= reservation.CheckInDate))
+            .Where(room => room.RoomType.Capacity >= numGuests)
+            .Select(room => new RoomDto
+            {
+                Id = room.Id,
+                HotelId = room.HotelId,
+                Rate = room.Rate,
+                RoomNumber = room.RoomNumber,
+                Image = room.Image,
+                RTypeId = room.RTypeId,
+                RoomType = new RTypeDto
+                {
+                    Id = room.RoomType.Id,
+                    Name = room.RoomType.Name,
+                    Description = room.RoomType.Description,
+                    Capacity = room.RoomType.Capacity
+                },
+                Hotel = new HotelDto
+                {
+                    Id = room.Hotel.Id,
+                    Name = room.Hotel.Name,
+                    Address = room.Hotel.Address,
+                    LocationId = room.Hotel.LocationId
+                }
+            })
+            .ToList();
+
+        return Ok(availableRooms);
+    }
+
+    private bool IsRoomAvailable(int roomId, DateTime checkInDate, DateTime checkOutDate)
+    {
+        return !reservations.Any(r =>
+            r.RoomId == roomId &&
+            (checkInDate < r.CheckOutDate && checkOutDate > r.CheckInDate));
+    }
+
+    [HttpPost("reserve")]
+    public IActionResult ReserveRoom(ReservationDto reservationDto)
+    {
+        var room = rooms.FirstOrDefault(r => r.Id == reservationDto.RoomId && r.HotelId == reservationDto.HotelId);
+        if (room == null)
+        {
+            return NotFound("Room not found in the specified hotel.");
+        }
+
+        var isAvailable = IsRoomAvailable(room.Id, reservationDto.CheckInDate, reservationDto.CheckOutDate);
+        if (!isAvailable)
+        {
+            return BadRequest("The room is not available for the selected dates.");
+        }
+
+        // Create the reservation
+        var reservation = new Reservation
+        {
+            RoomId = room.Id,
+            CheckInDate = reservationDto.CheckInDate,
+            CheckOutDate = reservationDto.CheckOutDate
+        };
+
+        reservations.Add(reservation);
+        _dataContext.SaveChanges();
+
+        return Ok("Room reserved successfully.");
+    }
+
+    [HttpDelete("DeleteReservation")]
+    [Authorize(Roles = RoleNames.Admin)]
+    public IActionResult DeleteAllReservations()
+    {
+        try
+        {
+            reservations.RemoveRange(reservations); // Delete all reservations
+            _dataContext.SaveChanges();
+            return Ok("All reservations deleted successfully.");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"An error occurred while deleting reservations: {ex.Message}");
+        }
+    }
+
 }
