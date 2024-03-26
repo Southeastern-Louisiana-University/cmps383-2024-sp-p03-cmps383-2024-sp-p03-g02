@@ -51,6 +51,8 @@ public class HotelsController : ControllerBase
                     Id = x.RTypeId,
                     Name = x.RoomType.Name,
                     Description = x.RoomType.Description,
+                    Capacity = x.RoomType.Capacity,
+                    CommonItems = x.RoomType.CommonItems,
                 }
             })
             .ToList();

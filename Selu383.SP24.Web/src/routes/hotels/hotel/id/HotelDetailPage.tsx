@@ -24,6 +24,7 @@ interface RoomDto {
   roomType?: {
     id: number;
     name: string;
+    commonItems: string;
   };
 }
 
@@ -112,7 +113,7 @@ const HotelDetailsPage: React.FC = () => {
                       <strong>Rate: ~$</strong>{room.rate}
                     </Card.Text>
                     <Card.Text>
-                      <strong>Room Number:</strong> {room.roomNumber}
+                      <strong>Amneties:</strong> {room.roomType?.commonItems}
                     </Card.Text>
                   </Card.Body>
                 </Card>

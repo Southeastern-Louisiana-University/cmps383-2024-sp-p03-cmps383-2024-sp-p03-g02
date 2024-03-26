@@ -38,6 +38,8 @@ const router = createBrowserRouter([
         path: '/register',
         element: <RegisterPage />,
       },
+      //{path: '/booking/:id',
+      //element: <
     ],
   },
 ]);

@@ -54,8 +54,8 @@ public class RoomsController : ControllerBase
     [HttpGet("{id:int}")]
     public IActionResult GetbyId(int id)
     {
-        var targetRoom = rooms.FirstOrDefault(x => x.Id == id);
-        var roomType = types.FirstOrDefault(x => x.Id == targetRoom.RTypeId);
+        var targetRoom = rooms.Include(r => r.RoomType)
+                              .FirstOrDefault(x => x.Id == id);
 
         if (targetRoom == null)
         {
@@ -72,15 +72,17 @@ public class RoomsController : ControllerBase
             RTypeId = targetRoom.RTypeId,
             RoomType = new RTypeDto
             {
-                Id = targetRoom.RTypeId,
+                Id = targetRoom.RoomType.Id,
                 Name = targetRoom.RoomType.Name,
                 Description = targetRoom.RoomType.Description,
                 Capacity = targetRoom.RoomType.Capacity,
                 CommonItems = targetRoom.RoomType.CommonItems,
             }
         };
+
         return Ok(roomToReturn);
     }
+
 
     [HttpPost]
     [Authorize(Roles = RoleNames.Admin)]
