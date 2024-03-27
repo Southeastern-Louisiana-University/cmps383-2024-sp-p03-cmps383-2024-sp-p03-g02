@@ -98,6 +98,7 @@ const HotelDetailsPage: React.FC = () => {
           <Row className="justify-content-center">
             {rooms.map((room) => (
               <Col xs={12} sm={6} md={4} lg={3} className="mb-3" key={room.id}>
+                <Link to={`/booking/${room.id}`} style={{ textDecoration: 'none' }}>
                 <Card
                   style={{ width: "100%", textAlign: "center", boxShadow: "0 0 10px #FDBA74" }}
                 >
@@ -117,6 +118,7 @@ const HotelDetailsPage: React.FC = () => {
                     </Card.Text>
                   </Card.Body>
                 </Card>
+                </Link>
               </Col>
             ))}
           </Row>

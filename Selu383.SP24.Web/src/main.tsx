@@ -39,7 +39,7 @@ const router = createBrowserRouter([
         path: '/register',
         element: <RegisterPage />,
       },
-      {path: '/booking',
+      {path: '/booking/:id',
       element: <BookingPage />
     }
     ],
