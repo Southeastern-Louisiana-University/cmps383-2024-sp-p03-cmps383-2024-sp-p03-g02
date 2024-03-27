@@ -60,6 +60,18 @@ public class HotelsController : ControllerBase
         return Ok(allRooms);
     }
 
+    [HttpPost("find")]
+    public IQueryable<HotelDto> FindHotels(FindHotelDto findHotelDto)
+    {
+        var filtered = hotels
+            .Where(x => x.Address.Contains(findHotelDto.SearchTerm)
+                     || x.Name.Contains(findHotelDto.SearchTerm)
+                     || x.Location.Name.Contains(findHotelDto.SearchTerm));
+
+        return GetHotelDtos(filtered);
+    }
+
+
     [HttpGet]
     [Route("{id}")]
     public ActionResult<HotelDto> GetHotelById(int id)

@@ -18,3 +18,8 @@ public class Hotel
     public string ContactNumber { get; set; }
     public string Image { get; set; }
 }
+
+public class FindHotelDto
+{
+    public string SearchTerm { get; set; }
+}
