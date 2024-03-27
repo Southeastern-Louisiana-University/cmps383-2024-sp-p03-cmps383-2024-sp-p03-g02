@@ -11,6 +11,7 @@ import Home from './routes/home/index.tsx'
 import HotelListPage from './routes/hotels/index.tsx';
 import HotelDetailsPage from './routes/hotels/hotel/id/HotelDetailPage.tsx';
 import RegisterPage from './routes/signUp/signUp.tsx';
+import BookingPage from './routes/Booking/BookingPage.tsx'
 
 
 const router = createBrowserRouter([
@@ -38,8 +39,9 @@ const router = createBrowserRouter([
         path: '/register',
         element: <RegisterPage />,
       },
-      //{path: '/booking/:id',
-      //element: <
+      {path: '/booking',
+      element: <BookingPage />
+    }
     ],
   },
 ]);
