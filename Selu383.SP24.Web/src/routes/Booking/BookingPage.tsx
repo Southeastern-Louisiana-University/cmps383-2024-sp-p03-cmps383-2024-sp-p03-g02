@@ -32,7 +32,6 @@ const BookingPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [room, setRoom] = useState<RoomDto>();
-  const [error, setError] = useState<string | null>(null);
   const [range, setRange] = useState([
     {
       startDate: new Date(),
@@ -72,7 +71,6 @@ const BookingPage: React.FC = () => {
           setRoom(roomData);
       } catch(error){
         console.error(error);
-        setError("Error");
       }
     };
     fetchRoomDetails();
