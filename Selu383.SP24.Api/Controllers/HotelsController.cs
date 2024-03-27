@@ -51,12 +51,26 @@ public class HotelsController : ControllerBase
                     Id = x.RTypeId,
                     Name = x.RoomType.Name,
                     Description = x.RoomType.Description,
+                    Capacity = x.RoomType.Capacity,
+                    CommonItems = x.RoomType.CommonItems,
                 }
             })
             .ToList();
 
         return Ok(allRooms);
     }
+
+    [HttpPost("find")]
+    public IQueryable<HotelDto> FindHotels(FindHotelDto findHotelDto)
+    {
+        var filtered = hotels
+            .Where(x => x.Address.Contains(findHotelDto.SearchTerm)
+                     || x.Name.Contains(findHotelDto.SearchTerm)
+                     || x.Location.Name.Contains(findHotelDto.SearchTerm));
+
+        return GetHotelDtos(filtered);
+    }
+
 
     [HttpGet]
     [Route("{id}")]

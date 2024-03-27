@@ -6,6 +6,7 @@
         public string Name { get; set; }
         public string Description { get; set; }
         public int Capacity { get; set; }
+        public string CommonItems { get; set; }
     }
 
     public class RTypeDto
@@ -14,6 +15,7 @@
         public string Name { get; set; }
         public string Description { get; set; }
         public int Capacity { get; set; }
+        public string CommonItems { get; set; }
 
     }
 
@@ -22,6 +24,7 @@
         public string Name { get; set; }
         public string Description { get; set; }
         public int Capacity { get; set; }
+        public string CommonItems { get; set; }
 
     }
 }
