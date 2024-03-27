@@ -1,34 +1,41 @@
-import React, { useState, useEffect } from 'react';
-import { Card, Col, Container, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { Container, Row, Col, Card } from "react-bootstrap";
+import { Link, useSearchParams } from "react-router-dom";
 
 interface HotelDto {
-  id?: number;
-  name?: string;
-  address?: string;
-  managerId?: number;
-  location?:{
-    id: number;
-    name: string;
-}
-}
+    id?: number;
+    name?: string;
+    address?: string;
+    email?: string;
+    locationId: number;
+    location?:{
+        id: number;
+        name: string;
+    }
+  }
 
-const HotelListPage: React.FC = () => {
+export default function SearchHotels() {
+  const [params] = useSearchParams();
+  const searchTerm = params.get("searchTerm");
+
   const [hotels, setHotels] = useState<HotelDto[]>([]);
 
   useEffect(() => {
-    const fetchHotels = async () => {
-      try {
-        const response = await fetch('api/hotels');
-        const data = await response.json();
-        setHotels(data);
-      } catch (error) {
-        console.error('Error fetching hotels:', error);
-      }
-    };
-
-    fetchHotels();
-  }, []);
+    fetch("/api/hotels/find", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        searchTerm: searchTerm,
+      }),
+    })
+      .then<HotelDto[]>((r) => r.json())
+      .then((j) => {
+        setHotels(j);
+      });
+  }, [searchTerm]);
+  console.log(searchTerm);
 
   return (
     <Container fluid className="mt-4">
@@ -63,6 +70,4 @@ const HotelListPage: React.FC = () => {
       </Row>
     </Container>
   );
-};
-
-export default HotelListPage;
+}
