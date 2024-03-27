@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Table } from 'react-bootstrap';
+import { Container, Button } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { DateRange } from "react-date-range";
 import format from "date-fns/format";
@@ -121,7 +121,7 @@ const BookingPage: React.FC = () => {
             )}
           <p>${room?.rate} per night</p>
           <p>Amenities: {room?.roomType?.commonItems}</p>
-            
+          <Button style={{ backgroundColor: '#FDBA74' }} className="btn-light">Confirm</Button>
         </div>
         
         
