@@ -38,7 +38,7 @@ export default function NavbarLayout(){
                     to={`/find-hotel?searchTerm=${encodeURIComponent(searchTerm)}&start=now`}
                     aria-disabled={!searchTerm}
                 >
-                    <Button style={{ backgroundColor: '#FDBA74' }} className="btn-light">Search</Button>
+                    <Button style={{ backgroundColor: '#FDBA74' }} className="btn-light">Basic Search</Button>
                 </Link>
             </div>
                  <ul className="navbar-nav ml-auto"> 
