@@ -10,6 +10,7 @@ import "react-date-range/dist/theme/default.css";
 interface RoomDto {
   id: number;
   hotelId: number;
+  hotel: HotelDto;
   rate: number;
   roomNumber: number;
   image: string;
@@ -28,6 +29,12 @@ interface HotelDto {
   name?: string;
   address: string;
   locationId: number;
+  location: CityDto;
+}
+
+interface CityDto {
+  id: number;
+  name: string;
 }
 
 const HotelSearchBar = () => {
@@ -37,6 +44,7 @@ const HotelSearchBar = () => {
   const [numRooms, setNumRooms] = useState(1);
   const [searchResults, setSearchResults] = useState<Array<RoomDto>>([]);
   const [hotels, setHotels] = useState<HotelDto[]>([]);
+  const [hotelNameInput, setHotelNameInput] = useState('');
 
   useEffect(() => {
     const fetchHotels = async () => {
@@ -86,18 +94,27 @@ const HotelSearchBar = () => {
   };
 
   const handleSearch = async () => {
-    const url = `/api/rooms/available?selectedDate=${format(range[0].startDate, "yyyy-MM-dd")}&numGuests=${numGuests}`;
+    const url = `/api/rooms/available?selectedDate=${format(range[0].startDate, "yyyy-MM-dd")}&numGuests=${numGuests}&hotelLocation=${hotelNameInput}`;
     console.log(url);
     const response = await fetch(url);
     if (response.ok) {
       const availableRooms: Array<RoomDto> = await response.json();
+      console.log(hotelNameInput);
+      
+      const filteredRooms = availableRooms.filter(room => 
+        room.hotel.location.name.toLowerCase() == hotelNameInput.toLowerCase()
+      );
+      
+      setSearchResults(filteredRooms);
       setSearchResults(availableRooms);
-      setSelectedCheckInDate(range[0].startDate); // Update selected check-in date
-      setSelectedCheckOutDate(range[0].endDate); // Update selected check-out date
+      setSelectedCheckInDate(range[0].startDate);
+      setSelectedCheckOutDate(range[0].endDate);
     } else {
       console.error('Failed to fetch available rooms');
     }
   };
+
+  
 
   const [range, setRange] = useState([
     {
@@ -109,7 +126,7 @@ const HotelSearchBar = () => {
 
   const [open, setOpen] = useState(false);
 
-  const refOne = useRef(null);
+  const refOne = useRef(null);  
 
   return (
     <>
@@ -122,6 +139,12 @@ const HotelSearchBar = () => {
       <div className="wrapper">
           <center>
         <div className="hotel-search-bar">
+          <input
+        type="text"
+        placeholder="Where"
+        value={hotelNameInput}
+        onChange={(e) => setHotelNameInput(e.target.value)}
+      />
           <input
             value={`${format(range[0].startDate, "MM/dd/yyyy")} to ${format(
               range[0].endDate,
