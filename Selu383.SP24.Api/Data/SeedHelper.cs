@@ -141,8 +141,6 @@ public static class SeedHelper
                 {
                     Name = "The Grand Motel",
                     Address = "1234 Place St",
-                    ManagerId = 2,
-                    LocationId = 2,
                     Image = "",
                     ContactNumber = "18009999999",
                     Email = "grandmotel@gmail.com"
@@ -153,8 +151,6 @@ public static class SeedHelper
                 {
                     Name = "Nice Suites",
                     Address = "1234 Place Ave",
-                    ManagerId = 3,
-                    LocationId = 2,
                     Image = "",
                     ContactNumber = "18007896087",
                     Email = "nicesuites@gmail.com"
@@ -165,8 +161,6 @@ public static class SeedHelper
                 {
                     Name = "Plaza Hotel",
                     Address = "12 Plack St",
-                    ManagerId = 3,
-                    LocationId = 2,
                     Image = "",
                     ContactNumber = "18007516238",
                     Email = "plazahotel@gmail.com"
@@ -177,8 +171,6 @@ public static class SeedHelper
                 {
                     Name = "Quality Hotel",
                     Address = "234 Venue Ave",
-                    ManagerId = 3,
-                    LocationId = 3,
                     Image = "",
                     ContactNumber = "18003517345",
                     Email = "qualityhotels@gmail.com"
@@ -189,8 +181,6 @@ public static class SeedHelper
                 {
                     Name = "La Vigesimo Séptima Inn",
                     Address = "5382 Gerry Ln",
-                    ManagerId = 3,
-                    LocationId = 3,
                     Image = "",
                     ContactNumber = "18001234567",
                     Email = "septimainn@gmail.com"
@@ -201,8 +191,6 @@ public static class SeedHelper
                 {
                     Name = "Hotel 7",
                     Address = "4 Ferry Ln",
-                    ManagerId = 3,
-                    LocationId = 3,
                     Image = "",
                     ContactNumber = "18007654321",
                     Email = "hotel7@gmail.com"
@@ -212,8 +200,6 @@ public static class SeedHelper
                 {
                     Name = "Better Eastern",
                     Address = "1 First St",
-                    ManagerId = 3,
-                    LocationId = 4,
                     Image = "",
                     ContactNumber = "18003421642",
                     Email = "better@gmail.com"
@@ -223,8 +209,6 @@ public static class SeedHelper
                 {
                     Name = "Night Inn and Suites",
                     Address = "1234 Place st",
-                    ManagerId = 3,
-                    LocationId = 4,
                     Image = "",
                     ContactNumber = "18001237654",
                     Email = "nigthinn@gmail.com"
@@ -234,8 +218,6 @@ public static class SeedHelper
                 {
                     Name = "The Town Inn",
                     Address = "12 Plaque Rd",
-                    ManagerId = 3,
-                    LocationId = 4,
                     Image = "",
                     ContactNumber = "18009996721",
                     Email = "towninn@gmail.com"

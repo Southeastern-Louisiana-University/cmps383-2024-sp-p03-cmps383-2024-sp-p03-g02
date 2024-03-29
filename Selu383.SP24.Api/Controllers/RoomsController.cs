@@ -96,7 +96,7 @@ public class RoomsController : ControllerBase
             return BadRequest();
         }
 
-        if(roomType == null)
+        if (roomType == null)
         {
             return BadRequest();
         }
@@ -140,7 +140,7 @@ public class RoomsController : ControllerBase
     {
         var hotel = hotels.FirstOrDefault(x => x.Id == dto.HotelId);
         var roomType = types.FirstOrDefault(x => x.Id == dto.RTypeId);
-        if(roomType == null)
+        if (roomType == null)
         {
             return BadRequest();
         }

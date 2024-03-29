@@ -29,6 +29,7 @@ namespace Selu383.SP24.Api.Controllers
                     Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
+
                     Capacity = x.Capacity,
                     CommonItems = x.CommonItems
                 })
@@ -87,7 +88,6 @@ namespace Selu383.SP24.Api.Controllers
                 Capacity = type.Capacity,
                 CommonItems = type.CommonItems
             };
-
             return CreatedAtAction(nameof(GetbyId), new { id = typeToReturn.Id }, typeToReturn);
         }
 
