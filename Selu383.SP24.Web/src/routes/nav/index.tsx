@@ -10,6 +10,7 @@ interface UserDto {
 
 export default function NavbarLayout(){
     const [user, setUser] = useState<UserDto | null>(null);
+    const [searchTerm, setSearchTerm] = useState("");
 
     function handleSignout(){
         return fetch("/api/authentication/logout",{method: "POST"}).then(async () => setUser(null));
@@ -26,6 +27,20 @@ export default function NavbarLayout(){
             <>
             <Navbar className="navbar navbar-light bg-light">
             <Link to={'/'}><span style={{ color: '#FDBA74' }} className="navbar-brand mb-0 h1">EnStay</span></Link>
+            
+            <Link to={'/Hotels'}><Button style={{ border: "1px solid black"} } className="btn-light">Hotels</Button></Link>
+            <div className="d-flex justify-content-center align-items-center flex-grow-1">
+                
+                <input id="search" name="search" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value ?? "")} className="form-control mx-2" style={{ maxWidth: '300px' }} />
+                
+                <Link
+                    onClick={(e) => (!searchTerm ? e.preventDefault() : null)}
+                    to={`/find-hotel?searchTerm=${encodeURIComponent(searchTerm)}&start=now`}
+                    aria-disabled={!searchTerm}
+                >
+                    <Button style={{ backgroundColor: '#FDBA74' }} className="btn-light">Basic Search</Button>
+                </Link>
+            </div>
                  <ul className="navbar-nav ml-auto"> 
                     <li className="nav-item"> 
                     {user !== null ? <div><Button style={{ backgroundColor: '#FDBA74' }} className="btn-light" onClick = {handleSignout}>Logout</Button></div>  : 

@@ -24,6 +24,7 @@ interface RoomDto {
   roomType?: {
     id: number;
     name: string;
+    commonItems: string;
   };
 }
 
@@ -97,6 +98,7 @@ const HotelDetailsPage: React.FC = () => {
           <Row className="justify-content-center">
             {rooms.map((room) => (
               <Col xs={12} sm={6} md={4} lg={3} className="mb-3" key={room.id}>
+                <Link to={`/booking/${room.id}`} style={{ textDecoration: 'none', color: '#000' }}>
                 <Card
                   style={{ width: "100%", textAlign: "center", boxShadow: "0 0 10px #FDBA74" }}
                 >
@@ -112,10 +114,11 @@ const HotelDetailsPage: React.FC = () => {
                       <strong>Rate: ~$</strong>{room.rate}
                     </Card.Text>
                     <Card.Text>
-                      <strong>Room Number:</strong> {room.roomNumber}
+                      <strong>Amneties:</strong> {room.roomType?.commonItems}
                     </Card.Text>
                   </Card.Body>
                 </Card>
+                </Link>
               </Col>
             ))}
           </Row>
@@ -139,7 +142,7 @@ const HotelDetailsPage: React.FC = () => {
                 <strong>City: </strong>
                 {city?.name}
               </p>
-              <Link to="/hotels" className="btn btn-warning">
+              <Link to="/hotels" className="btn btn-warning" style={{ backgroundColor: "#FDBA74" }}>
                 Back
               </Link>
             </Col>
