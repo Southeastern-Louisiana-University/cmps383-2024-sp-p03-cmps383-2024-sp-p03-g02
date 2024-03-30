@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Selu383.SP24.Api.Features.Authorization;
-using Selu383.SP24.Api.Features.Cities;
 using Selu383.SP24.Api.Features.Hotels;
 using Selu383.SP24.Api.Features.Rooms;
 using Selu383.SP24.Api.Features.RTypes;
@@ -18,7 +17,6 @@ public static class SeedHelper
 
         await AddRoles(serviceProvider);
         await AddUsers(serviceProvider);
-        await AddCities(dataContext);
         await AddTypes(dataContext);
        /* await AddHotels(dataContext);*/
     }
@@ -73,33 +71,6 @@ public static class SeedHelper
         });
     }
 
-    private static async Task AddCities(DataContext dataContext)
-    {
-        var cities = dataContext.Set<City>();
-        if (await cities.AnyAsync())
-        {
-            return;
-        }
-
-        dataContext.Set<City>()
-            .Add(new City
-            {
-                Name = "Hammond"
-            });
-
-        dataContext.Set<City>()
-            .Add(new City
-            {
-                Name = "New Orleans"
-            });
-
-        dataContext.Set<City>()
-            .Add(new City
-            {
-                Name = "Baton Rouge"
-            });
-        await dataContext.SaveChangesAsync();
-    }
 
     private static async Task AddTypes(DataContext dataContext)
     {

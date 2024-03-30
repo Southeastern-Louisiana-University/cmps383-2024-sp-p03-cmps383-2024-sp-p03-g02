@@ -247,7 +247,6 @@ public class RoomsController : ControllerBase
                     Id = room.Hotel.Id,
                     Name = room.Hotel.Name,
                     Address = room.Hotel.Address,
-                    LocationId = room.Hotel.LocationId
                 }
             })
             .ToList();
