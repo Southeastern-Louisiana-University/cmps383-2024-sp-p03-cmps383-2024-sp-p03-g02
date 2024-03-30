@@ -93,12 +93,17 @@ public static class SeedHelper
                 Name = "Double Queen",
                 Description = "Room with two queen beds"
             });
-
+        dataContext.Set<RType>()
+            .Add(new RType
+            {
+                Name = "Single King",
+                Description = "Room with one king bed"
+            });
 
         await dataContext.SaveChangesAsync();
     }
 
-   /* private static async Task AddHotels(DataContext dataContext)
+    private static async Task AddHotels(DataContext dataContext)
     {
         var hotels = dataContext.Set<Hotel>();
 
@@ -110,91 +115,34 @@ public static class SeedHelper
         dataContext.Set<Hotel>()
                 .Add(new Hotel
                 {
-                    Name = "The Grand Motel",
-                    Address = "1234 Place St",
-                    Image = "",
+                    Name = "Baronne Hotel",
+                    Address = "225 Baronne St, New Orleans, LA 70112",
+                    Image = "https://imgur.com/MLARzB8.png",
                     ContactNumber = "18009999999",
-                    Email = "grandmotel@gmail.com"
+                    Email = "baronne@gmail.com"
                 });
 
         dataContext.Set<Hotel>()
                 .Add(new Hotel
                 {
-                    Name = "Nice Suites",
-                    Address = "1234 Place Ave",
-                    Image = "",
+                    Name = "Esplanade Hotel",
+                    Address = "405 Esplanade Ave, New Orleans, LA 70116",
+                    Image = "https://imgur.com/MLARzB8.png",
                     ContactNumber = "18007896087",
-                    Email = "nicesuites@gmail.com"
+                    Email = "esplanade@gmail.com"
                 });
 
         dataContext.Set<Hotel>()
                 .Add(new Hotel
                 {
-                    Name = "Plaza Hotel",
-                    Address = "12 Plack St",
-                    Image = "",
+                    Name = "Convention Hotel",
+                    Address = "200 Convention St, Baton Rouge, LA 70801",
+                    Image = "https://imgur.com/MLARzB8.png",
                     ContactNumber = "18007516238",
-                    Email = "plazahotel@gmail.com"
-                });
-
-        dataContext.Set<Hotel>()
-                .Add(new Hotel
-                {
-                    Name = "Quality Hotel",
-                    Address = "234 Venue Ave",
-                    Image = "",
-                    ContactNumber = "18003517345",
-                    Email = "qualityhotels@gmail.com"
-                });
-
-        dataContext.Set<Hotel>()
-                .Add(new Hotel
-                {
-                    Name = "La Vigesimo Séptima Inn",
-                    Address = "5382 Gerry Ln",
-                    Image = "",
-                    ContactNumber = "18001234567",
-                    Email = "septimainn@gmail.com"
-                });
-
-        dataContext.Set<Hotel>()
-                .Add(new Hotel
-                {
-                    Name = "Hotel 7",
-                    Address = "4 Ferry Ln",
-                    Image = "",
-                    ContactNumber = "18007654321",
-                    Email = "hotel7@gmail.com"
-                });
-        dataContext.Set<Hotel>()
-                .Add(new Hotel
-                {
-                    Name = "Better Eastern",
-                    Address = "1 First St",
-                    Image = "",
-                    ContactNumber = "18003421642",
-                    Email = "better@gmail.com"
-                });
-        dataContext.Set<Hotel>()
-                .Add(new Hotel
-                {
-                    Name = "Night Inn and Suites",
-                    Address = "1234 Place st",
-                    Image = "",
-                    ContactNumber = "18001237654",
-                    Email = "nigthinn@gmail.com"
-                });
-        dataContext.Set<Hotel>()
-                .Add(new Hotel
-                {
-                    Name = "The Town Inn",
-                    Address = "12 Plaque Rd",
-                    Image = "",
-                    ContactNumber = "18009996721",
-                    Email = "towninn@gmail.com"
+                    Email = "conventionhotel@gmail.com"
                 });
 
         await dataContext.SaveChangesAsync();
-    }*/
+    }
 
 }
