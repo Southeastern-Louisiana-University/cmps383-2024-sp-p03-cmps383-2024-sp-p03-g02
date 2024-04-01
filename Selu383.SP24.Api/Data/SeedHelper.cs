@@ -18,7 +18,8 @@ public static class SeedHelper
         await AddRoles(serviceProvider);
         await AddUsers(serviceProvider);
         await AddTypes(dataContext);
-       /* await AddHotels(dataContext);*/
+        await AddHotels(dataContext);
+        await AddRooms(dataContext);
     }
 
     private static async Task AddUsers(IServiceProvider serviceProvider)
@@ -85,7 +86,8 @@ public static class SeedHelper
             {
                 Name = "Single Queen",
                 Description = "Room with one queen bed",
-                CommonItems = CommonList.CommonItems
+                CommonItems = CommonList.CommonItems,
+                Capacity = 2
             });
 
         dataContext.Set<RType>()
@@ -93,14 +95,16 @@ public static class SeedHelper
             {
                 Name = "Double Queen",
                 Description = "Room with two queen beds",
-                CommonItems = CommonList.CommonItems
+                CommonItems = CommonList.CommonItems,
+                Capacity = 4
             });
         dataContext.Set<RType>()
             .Add(new RType
             {
                 Name = "Single King",
                 Description = "Room with one king bed",
-                CommonItems = CommonList.CommonItems
+                CommonItems = CommonList.CommonItems,
+                Capacity = 2
             });
 
         await dataContext.SaveChangesAsync();
@@ -144,6 +148,35 @@ public static class SeedHelper
                     ContactNumber = "18007516238",
                     Email = "conventionhotel@gmail.com"
                 });
+
+        await dataContext.SaveChangesAsync();
+    }
+
+    private static async Task AddRooms(DataContext dataContext)
+    {
+        var rooms = dataContext.Set<Room>();
+
+        if(await rooms.AnyAsync())
+        {
+            return;
+        }
+
+        for (var i = 1; i < 4; i++)
+        {
+            var rate = 100;
+            for (var j = 1; j < 4; j++)
+            {
+                rooms.Add(new Room
+                {
+                    HotelId = i,
+                    Rate = rate,
+                    RoomNumber = j + 100,
+                    RTypeId = j,
+                    Image = "",
+                });
+                rate += 50;
+            }
+        }
 
         await dataContext.SaveChangesAsync();
     }
