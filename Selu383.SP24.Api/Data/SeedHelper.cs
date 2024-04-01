@@ -126,7 +126,8 @@ public static class SeedHelper
                     Address = "225 Baronne St, New Orleans, LA 70112",
                     Image = "https://imgur.com/MLARzB8.png",
                     ContactNumber = "18009999999",
-                    Email = "baronne@gmail.com"
+                    Email = "baronne@gmail.com",
+                    ManagerId = 2
                 });
 
         dataContext.Set<Hotel>()
@@ -136,7 +137,8 @@ public static class SeedHelper
                     Address = "405 Esplanade Ave, New Orleans, LA 70116",
                     Image = "https://imgur.com/MLARzB8.png",
                     ContactNumber = "18007896087",
-                    Email = "esplanade@gmail.com"
+                    Email = "esplanade@gmail.com",
+                    ManagerId = 2
                 });
 
         dataContext.Set<Hotel>()
@@ -146,7 +148,8 @@ public static class SeedHelper
                     Address = "200 Convention St, Baton Rouge, LA 70801",
                     Image = "https://imgur.com/MLARzB8.png",
                     ContactNumber = "18007516238",
-                    Email = "conventionhotel@gmail.com"
+                    Email = "conventionhotel@gmail.com",
+                    ManagerId = 2
                 });
 
         await dataContext.SaveChangesAsync();
