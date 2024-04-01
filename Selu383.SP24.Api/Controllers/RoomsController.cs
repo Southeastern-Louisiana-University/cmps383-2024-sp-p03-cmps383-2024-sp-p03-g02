@@ -44,6 +44,15 @@ public class RoomsController : ControllerBase
                     Description = x.RoomType.Description,
                     Capacity = x.RoomType.Capacity,
                     CommonItems = x.RoomType.CommonItems,
+                },
+                Hotel = new HotelDto
+                {
+                    Id = x.Hotel.Id,
+                    Name = x.Hotel.Name,
+                    Address = x.Hotel.Address,
+                    ContactNumber = x.Hotel.ContactNumber,
+                    Email = x.Hotel.Email,
+                    Image = x.Hotel.Image,
                 }
             })
             .ToList();
@@ -77,6 +86,15 @@ public class RoomsController : ControllerBase
                 Description = targetRoom.RoomType.Description,
                 Capacity = targetRoom.RoomType.Capacity,
                 CommonItems = targetRoom.RoomType.CommonItems,
+            },
+            Hotel = new HotelDto
+            {
+                Id = targetRoom.Hotel.Id,
+                Name = targetRoom.Hotel.Name,
+                Address = targetRoom.Hotel.Address,
+                ContactNumber = targetRoom.Hotel.ContactNumber,
+                Email = targetRoom.Hotel.Email,
+                Image = targetRoom.Hotel.Image,
             }
         };
 
