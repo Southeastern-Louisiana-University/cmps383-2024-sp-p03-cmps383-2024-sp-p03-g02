@@ -84,20 +84,23 @@ public static class SeedHelper
             .Add(new RType
             {
                 Name = "Single Queen",
-                Description = "Room with one queen bed"
+                Description = "Room with one queen bed",
+                CommonItems = CommonList.CommonItems
             });
 
         dataContext.Set<RType>()
             .Add(new RType
             {
                 Name = "Double Queen",
-                Description = "Room with two queen beds"
+                Description = "Room with two queen beds",
+                CommonItems = CommonList.CommonItems
             });
         dataContext.Set<RType>()
             .Add(new RType
             {
                 Name = "Single King",
-                Description = "Room with one king bed"
+                Description = "Room with one king bed",
+                CommonItems = CommonList.CommonItems
             });
 
         await dataContext.SaveChangesAsync();
