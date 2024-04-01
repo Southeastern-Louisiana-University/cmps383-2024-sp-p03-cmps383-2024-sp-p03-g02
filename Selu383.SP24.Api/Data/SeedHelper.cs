@@ -175,7 +175,7 @@ public static class SeedHelper
                     Rate = rate,
                     RoomNumber = j + 100,
                     RTypeId = j,
-                    Image = "",
+                    Image = "https://i.imgur.com/sTESIUA.jpg",
                 });
                 rate += 50;
             }
