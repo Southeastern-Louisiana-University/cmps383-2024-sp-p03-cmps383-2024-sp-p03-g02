@@ -119,6 +119,7 @@ namespace Selu383.SP24.Api.Controllers
 
             return Ok("Room reserved successfully.");
         }
+
         [HttpGet]
         [Authorize(Roles = RoleNames.Admin)]
         public IActionResult GetAll()
