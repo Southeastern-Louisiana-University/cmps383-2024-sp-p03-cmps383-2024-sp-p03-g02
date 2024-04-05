@@ -7,11 +7,6 @@ interface HotelDto {
   name?: string;
   address?: string;
   email?: string;
-  locationId: number;
-}
-
-interface CityDto {
-  name?: string;
 }
 
 interface RoomDto {
@@ -31,7 +26,6 @@ interface RoomDto {
 const HotelDetailsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [hotel, setHotel] = useState<HotelDto | null>(null);
-  const [city, setCity] = useState<CityDto | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [rooms, setRooms] = useState<RoomDto[]>([]);
 
@@ -56,14 +50,6 @@ const HotelDetailsPage: React.FC = () => {
         const roomData: RoomDto[] = await roomResponse.json();
         setRooms(roomData);
 
-        const cityResponse = await fetch(`/api/cities/${hotelData.locationId}`);
-        if (!cityResponse.ok) {
-          throw new Error(
-            `Failed to fetch city details. Status: ${cityResponse.status}`
-          );
-        }
-        const cityData: CityDto = await cityResponse.json();
-        setCity(cityData);
       } catch (error) {
         console.error("Error fetching hotel details:", error);
         setError("Failed to fetch hotel details. Please try again.");
@@ -137,10 +123,6 @@ const HotelDetailsPage: React.FC = () => {
               <p>
                 <strong>Contact Email: </strong>
                 {hotel.email}
-              </p>
-              <p>
-                <strong>City: </strong>
-                {city?.name}
               </p>
               <Link to="/hotels" className="btn btn-warning" style={{ backgroundColor: "#FDBA74" }}>
                 Back
