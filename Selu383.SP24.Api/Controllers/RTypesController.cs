@@ -62,7 +62,7 @@ namespace Selu383.SP24.Api.Controllers
 
         [HttpPost]
         [Authorize(Roles = RoleNames.Admin)]
-        public IActionResult CreateCity(RTypeDto dto)
+        public IActionResult CreateType(RTypeDto dto)
         {
             if (dto.Name == null || dto.Description == null || dto.Capacity <= 1)
             {
@@ -93,7 +93,7 @@ namespace Selu383.SP24.Api.Controllers
 
         [HttpPut("{id:int}")]
         [Authorize(Roles = RoleNames.Admin)]
-        public IActionResult PutCity([FromBody] RTypeUpdateDto dto, [FromRoute] int id)
+        public IActionResult PutType([FromBody] RTypeUpdateDto dto, [FromRoute] int id)
         {
             var targetType = types.FirstOrDefault(x => x.Id == id);
 
@@ -128,7 +128,7 @@ namespace Selu383.SP24.Api.Controllers
 
         [HttpDelete("{id:int}")]
         [Authorize(Roles = RoleNames.Admin)]
-        public IActionResult DeleteCity([FromRoute] int id)
+        public IActionResult DeleteType([FromRoute] int id)
         {
             var typeToDelete = types.FirstOrDefault(x => x.Id == id);
 
