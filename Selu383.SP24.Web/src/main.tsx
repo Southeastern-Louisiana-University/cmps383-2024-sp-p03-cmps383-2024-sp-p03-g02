@@ -13,6 +13,7 @@ import HotelDetailsPage from './routes/hotels/hotel/id/HotelDetailPage.tsx';
 import RegisterPage from './routes/signUp/signUp.tsx';
 import BookingPage from './routes/Booking/BookingPage.tsx'
 import SearchHotels from './routes/hotels/SearchHotels.tsx'
+import ReserveRoomForm from './routes/Booking/CreateBookingPage.tsx'
 
 
 const router = createBrowserRouter([
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
     {
       path: "/find-hotel", 
       element: <SearchHotels /> 
+    },
+    {
+      path:"/create-booking/:hotelId/:typeId",
+      element: <ReserveRoomForm/>
     }
     ],
   },
