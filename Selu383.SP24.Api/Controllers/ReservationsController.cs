@@ -104,6 +104,11 @@ namespace Selu383.SP24.Api.Controllers
             {
                 return NotFound("No room of that type is available in specified hotel.");
             }
+
+            if(reservationDto.CheckInDate == reservationDto.CheckOutDate)
+            {
+                return BadRequest();
+            }
             
             var reservation = new Reservation
             {
