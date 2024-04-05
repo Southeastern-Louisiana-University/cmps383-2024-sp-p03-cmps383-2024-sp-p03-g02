@@ -23,11 +23,19 @@ interface RoomDto {
   };
 }
 
+interface RTypeDto {
+  id: number;
+  name: string;
+  description: string;
+  capacity: number;
+  commonItems: string;
+}
+
 const HotelDetailsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [hotel, setHotel] = useState<HotelDto | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [rooms, setRooms] = useState<RoomDto[]>([]);
+  const [roomTypes, setRoomTypes] = useState<RTypeDto[]>([]);
 
   useEffect(() => {
     const fetchHotelDetails = async () => {
@@ -41,14 +49,14 @@ const HotelDetailsPage: React.FC = () => {
         const hotelData: HotelDto = await hotelResponse.json();
         setHotel(hotelData);
 
-        const roomResponse = await fetch(`/api/hotels/${id}/rooms`);
-        if (!roomResponse.ok) {
+        const roomTypeResponse = await fetch(`/api/rooms/rtype/${id}`);
+        if (!roomTypeResponse.ok) {
           throw new Error(
-            `Failed to fetch room details. Status: ${roomResponse.status}`
+            `Failed to fetch room details. Status: ${roomTypeResponse.status}`
           );
         }
-        const roomData: RoomDto[] = await roomResponse.json();
-        setRooms(roomData);
+        const roomTypeData: RTypeDto[] = await roomTypeResponse.json();
+        setRoomTypes(roomTypeData);
 
       } catch (error) {
         console.error("Error fetching hotel details:", error);
@@ -82,25 +90,22 @@ const HotelDetailsPage: React.FC = () => {
             {hotel.name}
           </h1>
           <Row className="justify-content-center">
-            {rooms.map((room) => (
-              <Col xs={12} sm={6} md={4} lg={3} className="mb-3" key={room.id}>
-                <Link to={`/booking/${room.id}`} style={{ textDecoration: 'none', color: '#000' }}>
+            {roomTypes.map((roomType) => (
+              <Col xs={12} sm={6} md={4} lg={3} className="mb-3" key={roomType.id}>
+                <Link to={`/create-booking/${hotel.id}/${roomType.id}`} style={{ textDecoration: 'none', color: '#000' }}>
                 <Card
                   style={{ width: "100%", textAlign: "center", boxShadow: "0 0 10px #FDBA74" }}
                 >
                   <Card.Img
                     variant="top"
-                    src={room.image}
+                    src="https://i.imgur.com/g4pv8fd.jpeg"
                     alt="Room Placeholder"
                     style={{ width: "100%" }}
                   />
                   <Card.Body>
-                    <Card.Title>{room.roomType?.name}</Card.Title>
+                    <Card.Title>{roomType.name}</Card.Title>
                     <Card.Text>
-                      <strong>Rate: ~$</strong>{room.rate}
-                    </Card.Text>
-                    <Card.Text>
-                      <strong>Amneties:</strong> {room.roomType?.commonItems}
+                      <strong>Amneties:</strong> {roomType.commonItems}
                     </Card.Text>
                   </Card.Body>
                 </Card>
