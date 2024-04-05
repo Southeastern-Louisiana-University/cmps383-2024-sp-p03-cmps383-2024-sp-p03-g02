@@ -91,15 +91,7 @@ public class RoomsController : ControllerBase
                 Capacity = targetRoom.RoomType.Capacity,
                 CommonItems = targetRoom.RoomType.CommonItems,
             },
-            Hotel = new HotelDto
-            {
-                Id = targetRoom.Hotel.Id,
-                Name = targetRoom.Hotel.Name,
-                Address = targetRoom.Hotel.Address,
-                ContactNumber = targetRoom.Hotel.ContactNumber,
-                Email = targetRoom.Hotel.Email,
-                Image = targetRoom.Hotel.Image,
-            }
+            
         };
 
         return Ok(roomToReturn);
