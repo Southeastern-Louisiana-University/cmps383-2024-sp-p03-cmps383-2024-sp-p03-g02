@@ -4,11 +4,6 @@ import { useParams } from 'react-router-dom';
 import { useNavigate } from "react-router-dom"
 
 
-interface CreateReservationDto {
-	checkInDate?: Date;
-	checkOutDate?: Date;
-}
-
 const ReserveRoomForm = () => {
   const [checkinDate, setCheckinDate] = useState(new Date().toISOString().slice(0, 10));
   const [checkoutDate, setCheckoutDate] = useState("");
@@ -17,7 +12,6 @@ const ReserveRoomForm = () => {
   const { hotelId, typeId } = useParams();
 
   useEffect(() => {
-    // Calculate check-out date as two days from the current date
     const twoDaysLater = new Date();
     twoDaysLater.setDate(twoDaysLater.getDate() + 2);
     setCheckoutDate(twoDaysLater.toISOString().slice(0, 10));

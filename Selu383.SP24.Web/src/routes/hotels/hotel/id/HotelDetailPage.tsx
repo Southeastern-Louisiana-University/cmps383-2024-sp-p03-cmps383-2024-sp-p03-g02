@@ -9,26 +9,13 @@ interface HotelDto {
   email?: string;
 }
 
-interface RoomDto {
-  id: number;
-  hotelId?: number;
-  rTypeId?: number;
-  rate?: number;
-  roomNumber?: number;
-  image?: string;
-  roomType?: {
-    id: number;
-    name: string;
-    commonItems: string;
-  };
-}
-
 interface RTypeDto {
   id: number;
   name: string;
   description: string;
   capacity: number;
   commonItems: string;
+  rate: number;
 }
 
 const HotelDetailsPage: React.FC = () => {
@@ -106,6 +93,8 @@ const HotelDetailsPage: React.FC = () => {
                     <Card.Title>{roomType.name}</Card.Title>
                     <Card.Text>
                       <strong>Amneties:</strong> {roomType.commonItems}
+                      <br></br>
+                      <strong>Rate per night:</strong> ${roomType.rate}
                     </Card.Text>
                   </Card.Body>
                 </Card>
