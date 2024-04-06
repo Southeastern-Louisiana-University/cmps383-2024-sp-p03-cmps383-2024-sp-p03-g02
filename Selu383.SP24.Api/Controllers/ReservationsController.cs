@@ -50,7 +50,6 @@ namespace Selu383.SP24.Api.Controllers
                     Room = new RoomDto
                     {
                         Id = x.RoomId,
-                        Rate = x.Room.Rate,
                         RoomNumber = x.Room.RoomNumber,
                         Image = x.Room.Image,
                         HotelId = x.Room.HotelId,
@@ -72,6 +71,7 @@ namespace Selu383.SP24.Api.Controllers
                             CommonItems = x.Room.RoomType.CommonItems,
                             Capacity = x.Room.RoomType.Capacity,
                             Description = x.Room.RoomType.Description,
+                            Rate = x.Room.RoomType.Rate,
                         },  
                     },
                     CheckInDate = x.CheckInDate,
@@ -85,6 +85,77 @@ namespace Selu383.SP24.Api.Controllers
                 }).ToList();
 
             return Ok(bookings);
+        }
+
+        [HttpGet("{id:int}")]
+        [Authorize]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var user = await userManager.FindByNameAsync(User.Identity?.Name);
+            
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            var targetReservation = reservations.Include(r => r.Room).ThenInclude(room => room.Hotel)
+                .Include(r => r.Room).ThenInclude(room => room.RoomType)
+                .FirstOrDefault(r => r.Id == id);
+
+            if (targetReservation == null)
+            {
+                return NotFound();
+            }
+
+            if (targetReservation.UserId != user.Id)
+            {
+                return BadRequest();
+            }
+
+            var reservationToReturn = new ReservationDto
+            {
+                Id = targetReservation.Id,
+                RoomId = targetReservation.RoomId,
+                HotelId = targetReservation.Room.HotelId,
+                Room = new RoomDto
+                {
+                    Id = targetReservation.RoomId,
+                    RoomNumber = targetReservation.Room.RoomNumber,
+                    Image = targetReservation.Room.Image,
+                    HotelId = targetReservation.Room.HotelId,
+                    Hotel = new HotelDto
+                    {
+                        Id = targetReservation.Room.Hotel.Id,
+                        Name = targetReservation.Room.Hotel.Name,
+                        ContactNumber = targetReservation.Room.Hotel.ContactNumber,
+                        Email = targetReservation.Room.Hotel.Email,
+                        Address = targetReservation.Room.Hotel.Address,
+                        Image = targetReservation.Room.Hotel.Image,
+                        ManagerId = targetReservation.Room.Hotel.ManagerId
+                    },
+                    RTypeId = targetReservation.Room.RTypeId,
+                    RoomType = new RTypeDto
+                    {
+                        Id = targetReservation.Room.RoomType.Id,
+                        Name = targetReservation.Room.RoomType.Name,
+                        CommonItems = targetReservation.Room.RoomType.CommonItems,
+                        Capacity = targetReservation.Room.RoomType.Capacity,
+                        Description = targetReservation.Room.RoomType.Description,
+                        Rate = targetReservation.Room.RoomType.Rate,
+                    },
+                },
+                CheckInDate = targetReservation.CheckInDate,
+                CheckOutDate = targetReservation.CheckOutDate,
+                UserId = targetReservation.UserId,
+                User = new UserDto
+                {
+                    Id = targetReservation.User.Id,
+                    UserName = targetReservation.User.UserName,
+                }
+            };
+
+            return Ok(reservationToReturn);
+
         }
 
         [HttpPost("hotel/{hotelId}/rtype/{typeId}")]
@@ -146,7 +217,6 @@ namespace Selu383.SP24.Api.Controllers
                     Room = new RoomDto
                     {
                         Id = x.RoomId,
-                        Rate = x.Room.Rate,
                         RoomNumber = x.Room.RoomNumber,
                         Image = x.Room.Image,
                         HotelId = x.Room.HotelId,
@@ -168,6 +238,7 @@ namespace Selu383.SP24.Api.Controllers
                             CommonItems = x.Room.RoomType.CommonItems,
                             Capacity = x.Room.RoomType.Capacity,
                             Description = x.Room.RoomType.Description,
+                            Rate = x.Room.RoomType.Rate,
                         },
                     },
                 })

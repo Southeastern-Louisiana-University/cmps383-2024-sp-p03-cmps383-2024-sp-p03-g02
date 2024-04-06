@@ -37,7 +37,6 @@ public class RoomsController : ControllerBase
             {
                 Id = x.Id,
                 HotelId = x.HotelId,
-                Rate = x.Rate,
                 RoomNumber = x.RoomNumber,
                 Image = x.Image,
                 RTypeId = x.RTypeId,
@@ -48,6 +47,7 @@ public class RoomsController : ControllerBase
                     Description = x.RoomType.Description,
                     Capacity = x.RoomType.Capacity,
                     CommonItems = x.RoomType.CommonItems,
+                    Rate = x.RoomType.Rate,
                 },
                 Hotel = new HotelDto
                 {
@@ -79,7 +79,6 @@ public class RoomsController : ControllerBase
         {
             Id = id,
             HotelId = targetRoom.HotelId,
-            Rate = targetRoom.Rate,
             RoomNumber = targetRoom.RoomNumber,
             Image = targetRoom.Image,
             RTypeId = targetRoom.RTypeId,
@@ -90,6 +89,7 @@ public class RoomsController : ControllerBase
                 Description = targetRoom.RoomType.Description,
                 Capacity = targetRoom.RoomType.Capacity,
                 CommonItems = targetRoom.RoomType.CommonItems,
+                Rate = targetRoom.RoomType.Rate,
             },
             
         };
@@ -117,7 +117,6 @@ public class RoomsController : ControllerBase
         var room = new Room
         {
             HotelId = dto.HotelId,
-            Rate = dto.Rate,
             RoomNumber = dto.RoomNumber,
             Image = dto.Image,
             RTypeId = dto.RTypeId,
@@ -140,7 +139,6 @@ public class RoomsController : ControllerBase
                 Email = room.Hotel.Email,
                 Image = room.Hotel.Image,
             },
-            Rate = room.Rate,
             RoomNumber = room.RoomNumber,
             Image = room.Image,
             RTypeId = room.RTypeId,
@@ -151,6 +149,7 @@ public class RoomsController : ControllerBase
                 Description = room.RoomType.Description,
                 Capacity = room.RoomType.Capacity,
                 CommonItems = room.RoomType.CommonItems,
+                Rate = room.RoomType.Rate,
             }
         };
 
@@ -180,7 +179,6 @@ public class RoomsController : ControllerBase
         }
 
         targetRoom.HotelId = dto.HotelId;
-        targetRoom.Rate = dto.Rate;
         targetRoom.RoomNumber = dto.RoomNumber;
         targetRoom.Image = dto.Image;
         targetRoom.RTypeId = dto.RTypeId;
@@ -192,8 +190,7 @@ public class RoomsController : ControllerBase
         {
             Id = targetRoom.Id,
             HotelId = targetRoom.HotelId,
-            Rate = targetRoom.Rate,
-            RoomNumber = targetRoom.Rate,
+            RoomNumber = targetRoom.RoomNumber,
             Image = targetRoom.Image,
             RTypeId = targetRoom.RTypeId,
             RoomType = new RTypeDto
@@ -203,6 +200,7 @@ public class RoomsController : ControllerBase
                 Description = targetRoom.RoomType.Description,
                 Capacity = targetRoom.RoomType.Capacity,
                 CommonItems = targetRoom.RoomType.CommonItems,
+                Rate = targetRoom.RoomType.Rate,
             } 
         };
         return Ok(roomToReturn);
@@ -226,8 +224,7 @@ public class RoomsController : ControllerBase
         {
             Id = roomToDelete.Id,
             HotelId = roomToDelete.HotelId,
-            Rate = roomToDelete.Rate,
-            RoomNumber = roomToDelete.Rate,
+            RoomNumber = roomToDelete.RoomNumber,
             Image = roomToDelete.Image,
             RTypeId = roomToDelete.RTypeId,
             RoomType = new RTypeDto
@@ -235,7 +232,8 @@ public class RoomsController : ControllerBase
                 Id = roomToDelete.RTypeId,
                 Name = roomToDelete.RoomType.Name,
                 Description = roomToDelete.RoomType.Description,
-                Capacity = roomToDelete.RoomType.Capacity
+                Capacity = roomToDelete.RoomType.Capacity,
+                Rate = roomToDelete.RoomType.Rate,
             }
         };
 
@@ -254,7 +252,6 @@ public class RoomsController : ControllerBase
             {
                 Id = room.Id,
                 HotelId = room.HotelId,
-                Rate = room.Rate,
                 RoomNumber = room.RoomNumber,
                 Image = room.Image,
                 RTypeId = room.RTypeId,
@@ -263,7 +260,8 @@ public class RoomsController : ControllerBase
                     Id = room.RoomType.Id,
                     Name = room.RoomType.Name,
                     Description = room.RoomType.Description,
-                    Capacity = room.RoomType.Capacity  
+                    Capacity = room.RoomType.Capacity,
+                    Rate = room.RoomType.Rate,
                 },
                 Hotel = new HotelDto
                 {
@@ -353,6 +351,7 @@ public class RoomsController : ControllerBase
                 Description = roomType.Description,
                 Capacity = roomType.Capacity,
                 CommonItems = roomType.CommonItems,
+                Rate = roomType.Rate,
             }).ToListAsync();
 
         if (roomTypes == null)
