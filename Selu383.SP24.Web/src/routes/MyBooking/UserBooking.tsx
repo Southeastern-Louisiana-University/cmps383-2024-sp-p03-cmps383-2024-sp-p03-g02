@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Card } from "react-bootstrap";
+import { Container, Row, Col, Card, Button } from "react-bootstrap";
 
 interface UserDto {
   id: number;
@@ -23,7 +23,7 @@ interface RoomDto {
     name: string;
     commonItems: string;
   };
-  hotel?: HotelDto; 
+  hotel?: HotelDto;
 }
 
 interface ReservationDto {
@@ -40,6 +40,7 @@ interface ReservationDto {
 function UserBooking() {
   const [bookings, setBookings] = useState<ReservationDto[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [buttonColor, setButtonColor] = useState("success");
 
   useEffect(() => {
     async function fetchBookings() {
@@ -58,6 +59,10 @@ function UserBooking() {
 
     fetchBookings();
   }, []);
+
+  const handleButtonClick = () => {
+    setButtonColor(buttonColor === "success" ? "danger" : "success");
+  };
 
   return (
     <Container
@@ -83,32 +88,44 @@ function UserBooking() {
         bookings.map((booking) => (
           <Row key={booking.id}>
             <Col>
-              <Card>
+              <Card
+                style={{
+                  border: "none",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Card.Img
+                  variant="top"
+                  src={booking.room.image || "https://imgur.com/EwexnIp.png"}
+                  alt="Room"
+                  style={{ flex: "1", objectFit: "cover" }}
+                />
                 <Card.Body>
-
-                  <Card.Text>
-                    <center>
-                        <strong>Hotel Name:</strong>{" "}
-                        {booking.room.hotel ? booking.room.hotel.name : "Unknown"}
-                        <br />
-                        <strong>Room Type:</strong>{" "}
-                        {booking.room.roomType ? booking.room.roomType.name : "Unknown"}
-                        <br />
-                        <img
-                        src={booking.room.image}
-                        alt="Room"
-                        style={{ maxWidth: "50%", height: "50%" }}
-                        />
-                        <br />
-                        <strong>Check-In Date:</strong>{" "}
-                        {new Date(booking.checkInDate).toLocaleDateString()}
-                        <br />
-                        <strong>Check-Out Date:</strong>{" "}
-                        {new Date(booking.checkOutDate).toLocaleDateString()}
-                        <br />                        
-                    </center>
-
+                  <Card.Title style={{ color: "#000000", textShadow: "2px 2px 5px #FFA500" }}>
+                    <strong>Hotel Name:</strong>{" "}
+                    {booking.room.hotel ? booking.room.hotel.name : "Unknown"}
+                  </Card.Title>
+                  <Card.Text  style={{ color: "#000000", textShadow: "2px 2px 5px #FFA500" }}>
+                    <strong>Room Type:</strong>{" "}
+                    {booking.room.roomType
+                      ? booking.room.roomType.name
+                      : "Unknown"}
+                    <br />
+                    <strong>Check-In Date:</strong>{" "}
+                    {new Date(booking.checkInDate).toLocaleDateString()}
+                    <br />
+                    <strong>Check-Out Date:</strong>{" "}
+                    {new Date(booking.checkOutDate).toLocaleDateString()}
                   </Card.Text>
+                  <Button
+                    variant={buttonColor}
+                    onClick={handleButtonClick}
+                    style={{ width: "10%" }}
+                  >
+                    {buttonColor === "success" ? "Unlock" : "Lock"}
+                  </Button>
                 </Card.Body>
               </Card>
             </Col>
