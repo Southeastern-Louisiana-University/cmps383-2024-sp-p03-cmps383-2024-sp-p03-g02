@@ -100,7 +100,7 @@ function UserBooking() {
                   variant="top"
                   src={booking.room.image || "https://imgur.com/EwexnIp.png"}
                   alt="Room"
-                  style={{ flex: "1", objectFit: "cover" }}
+                  style={{ maxHeight: "400px", objectFit: "contain" }}
                 />
                 <Card.Body>
                   <Card.Title style={{ color: "#000000", textShadow: "2px 2px 5px #FFA500" }}>
