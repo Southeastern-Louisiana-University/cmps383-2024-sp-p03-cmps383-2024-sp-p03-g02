@@ -9,11 +9,6 @@ interface UserDto {
 interface HotelDto {
   id: number;
   name: string;
-  address: string;
-  managerId: number;
-  email: string;
-  contactNumber: string;
-  image: string;
 }
 
 interface RoomDto {
@@ -44,6 +39,7 @@ interface ReservationDto {
 
 function UserBooking() {
   const [bookings, setBookings] = useState<ReservationDto[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchBookings() {
@@ -56,6 +52,7 @@ function UserBooking() {
         setBookings(data);
       } catch (error) {
         console.error("Error fetching bookings:", error);
+        setError("Failed to fetch bookings. Please try again.");
       }
     }
 
@@ -63,34 +60,54 @@ function UserBooking() {
   }, []);
 
   return (
-    <Container>
-      <h1>All Bookings</h1>
+    <Container
+      className="mt-4"
+      style={{
+        border: "1px solid #dddddd",
+        borderRadius: "8px",
+        padding: "20px",
+        boxShadow: "0 0 10px #FDBA74",
+      }}
+    >
+      <h1
+        className="text-center mb-4"
+        style={{
+          fontWeight: "bold",
+          color: "#000000",
+          textShadow: "2px 2px 5px #FDBA74",
+        }}
+      >
+        Bookings
+      </h1>
       {bookings.length > 0 ? (
         bookings.map((booking) => (
           <Row key={booking.id}>
             <Col>
               <Card>
                 <Card.Body>
-                  <Card.Title>Reservation ID: {booking.id}</Card.Title>
+
                   <Card.Text>
-                    <strong>Hotel Name:</strong>{" "}
-                    {booking.room.hotel ? booking.room.hotel.name : "Unknown"}
-                    <br />
-                    <strong>Room Type:</strong>{" "}
-                    {booking.room.roomType ? booking.room.roomType.name : "Unknown"}
-                    <br />
-                    <img
-                      src={booking.room.image}
-                      alt="Room"
-                      style={{ maxWidth: "100%", height: "auto" }}
-                    />
-                    <br />
-                    <strong>Check-In Date:</strong>{" "}
-                    {new Date(booking.checkInDate).toLocaleDateString()}
-                    <br />
-                    <strong>Check-Out Date:</strong>{" "}
-                    {new Date(booking.checkOutDate).toLocaleDateString()}
-                    <br />
+                    <center>
+                        <strong>Hotel Name:</strong>{" "}
+                        {booking.room.hotel ? booking.room.hotel.name : "Unknown"}
+                        <br />
+                        <strong>Room Type:</strong>{" "}
+                        {booking.room.roomType ? booking.room.roomType.name : "Unknown"}
+                        <br />
+                        <img
+                        src={booking.room.image}
+                        alt="Room"
+                        style={{ maxWidth: "50%", height: "50%" }}
+                        />
+                        <br />
+                        <strong>Check-In Date:</strong>{" "}
+                        {new Date(booking.checkInDate).toLocaleDateString()}
+                        <br />
+                        <strong>Check-Out Date:</strong>{" "}
+                        {new Date(booking.checkOutDate).toLocaleDateString()}
+                        <br />                        
+                    </center>
+
                   </Card.Text>
                 </Card.Body>
               </Card>
@@ -100,6 +117,7 @@ function UserBooking() {
       ) : (
         <p>No bookings found</p>
       )}
+      {error && <div className="error-message">{error}</div>}
     </Container>
   );
 }
