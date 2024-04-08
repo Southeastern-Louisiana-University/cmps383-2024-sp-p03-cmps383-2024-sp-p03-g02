@@ -3,7 +3,6 @@ import { Button } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from "react-router-dom"
 
-
 const ReserveRoomForm = () => {
   const [checkinDate, setCheckinDate] = useState(new Date().toISOString().slice(0, 10));
   const [checkoutDate, setCheckoutDate] = useState("");
@@ -52,14 +51,18 @@ const ReserveRoomForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="checkinDate">Check-in Date:</label>
-      <input type="date" id="checkinDate" name="checkinDate" value={checkinDate} onChange={handleCheckInChange} />
+    <form onSubmit={handleSubmit} style={{ maxWidth: "400px", margin: "auto" }}>
+      <div style={{ marginBottom: "20px" }}>
+        <label htmlFor="checkinDate" style={{ display: "block", marginBottom: "5px" }}>Check-in Date:</label>
+        <input type="date" id="checkinDate" name="checkinDate" value={checkinDate} onChange={handleCheckInChange} style={{ width: "100%" }} />
+      </div>
 
-      <label htmlFor="checkoutDate">Check-out Date:</label>
-      <input type="date" id="checkoutDate" name="checkoutDate" value={checkoutDate} onChange={handleCheckOutChange} />
+      <div style={{ marginBottom: "20px" }}>
+        <label htmlFor="checkoutDate" style={{ display: "block", marginBottom: "5px" }}>Check-out Date:</label>
+        <input type="date" id="checkoutDate" name="checkoutDate" value={checkoutDate} onChange={handleCheckOutChange} style={{ width: "100%" }} />
+      </div>
 
-      <Button type="submit" style = {{ backgroundColor: '#FDBA74' }} className="btn-light">Reserve Room</Button>
+      <Button type="submit" style={{ backgroundColor: '#FDBA74', color: '#FFFFFF', width: "100%" }} className="btn-light">Reserve Room</Button>
     </form>
   );
 };
