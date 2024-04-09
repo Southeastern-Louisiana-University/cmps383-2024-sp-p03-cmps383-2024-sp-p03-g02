@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Selu383.SP24.Api.Features.Authorization;
 using Selu383.SP24.Api.Features.Hotels;
 using Selu383.SP24.Api.Features.Rooms;
@@ -18,7 +19,7 @@ public static class SeedHelper
         await AddRoles(serviceProvider);
         await AddUsers(serviceProvider);
         await AddTypes(dataContext);
-        await AddHotels(dataContext);
+        await AddHotels(dataContext, serviceProvider);
         await AddRooms(dataContext);
     }
 
@@ -110,14 +111,22 @@ public static class SeedHelper
         await dataContext.SaveChangesAsync();
     }
 
-    private static async Task AddHotels(DataContext dataContext)
+    private static async Task AddHotels(DataContext dataContext, IServiceProvider serviceProvider)
     {
+        var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
+
         var hotels = dataContext.Set<Hotel>();
 
         if (await hotels.AnyAsync())
         {
             return;
         }
+
+        var userAdmin = await userManager.FindByNameAsync("galkadi");
+
+        var userBob = await userManager.FindByNameAsync("bob");
+
+        var userSue = await userManager.FindByNameAsync("sue");
 
         dataContext.Set<Hotel>()
                 .Add(new Hotel
@@ -127,7 +136,7 @@ public static class SeedHelper
                     Image = "https://imgur.com/MLARzB8.png",
                     ContactNumber = "18009999999",
                     Email = "baronne@gmail.com",
-                    ManagerId = 2
+                    ManagerId = userAdmin.Id
                 });
 
         dataContext.Set<Hotel>()
@@ -138,7 +147,7 @@ public static class SeedHelper
                     Image = "https://imgur.com/MLARzB8.png",
                     ContactNumber = "18007896087",
                     Email = "esplanade@gmail.com",
-                    ManagerId = 2
+                    ManagerId = userBob.Id
                 });
 
         dataContext.Set<Hotel>()
@@ -149,7 +158,7 @@ public static class SeedHelper
                     Image = "https://imgur.com/MLARzB8.png",
                     ContactNumber = "18007516238",
                     Email = "conventionhotel@gmail.com",
-                    ManagerId = 2
+                    ManagerId = userSue.Id
                 });
 
         await dataContext.SaveChangesAsync();
