@@ -42,7 +42,17 @@ public class RoomsController : ControllerBase
                     Id = x.RTypeId,
                     Name = x.RoomType.Name,
                     Description = x.RoomType.Description,
-                    Capacity = x.RoomType.Capacity
+                    Capacity = x.RoomType.Capacity,
+                    CommonItems = x.RoomType.CommonItems,
+                },
+                Hotel = new HotelDto
+                {
+                    Id = x.Hotel.Id,
+                    Name = x.Hotel.Name,
+                    Address = x.Hotel.Address,
+                    ContactNumber = x.Hotel.ContactNumber,
+                    Email = x.Hotel.Email,
+                    Image = x.Hotel.Image,
                 }
             })
             .ToList();
@@ -53,8 +63,8 @@ public class RoomsController : ControllerBase
     [HttpGet("{id:int}")]
     public IActionResult GetbyId(int id)
     {
-        var targetRoom = rooms.FirstOrDefault(x => x.Id == id);
-        var roomType = types.FirstOrDefault(x => x.Id == targetRoom.RTypeId);
+        var targetRoom = rooms.Include(r => r.RoomType)
+                              .FirstOrDefault(x => x.Id == id);
 
         if (targetRoom == null)
         {
@@ -71,14 +81,26 @@ public class RoomsController : ControllerBase
             RTypeId = targetRoom.RTypeId,
             RoomType = new RTypeDto
             {
-                Id = targetRoom.RTypeId,
+                Id = targetRoom.RoomType.Id,
                 Name = targetRoom.RoomType.Name,
                 Description = targetRoom.RoomType.Description,
-                Capacity = targetRoom.RoomType.Capacity
+                Capacity = targetRoom.RoomType.Capacity,
+                CommonItems = targetRoom.RoomType.CommonItems,
+            },
+            Hotel = new HotelDto
+            {
+                Id = targetRoom.Hotel.Id,
+                Name = targetRoom.Hotel.Name,
+                Address = targetRoom.Hotel.Address,
+                ContactNumber = targetRoom.Hotel.ContactNumber,
+                Email = targetRoom.Hotel.Email,
+                Image = targetRoom.Hotel.Image,
             }
         };
+
         return Ok(roomToReturn);
     }
+
 
     [HttpPost]
     [Authorize(Roles = RoleNames.Admin)]
@@ -92,7 +114,7 @@ public class RoomsController : ControllerBase
             return BadRequest();
         }
 
-        if(roomType == null)
+        if (roomType == null)
         {
             return BadRequest();
         }
@@ -122,7 +144,8 @@ public class RoomsController : ControllerBase
                 Id = room.RTypeId,
                 Name = room.RoomType.Name,
                 Description = room.RoomType.Description,
-                Capacity = room.RoomType.Capacity
+                Capacity = room.RoomType.Capacity,
+                CommonItems = room.RoomType.CommonItems,
             }
         };
 
@@ -135,7 +158,7 @@ public class RoomsController : ControllerBase
     {
         var hotel = hotels.FirstOrDefault(x => x.Id == dto.HotelId);
         var roomType = types.FirstOrDefault(x => x.Id == dto.RTypeId);
-        if(roomType == null)
+        if (roomType == null)
         {
             return BadRequest();
         }
@@ -173,7 +196,8 @@ public class RoomsController : ControllerBase
                 Id = targetRoom.RTypeId,
                 Name = targetRoom.RoomType.Name,
                 Description = targetRoom.RoomType.Description,
-                Capacity = targetRoom.RoomType.Capacity
+                Capacity = targetRoom.RoomType.Capacity,
+                CommonItems = targetRoom.RoomType.CommonItems,
             } 
         };
         return Ok(roomToReturn);
@@ -241,7 +265,6 @@ public class RoomsController : ControllerBase
                     Id = room.Hotel.Id,
                     Name = room.Hotel.Name,
                     Address = room.Hotel.Address,
-                    LocationId = room.Hotel.LocationId
                 }
             })
             .ToList();
@@ -299,6 +322,30 @@ public class RoomsController : ControllerBase
         {
             return StatusCode(500, $"An error occurred while deleting reservations: {ex.Message}");
         }
+    }
+
+    [HttpGet("rtype/{id}")]
+    public async Task<ActionResult<IEnumerable<RTypeDto>>> GetRTypesByHotel(int id)
+    {
+
+        var roomTypes = await rooms.Where(room => room.HotelId == id)
+            .Select(room => room.RoomType)
+            .Distinct()
+            .Select(roomType => new RTypeDto
+            {
+                Id = roomType.Id,
+                Name = roomType.Name,
+                Description = roomType.Description,
+                Capacity = roomType.Capacity,
+                CommonItems = roomType.CommonItems,
+            }).ToListAsync();
+
+        if (roomTypes == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(roomTypes);
     }
 
 }

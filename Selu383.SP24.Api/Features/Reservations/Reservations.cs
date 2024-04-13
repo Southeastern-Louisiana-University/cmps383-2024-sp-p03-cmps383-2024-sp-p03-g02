@@ -1,4 +1,4 @@
-﻿using Selu383.SP24.Api.Features.Rooms;
+﻿﻿using Selu383.SP24.Api.Features.Rooms;
 
 public class Reservation
 {
@@ -7,6 +7,7 @@ public class Reservation
     public Room Room { get; set; }
     public DateTime CheckInDate { get; set; }
     public DateTime CheckOutDate { get; set; }
+    // Add more reservation-related properties as needed
 }
 
 public class ReservationDto
