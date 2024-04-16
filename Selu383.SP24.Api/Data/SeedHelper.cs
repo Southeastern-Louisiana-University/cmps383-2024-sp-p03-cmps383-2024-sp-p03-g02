@@ -20,7 +20,7 @@ public static class SeedHelper
         await AddUsers(serviceProvider);
         await AddTypes(dataContext);
         await AddHotels(dataContext, serviceProvider);
-        await AddRooms(dataContext);
+        await AddRooms(dataContext, serviceProvider);
     }
 
     private static async Task AddUsers(IServiceProvider serviceProvider)
@@ -164,29 +164,30 @@ public static class SeedHelper
         await dataContext.SaveChangesAsync();
     }
 
-    private static async Task AddRooms(DataContext dataContext)
+    private static async Task AddRooms(DataContext dataContext, IServiceProvider serviceProvider)
     {
         var rooms = dataContext.Set<Room>();
 
-        if(await rooms.AnyAsync())
-        {
-            return;
-        }
+        var hotels = await dataContext.Set<Hotel>().ToListAsync();
 
-        for (var i = 1; i < 4; i++)
+        foreach (var hotel in hotels)
         {
-            var rate = 100;
-            for (var j = 1; j < 4; j++)
+            var roomTypes = await dataContext.Set<RType>().ToListAsync(); 
+            foreach (var roomType in roomTypes)
             {
-                rooms.Add(new Room
+                var rate = 100;
+                for (var j = 1; j < 4; j++)
                 {
-                    HotelId = i,
-                    Rate = rate,
-                    RoomNumber = j + 100,
-                    RTypeId = j,
-                    Image = "https://i.imgur.com/sTESIUA.jpg",
-                });
-                rate += 50;
+                    rooms.Add(new Room
+                    {
+                        HotelId = hotel.Id, 
+                        Rate = rate,
+                        RoomNumber = j + 100,
+                        RTypeId = roomType.Id,
+                        Image = "https://i.imgur.com/sTESIUA.jpg",
+                    });
+                    rate += 50;
+                }
             }
         }
 
