@@ -19,7 +19,7 @@ export default function App() {
   const [bookingSubmitted, setBookingSubmitted] = useState(false);
 
   const handleSubmit = () => {
-    
+    // Here you can add logic to handle the form submission, such as sending data to a backend server
     setBookingSubmitted(true);
   };
 
@@ -67,9 +67,9 @@ export default function App() {
         value={email}
         onChangeText={setEmail}
       />
-    
+      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
         <Text>Submit</Text>
-
+      </TouchableOpacity>
       <StatusBar style="auto" />
     </View>
   );
