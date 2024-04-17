@@ -184,7 +184,6 @@ public static class SeedHelper
                     rooms.Add(new Room
                     {
                         HotelId = hotel.Id, 
-                        Rate = rate,
                         RoomNumber = j + 100,
                         RTypeId = roomType.Id,
                         Image = "https://i.imgur.com/sTESIUA.jpg",
