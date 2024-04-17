@@ -77,7 +77,8 @@ export default function NavbarLayout() {
                         )}
                     </li>
                 </ul>
-            </Navbar>
+            </div>
+        </Navbar>
 
             <Outlet />
         </>
