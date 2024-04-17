@@ -2,6 +2,6 @@
 {
     public class CommonList
     {
-        public const string CommonItems = "Free Wi-Fi, Room Minibar, Cable TV, and Daily Cleaning";
+        public const string CommonItems = "Mini-Fridge, Microwave, Internet, TV, etc.";
     }
 }

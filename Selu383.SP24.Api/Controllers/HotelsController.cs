@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Selu383.SP24.Api.Data;
 using Selu383.SP24.Api.Extensions;
 using Selu383.SP24.Api.Features.Authorization;
-using Selu383.SP24.Api.Features.Cities;
 using Selu383.SP24.Api.Features.Hotels;
 using Selu383.SP24.Api.Features.Rooms;
 using Selu383.SP24.Api.Features.RTypes;
@@ -16,7 +15,6 @@ namespace Selu383.SP24.Api.Controllers;
 public class HotelsController : ControllerBase
 {
     private readonly DbSet<Hotel> hotels;
-    private readonly DbSet<City> cities;
     private readonly DbSet<Room> rooms;
     private readonly DataContext dataContext;
 
@@ -24,7 +22,6 @@ public class HotelsController : ControllerBase
     {
         this.dataContext = dataContext;
         hotels = dataContext.Set<Hotel>();
-        cities = dataContext.Set<City>();
         rooms = dataContext.Set<Room>();
     }
 
@@ -42,7 +39,6 @@ public class HotelsController : ControllerBase
             {
                 Id = x.Id,
                 HotelId = x.HotelId,
-                Rate = x.Rate,
                 RoomNumber = x.RoomNumber,
                 RTypeId = x.RTypeId,
                 Image = x.Image,
@@ -65,8 +61,7 @@ public class HotelsController : ControllerBase
     {
         var filtered = hotels
             .Where(x => x.Address.Contains(findHotelDto.SearchTerm)
-                     || x.Name.Contains(findHotelDto.SearchTerm)
-                     || x.Location.Name.Contains(findHotelDto.SearchTerm));
+                     || x.Name.Contains(findHotelDto.SearchTerm));
 
         return GetHotelDtos(filtered);
     }
@@ -90,12 +85,6 @@ public class HotelsController : ControllerBase
     public ActionResult<HotelDto> CreateHotel(HotelDto dto)
     {
 
-        var city = cities.FirstOrDefault(x => x.Id == dto.LocationId);
-        if (city == null)
-        {
-            return BadRequest();
-        }
-
         if (IsInvalid(dto))
         {
             return BadRequest();
@@ -105,11 +94,9 @@ public class HotelsController : ControllerBase
             Name = dto.Name,
             Address = dto.Address,
             ManagerId = dto.ManagerId,
-            LocationId = dto.LocationId,
             ContactNumber = dto.ContactNumber,
             Email = dto.Email,
             Image = dto.Image,
-            Location = city
         };
         hotels.Add(hotel);
 
@@ -130,11 +117,6 @@ public class HotelsController : ControllerBase
             return BadRequest();
         }
 
-        var city = cities.FirstOrDefault(x => x.Id == dto.LocationId);
-        if (city == null)
-        {
-            return BadRequest();
-        }
 
         var hotel = hotels.FirstOrDefault(x => x.Id == id);
         if (hotel == null)
@@ -149,11 +131,9 @@ public class HotelsController : ControllerBase
 
         hotel.Name = dto.Name;
         hotel.Address = dto.Address;
-        hotel.LocationId = dto.LocationId;
         hotel.ContactNumber = dto.ContactNumber;
         hotel.Email = dto.Email;
         hotel.Image = dto.Image;
-        hotel.Location = city;
         if (User.IsInRole(RoleNames.Admin))
         {
             hotel.ManagerId = dto.ManagerId;
@@ -223,12 +203,6 @@ public class HotelsController : ControllerBase
                 Name = x.Name,
                 Address = x.Address,
                 ManagerId = x.ManagerId,
-                LocationId = x.Location.Id,
-                Location = new CityDto
-                {
-                    Id = x.Location.Id,
-                    Name = x.Location.Name,
-                },
                 ContactNumber = x.ContactNumber,
                 Email = x.Email,
                 Image = x.Image,

@@ -18,7 +18,7 @@ namespace Selu383.SP24.Api.Migrations
                 nullable: false,
                 defaultValue: 0);
 
-            migrationBuilder.CreateTable(
+           /* migrationBuilder.CreateTable(
                 name: "Reservation",
                 columns: table => new
                 {
@@ -42,14 +42,14 @@ namespace Selu383.SP24.Api.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Reservation_RoomId",
                 table: "Reservation",
-                column: "RoomId");
+                column: "RoomId");*/
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Reservation");
+           /* migrationBuilder.DropTable(
+                name: "Reservation");*/
 
             migrationBuilder.DropColumn(
                 name: "Capacity",
