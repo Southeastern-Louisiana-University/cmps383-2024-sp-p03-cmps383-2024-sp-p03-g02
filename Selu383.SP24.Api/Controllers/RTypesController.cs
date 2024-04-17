@@ -29,7 +29,7 @@ namespace Selu383.SP24.Api.Controllers
                     Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
-
+                    Rate = x.Rate,
                     Capacity = x.Capacity,
                     CommonItems = x.CommonItems
                 })
@@ -54,7 +54,8 @@ namespace Selu383.SP24.Api.Controllers
                 Name = targetType.Name,
                 Description = targetType.Description,
                 Capacity = targetType.Capacity,
-                CommonItems = targetType.CommonItems
+                CommonItems = targetType.CommonItems,
+                Rate = targetType.Rate
             };
 
             return Ok(typeToReturn);
@@ -62,7 +63,7 @@ namespace Selu383.SP24.Api.Controllers
 
         [HttpPost]
         [Authorize(Roles = RoleNames.Admin)]
-        public IActionResult CreateCity(RTypeDto dto)
+        public IActionResult CreateType(RTypeDto dto)
         {
             if (dto.Name == null || dto.Description == null || dto.Capacity <= 1)
             {
@@ -74,7 +75,8 @@ namespace Selu383.SP24.Api.Controllers
                 Name = dto.Name,
                 Description = dto.Description,
                 Capacity = dto.Capacity,
-                CommonItems = CommonList.CommonItems
+                CommonItems = CommonList.CommonItems,
+                Rate = dto.Rate
             };
 
             types.Add(type);
@@ -86,14 +88,15 @@ namespace Selu383.SP24.Api.Controllers
                 Name = type.Name,
                 Description = type.Description,
                 Capacity = type.Capacity,
-                CommonItems = type.CommonItems
+                CommonItems = type.CommonItems,
+                Rate = type.Rate
             };
             return CreatedAtAction(nameof(GetbyId), new { id = typeToReturn.Id }, typeToReturn);
         }
 
         [HttpPut("{id:int}")]
         [Authorize(Roles = RoleNames.Admin)]
-        public IActionResult PutCity([FromBody] RTypeUpdateDto dto, [FromRoute] int id)
+        public IActionResult PutType([FromBody] RTypeUpdateDto dto, [FromRoute] int id)
         {
             var targetType = types.FirstOrDefault(x => x.Id == id);
 
@@ -120,7 +123,8 @@ namespace Selu383.SP24.Api.Controllers
                 Name = targetType.Name,
                 Description = targetType.Description,
                 Capacity = targetType.Capacity,
-                CommonItems = targetType.CommonItems
+                CommonItems = targetType.CommonItems,
+                Rate = targetType.Rate
             };
 
             return Ok(typeToReturn);
@@ -128,7 +132,7 @@ namespace Selu383.SP24.Api.Controllers
 
         [HttpDelete("{id:int}")]
         [Authorize(Roles = RoleNames.Admin)]
-        public IActionResult DeleteCity([FromRoute] int id)
+        public IActionResult DeleteType([FromRoute] int id)
         {
             var typeToDelete = types.FirstOrDefault(x => x.Id == id);
 
@@ -146,7 +150,8 @@ namespace Selu383.SP24.Api.Controllers
                 Name = typeToDelete.Name,
                 Description = typeToDelete.Description,
                 Capacity = typeToDelete.Capacity,
-                CommonItems = typeToDelete.CommonItems
+                CommonItems = typeToDelete.CommonItems,
+                Rate = typeToDelete.Rate
             };
 
             return Ok(typeToDelete);

@@ -7,10 +7,6 @@ interface HotelDto {
   name?: string;
   address?: string;
   managerId?: number;
-  location?:{
-    id: number;
-    name: string;
-}
 }
 
 const HotelListPage: React.FC = () => {
@@ -54,7 +50,7 @@ const HotelListPage: React.FC = () => {
 
                 <Card.Body>
                   <Card.Title style={{ color: '#000000', fontWeight: 'bold', textShadow: '2px 2px 5px #FDBA74' }}>{hotel.name}</Card.Title>
-                  <Card.Subtitle className="mb-2 text-muted">{hotel.address}, {hotel.location?.name}</Card.Subtitle>
+                  <Card.Subtitle className="mb-2 text-muted">{hotel.address}</Card.Subtitle>
                 </Card.Body>
               </Card>
             </Link>

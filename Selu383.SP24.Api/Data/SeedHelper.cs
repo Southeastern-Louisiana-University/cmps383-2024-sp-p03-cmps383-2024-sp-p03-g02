@@ -88,7 +88,8 @@ public static class SeedHelper
                 Name = "Single Queen",
                 Description = "Room with one queen bed",
                 CommonItems = CommonList.CommonItems,
-                Capacity = 2
+                Capacity = 2,
+                Rate = 100
             });
 
         dataContext.Set<RType>()
@@ -97,7 +98,8 @@ public static class SeedHelper
                 Name = "Double Queen",
                 Description = "Room with two queen beds",
                 CommonItems = CommonList.CommonItems,
-                Capacity = 4
+                Capacity = 4,
+                Rate = 200
             });
         dataContext.Set<RType>()
             .Add(new RType
@@ -105,7 +107,8 @@ public static class SeedHelper
                 Name = "Single King",
                 Description = "Room with one king bed",
                 CommonItems = CommonList.CommonItems,
-                Capacity = 2
+                Capacity = 2,
+                Rate = 300
             });
 
         await dataContext.SaveChangesAsync();
@@ -188,6 +191,7 @@ public static class SeedHelper
                     });
                     rate += 50;
                 }
+
             }
         }
 
