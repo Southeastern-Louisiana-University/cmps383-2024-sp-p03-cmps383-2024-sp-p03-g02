@@ -7,11 +7,6 @@ interface HotelDto {
     name?: string;
     address?: string;
     email?: string;
-    locationId: number;
-    location?:{
-        id: number;
-        name: string;
-    }
   }
 
 export default function SearchHotels() {
@@ -61,7 +56,7 @@ export default function SearchHotels() {
 
                 <Card.Body>
                   <Card.Title style={{ color: '#000000', fontWeight: 'bold', textShadow: '2px 2px 5px #FDBA74' }}>{hotel.name}</Card.Title>
-                  <Card.Subtitle className="mb-2 text-muted">{hotel.address}, {hotel.location?.name}</Card.Subtitle>
+                  <Card.Subtitle className="mb-2 text-muted">{hotel.address}</Card.Subtitle>
                 </Card.Body>
               </Card>
             </Link>

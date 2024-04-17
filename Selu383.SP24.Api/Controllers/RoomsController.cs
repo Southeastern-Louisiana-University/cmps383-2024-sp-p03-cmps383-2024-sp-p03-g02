@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Selu383.SP24.Api.Data;
+using Selu383.SP24.Api.Extensions;
 using Selu383.SP24.Api.Features.Authorization;
 using Selu383.SP24.Api.Features.Hotels;
 using Selu383.SP24.Api.Features.Rooms;
@@ -16,13 +18,15 @@ public class RoomsController : ControllerBase
     private readonly DbSet<Hotel> hotels;
     private readonly DbSet<Reservation> reservations;
     private readonly DbSet<RType> types;
-    public RoomsController(DataContext dataContext)
+    private readonly UserManager<User> userManager;
+    public RoomsController(DataContext dataContext, UserManager<User> userManager)
     {
         _dataContext = dataContext;
         rooms = dataContext.Set<Room>();
         hotels = dataContext.Set<Hotel>();
         reservations = dataContext.Set<Reservation>();
         types = dataContext.Set<RType>();
+        this.userManager = userManager;
     }
 
     [HttpGet]
@@ -33,7 +37,6 @@ public class RoomsController : ControllerBase
             {
                 Id = x.Id,
                 HotelId = x.HotelId,
-                Rate = x.Rate,
                 RoomNumber = x.RoomNumber,
                 Image = x.Image,
                 RTypeId = x.RTypeId,
@@ -44,6 +47,16 @@ public class RoomsController : ControllerBase
                     Description = x.RoomType.Description,
                     Capacity = x.RoomType.Capacity,
                     CommonItems = x.RoomType.CommonItems,
+                    Rate = x.RoomType.Rate,
+                },
+                Hotel = new HotelDto
+                {
+                    Id = x.Hotel.Id,
+                    Name = x.Hotel.Name,
+                    Address = x.Hotel.Address,
+                    ContactNumber = x.Hotel.ContactNumber,
+                    Email = x.Hotel.Email,
+                    Image = x.Hotel.Image,
                 }
             })
             .ToList();
@@ -66,7 +79,6 @@ public class RoomsController : ControllerBase
         {
             Id = id,
             HotelId = targetRoom.HotelId,
-            Rate = targetRoom.Rate,
             RoomNumber = targetRoom.RoomNumber,
             Image = targetRoom.Image,
             RTypeId = targetRoom.RTypeId,
@@ -77,7 +89,9 @@ public class RoomsController : ControllerBase
                 Description = targetRoom.RoomType.Description,
                 Capacity = targetRoom.RoomType.Capacity,
                 CommonItems = targetRoom.RoomType.CommonItems,
-            }
+                Rate = targetRoom.RoomType.Rate,
+            },
+            
         };
 
         return Ok(roomToReturn);
@@ -86,7 +100,7 @@ public class RoomsController : ControllerBase
 
     [HttpPost]
     [Authorize(Roles = RoleNames.Admin)]
-    public IActionResult CreateRoom(RoomDto dto)
+    public IActionResult CreateRoom(RoomCreateDto dto)
     {
 
         var hotel = hotels.FirstOrDefault(x => x.Id == dto.HotelId);
@@ -96,18 +110,16 @@ public class RoomsController : ControllerBase
             return BadRequest();
         }
 
-        if(roomType == null)
+        if (roomType == null)
         {
             return BadRequest();
         }
         var room = new Room
         {
             HotelId = dto.HotelId,
-            Rate = dto.Rate,
             RoomNumber = dto.RoomNumber,
             Image = dto.Image,
             RTypeId = dto.RTypeId,
-            RoomType = roomType
         };
 
         rooms.Add(room);
@@ -117,7 +129,16 @@ public class RoomsController : ControllerBase
         {
             Id = room.Id,
             HotelId = room.HotelId,
-            Rate = room.Rate,
+            Hotel = new HotelDto
+            {
+                Id =room.Hotel.Id,
+                Name = room.Hotel.Name,
+                Address = room.Hotel.Address,
+                ManagerId = room.Hotel.ManagerId,
+                ContactNumber = room.Hotel.ContactNumber,
+                Email = room.Hotel.Email,
+                Image = room.Hotel.Image,
+            },
             RoomNumber = room.RoomNumber,
             Image = room.Image,
             RTypeId = room.RTypeId,
@@ -128,6 +149,7 @@ public class RoomsController : ControllerBase
                 Description = room.RoomType.Description,
                 Capacity = room.RoomType.Capacity,
                 CommonItems = room.RoomType.CommonItems,
+                Rate = room.RoomType.Rate,
             }
         };
 
@@ -140,7 +162,7 @@ public class RoomsController : ControllerBase
     {
         var hotel = hotels.FirstOrDefault(x => x.Id == dto.HotelId);
         var roomType = types.FirstOrDefault(x => x.Id == dto.RTypeId);
-        if(roomType == null)
+        if (roomType == null)
         {
             return BadRequest();
         }
@@ -157,7 +179,6 @@ public class RoomsController : ControllerBase
         }
 
         targetRoom.HotelId = dto.HotelId;
-        targetRoom.Rate = dto.Rate;
         targetRoom.RoomNumber = dto.RoomNumber;
         targetRoom.Image = dto.Image;
         targetRoom.RTypeId = dto.RTypeId;
@@ -169,8 +190,7 @@ public class RoomsController : ControllerBase
         {
             Id = targetRoom.Id,
             HotelId = targetRoom.HotelId,
-            Rate = targetRoom.Rate,
-            RoomNumber = targetRoom.Rate,
+            RoomNumber = targetRoom.RoomNumber,
             Image = targetRoom.Image,
             RTypeId = targetRoom.RTypeId,
             RoomType = new RTypeDto
@@ -180,6 +200,7 @@ public class RoomsController : ControllerBase
                 Description = targetRoom.RoomType.Description,
                 Capacity = targetRoom.RoomType.Capacity,
                 CommonItems = targetRoom.RoomType.CommonItems,
+                Rate = targetRoom.RoomType.Rate,
             } 
         };
         return Ok(roomToReturn);
@@ -203,8 +224,7 @@ public class RoomsController : ControllerBase
         {
             Id = roomToDelete.Id,
             HotelId = roomToDelete.HotelId,
-            Rate = roomToDelete.Rate,
-            RoomNumber = roomToDelete.Rate,
+            RoomNumber = roomToDelete.RoomNumber,
             Image = roomToDelete.Image,
             RTypeId = roomToDelete.RTypeId,
             RoomType = new RTypeDto
@@ -212,7 +232,8 @@ public class RoomsController : ControllerBase
                 Id = roomToDelete.RTypeId,
                 Name = roomToDelete.RoomType.Name,
                 Description = roomToDelete.RoomType.Description,
-                Capacity = roomToDelete.RoomType.Capacity
+                Capacity = roomToDelete.RoomType.Capacity,
+                Rate = roomToDelete.RoomType.Rate,
             }
         };
 
@@ -231,7 +252,6 @@ public class RoomsController : ControllerBase
             {
                 Id = room.Id,
                 HotelId = room.HotelId,
-                Rate = room.Rate,
                 RoomNumber = room.RoomNumber,
                 Image = room.Image,
                 RTypeId = room.RTypeId,
@@ -240,15 +260,19 @@ public class RoomsController : ControllerBase
                     Id = room.RoomType.Id,
                     Name = room.RoomType.Name,
                     Description = room.RoomType.Description,
-                    Capacity = room.RoomType.Capacity  
+                    Capacity = room.RoomType.Capacity,
+                    Rate = room.RoomType.Rate,
                 },
                 Hotel = new HotelDto
                 {
                     Id = room.Hotel.Id,
                     Name = room.Hotel.Name,
                     Address = room.Hotel.Address,
-                    LocationId = room.Hotel.LocationId
-                }
+                    ManagerId = room.Hotel.ManagerId,
+                    ContactNumber = room.Hotel.ContactNumber,
+                    Email = room.Hotel.Email,
+                    Image = room.Hotel.Image,
+                },
             })
             .ToList();
 
@@ -263,8 +287,12 @@ public class RoomsController : ControllerBase
     }
 
     [HttpPost("reserve")]
-    public IActionResult ReserveRoom(ReservationDto reservationDto)
+    [Authorize]
+    public async Task<IActionResult> ReserveRoomAsync(ReservationDto reservationDto)
     {
+        var user = await userManager.FindByNameAsync(User.Identity?.Name);
+
+
         var room = rooms.FirstOrDefault(r => r.Id == reservationDto.RoomId && r.HotelId == reservationDto.HotelId);
         if (room == null)
         {
@@ -282,7 +310,9 @@ public class RoomsController : ControllerBase
         {
             RoomId = room.Id,
             CheckInDate = reservationDto.CheckInDate,
-            CheckOutDate = reservationDto.CheckOutDate
+            CheckOutDate = reservationDto.CheckOutDate,
+            UserId = user.Id,
+            User = user
         };
 
         reservations.Add(reservation);
@@ -321,6 +351,7 @@ public class RoomsController : ControllerBase
                 Description = roomType.Description,
                 Capacity = roomType.Capacity,
                 CommonItems = roomType.CommonItems,
+                Rate = roomType.Rate,
             }).ToListAsync();
 
         if (roomTypes == null)

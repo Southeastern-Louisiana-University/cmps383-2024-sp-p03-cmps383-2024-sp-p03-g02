@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Selu383.SP24.Api.Features.Authorization;
-using Selu383.SP24.Api.Features.Cities;
 using Selu383.SP24.Api.Features.Hotels;
 using Selu383.SP24.Api.Features.Rooms;
 using Selu383.SP24.Api.Features.RTypes;
@@ -18,9 +18,9 @@ public static class SeedHelper
 
         await AddRoles(serviceProvider);
         await AddUsers(serviceProvider);
-        await AddCities(dataContext);
         await AddTypes(dataContext);
-       /* await AddHotels(dataContext);*/
+        await AddHotels(dataContext, serviceProvider);
+        await AddRooms(dataContext, serviceProvider);
     }
 
     private static async Task AddUsers(IServiceProvider serviceProvider)
@@ -73,33 +73,6 @@ public static class SeedHelper
         });
     }
 
-    private static async Task AddCities(DataContext dataContext)
-    {
-        var cities = dataContext.Set<City>();
-        if (await cities.AnyAsync())
-        {
-            return;
-        }
-
-        dataContext.Set<City>()
-            .Add(new City
-            {
-                Name = "Hammond"
-            });
-
-        dataContext.Set<City>()
-            .Add(new City
-            {
-                Name = "New Orleans"
-            });
-
-        dataContext.Set<City>()
-            .Add(new City
-            {
-                Name = "Baton Rouge"
-            });
-        await dataContext.SaveChangesAsync();
-    }
 
     private static async Task AddTypes(DataContext dataContext)
     {
@@ -113,22 +86,38 @@ public static class SeedHelper
             .Add(new RType
             {
                 Name = "Single Queen",
-                Description = "Room with one queen bed"
+                Description = "Room with one queen bed",
+                CommonItems = CommonList.CommonItems,
+                Capacity = 2,
+                Rate = 100
             });
 
         dataContext.Set<RType>()
             .Add(new RType
             {
                 Name = "Double Queen",
-                Description = "Room with two queen beds"
+                Description = "Room with two queen beds",
+                CommonItems = CommonList.CommonItems,
+                Capacity = 4,
+                Rate = 200
             });
-
+        dataContext.Set<RType>()
+            .Add(new RType
+            {
+                Name = "Single King",
+                Description = "Room with one king bed",
+                CommonItems = CommonList.CommonItems,
+                Capacity = 2,
+                Rate = 300
+            });
 
         await dataContext.SaveChangesAsync();
     }
 
-   /* private static async Task AddHotels(DataContext dataContext)
+    private static async Task AddHotels(DataContext dataContext, IServiceProvider serviceProvider)
     {
+        var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
+
         var hotels = dataContext.Set<Hotel>();
 
         if (await hotels.AnyAsync())
@@ -136,112 +125,76 @@ public static class SeedHelper
             return;
         }
 
+        var userAdmin = await userManager.FindByNameAsync("galkadi");
+
+        var userBob = await userManager.FindByNameAsync("bob");
+
+        var userSue = await userManager.FindByNameAsync("sue");
+
         dataContext.Set<Hotel>()
                 .Add(new Hotel
                 {
-                    Name = "The Grand Motel",
-                    Address = "1234 Place St",
-                    ManagerId = 2,
-                    LocationId = 2,
-                    Image = "",
+                    Name = "Baronne Hotel",
+                    Address = "225 Baronne St, New Orleans, LA 70112",
+                    Image = "https://imgur.com/MLARzB8.png",
                     ContactNumber = "18009999999",
-                    Email = "grandmotel@gmail.com"
+                    Email = "baronne@gmail.com",
+                    ManagerId = userAdmin.Id
                 });
 
         dataContext.Set<Hotel>()
                 .Add(new Hotel
                 {
-                    Name = "Nice Suites",
-                    Address = "1234 Place Ave",
-                    ManagerId = 3,
-                    LocationId = 2,
-                    Image = "",
+                    Name = "Esplanade Hotel",
+                    Address = "405 Esplanade Ave, New Orleans, LA 70116",
+                    Image = "https://imgur.com/MLARzB8.png",
                     ContactNumber = "18007896087",
-                    Email = "nicesuites@gmail.com"
+                    Email = "esplanade@gmail.com",
+                    ManagerId = userBob.Id
                 });
 
         dataContext.Set<Hotel>()
                 .Add(new Hotel
                 {
-                    Name = "Plaza Hotel",
-                    Address = "12 Plack St",
-                    ManagerId = 3,
-                    LocationId = 2,
-                    Image = "",
+                    Name = "Convention Hotel",
+                    Address = "200 Convention St, Baton Rouge, LA 70801",
+                    Image = "https://imgur.com/MLARzB8.png",
                     ContactNumber = "18007516238",
-                    Email = "plazahotel@gmail.com"
-                });
-
-        dataContext.Set<Hotel>()
-                .Add(new Hotel
-                {
-                    Name = "Quality Hotel",
-                    Address = "234 Venue Ave",
-                    ManagerId = 3,
-                    LocationId = 3,
-                    Image = "",
-                    ContactNumber = "18003517345",
-                    Email = "qualityhotels@gmail.com"
-                });
-
-        dataContext.Set<Hotel>()
-                .Add(new Hotel
-                {
-                    Name = "La Vigesimo Séptima Inn",
-                    Address = "5382 Gerry Ln",
-                    ManagerId = 3,
-                    LocationId = 3,
-                    Image = "",
-                    ContactNumber = "18001234567",
-                    Email = "septimainn@gmail.com"
-                });
-
-        dataContext.Set<Hotel>()
-                .Add(new Hotel
-                {
-                    Name = "Hotel 7",
-                    Address = "4 Ferry Ln",
-                    ManagerId = 3,
-                    LocationId = 3,
-                    Image = "",
-                    ContactNumber = "18007654321",
-                    Email = "hotel7@gmail.com"
-                });
-        dataContext.Set<Hotel>()
-                .Add(new Hotel
-                {
-                    Name = "Better Eastern",
-                    Address = "1 First St",
-                    ManagerId = 3,
-                    LocationId = 4,
-                    Image = "",
-                    ContactNumber = "18003421642",
-                    Email = "better@gmail.com"
-                });
-        dataContext.Set<Hotel>()
-                .Add(new Hotel
-                {
-                    Name = "Night Inn and Suites",
-                    Address = "1234 Place st",
-                    ManagerId = 3,
-                    LocationId = 4,
-                    Image = "",
-                    ContactNumber = "18001237654",
-                    Email = "nigthinn@gmail.com"
-                });
-        dataContext.Set<Hotel>()
-                .Add(new Hotel
-                {
-                    Name = "The Town Inn",
-                    Address = "12 Plaque Rd",
-                    ManagerId = 3,
-                    LocationId = 4,
-                    Image = "",
-                    ContactNumber = "18009996721",
-                    Email = "towninn@gmail.com"
+                    Email = "conventionhotel@gmail.com",
+                    ManagerId = userSue.Id
                 });
 
         await dataContext.SaveChangesAsync();
-    }*/
+    }
+
+    private static async Task AddRooms(DataContext dataContext, IServiceProvider serviceProvider)
+    {
+        var rooms = dataContext.Set<Room>();
+
+        var hotels = await dataContext.Set<Hotel>().ToListAsync();
+
+        foreach (var hotel in hotels)
+        {
+            var roomTypes = await dataContext.Set<RType>().ToListAsync(); 
+            foreach (var roomType in roomTypes)
+            {
+                var rate = 100;
+                for (var j = 1; j < 4; j++)
+                {
+                    rooms.Add(new Room
+                    {
+                        HotelId = hotel.Id, 
+                        RoomNumber = j + 100,
+                        RTypeId = roomType.Id,
+                        Image = "https://i.imgur.com/sTESIUA.jpg",
+                    });
+                    rate += 50;
+                }
+
+            }
+        }
+
+        await dataContext.SaveChangesAsync();
+    }
 
 }
