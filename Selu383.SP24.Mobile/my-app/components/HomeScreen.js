@@ -2,6 +2,7 @@ import React from "react";
 import { Button, View, Text ,StyleSheet} from "react-native";
 import ImageViewer from '../screens/ImageViewer';
 import { StatusBar } from "expo-status-bar";
+
 const PlaceholderImage = require("../assets/images/orange1.jpg");
 
 export default function HomeScreen({ navigation }) {
@@ -9,14 +10,15 @@ export default function HomeScreen({ navigation }) {
    
               <View style={styles.container}>
       <View style={styles.imageContainer}>
-        <ImageViewer placeholderImageSource={PlaceholderImage} />            
-      <Button style={styles.butt}
+        <ImageViewer placeholderImageSource={PlaceholderImage} />          
+            
+        <Button color="coral"
         title="Login as Enstay User"
         onPress={() => navigation.navigate("Login")}
       />
       
-<Text>  Want to create an account?</Text>
-      <Text onPress={() => navigation.navigate("Signup")}>
+<Text style={styles.normalText}>  Want to create an account?</Text>
+      <Text style={styles.hyperlinkStyle} onPress={() => navigation.navigate("Signup")}>
            SignUp 
       </Text>
   
@@ -28,28 +30,39 @@ export default function HomeScreen({ navigation }) {
 
 
 const styles = StyleSheet.create({
-  container: {
+  container: {   
     flex: 1,
-    backgroundColor: '#fff5ee',
+    backgroundColor: '#FFFFF0',
     alignItems: 'center',
   },
   imageContainer: {
+    gap:10,
     flex: 1,
-    paddingTop: 58,
+    
       },
   footerContainer: {
     flex: 1 / 3,
     alignItems: 'center',
   },
   hyperlinkStyle:{
-    padding:20,
-    color:'coral',    
-    textDecorationLine: "underline",
+    textAlign: 'center',
+      color:'coral',    
     textDecorationStyle: "solid",
-    textDecorationColor: "coral"
+    textDecorationColor: "coral",
+   textDecorationLine: 'underline',
   },
 butt:{
-backgroundColor:'coral',
+ 
+  color:'coral',
+  accessibilityLabel:"Learn more about this purple button",
+
+
+},
+normalText: {
+  textAlign: 'center',
+fontSize:15,
+color:'#000',
+textDecorationStyle: "solid",
 
 
 },
