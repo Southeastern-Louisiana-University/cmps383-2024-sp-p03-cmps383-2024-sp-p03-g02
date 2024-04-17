@@ -29,18 +29,7 @@ export default function NavbarLayout() {
             <Link to={'/'}><span style={{ color: '#FDBA74' }} className="navbar-brand mb-0 h1">EnStay</span></Link>
             
             <Link to={'/Hotels'}><Button style={{ border: "1px solid black"} } className="btn-light">Hotels</Button></Link>
-            <div className="d-flex justify-content-center align-items-center flex-grow-1">
-                
-                <input id="search" name="search" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value ?? "")} className="form-control mx-2" style={{ maxWidth: '300px' }} />
-                
-                <Link
-                    onClick={(e) => (!searchTerm ? e.preventDefault() : null)}
-                    to={`/find-hotel?searchTerm=${encodeURIComponent(searchTerm)}&start=now`}
-                    aria-disabled={!searchTerm}
-                >
-                    <Button style={{ backgroundColor: '#FDBA74'}} className="btn-light">Search</Button>
-                </Link>
-
+            
                 <div className="d-flex justify-content-center align-items-center flex-grow-1">
                     <input
                         id="search"
@@ -77,7 +66,6 @@ export default function NavbarLayout() {
                         )}
                     </li>
                 </ul>
-            </div>
         </Navbar>
 
             <Outlet />
