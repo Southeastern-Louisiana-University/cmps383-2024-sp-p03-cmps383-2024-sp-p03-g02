@@ -39,7 +39,6 @@ public class HotelsController : ControllerBase
             {
                 Id = x.Id,
                 HotelId = x.HotelId,
-                Rate = x.Rate,
                 RoomNumber = x.RoomNumber,
                 RTypeId = x.RTypeId,
                 Image = x.Image,
