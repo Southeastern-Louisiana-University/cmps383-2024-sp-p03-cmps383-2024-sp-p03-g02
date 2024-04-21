@@ -113,6 +113,9 @@ function UserBooking() {
                       ? booking.room.roomType.name
                       : "Unknown"}
                     <br />
+                    <strong>Room Number:</strong>{" "}
+                    {booking.room.roomNumber}
+                    <br />
                     <strong>Check-In Date:</strong>{" "}
                     {new Date(booking.checkInDate).toLocaleDateString()}
                     <br />
