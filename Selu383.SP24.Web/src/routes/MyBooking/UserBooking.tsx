@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
 
 interface UserDto {
@@ -74,6 +74,27 @@ function UserBooking() {
     });
   };
 
+  const cancelReservation = async (id: number) => {
+    try {
+      const response = await fetch(`/api/cancelReservation/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Authorization": "Bearer your_access_token_here"
+        }
+      });
+      if (!response.ok) {
+        throw new Error("Failed to cancel reservation");
+      }
+      // Remove the cancelled reservation from the UI
+      setBookings(prevBookings => prevBookings.filter(booking => booking.id !== id));
+    } catch (error) {
+      console.error("Error cancelling reservation:", error);
+      setError("Failed to cancel reservation. Please try again.");
+    }
+  };
+
+  
+
   return (
     <Container
       className="mt-4"
@@ -139,6 +160,7 @@ function UserBooking() {
                   >
                     {buttonColors[booking.id] === "success" ? "Unlocked" : "Locked"}
                   </Button>
+                  <Button onClick={() => cancelReservation(booking.id)}>Cancel Reservation</Button>
                 </Card.Body>
               </Card>
             </Col>
