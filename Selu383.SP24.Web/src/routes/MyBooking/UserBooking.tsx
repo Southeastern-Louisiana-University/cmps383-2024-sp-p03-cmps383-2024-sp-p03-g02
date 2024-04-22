@@ -40,7 +40,7 @@ interface ReservationDto {
 function UserBooking() {
   const [bookings, setBookings] = useState<ReservationDto[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [buttonColor, setButtonColor] = useState("success");
+  const [buttonColors, setButtonColors] = useState<{ [key: number]: string }>({});
 
   useEffect(() => {
     async function fetchBookings() {
@@ -50,6 +50,9 @@ function UserBooking() {
           throw new Error("Failed to fetch bookings");
         }
         const data = await response.json();
+        // Retrieve button colors from localStorage if available, otherwise initialize to "success"
+        const storedButtonColors = JSON.parse(localStorage.getItem("buttonColors") || "{}");
+        setButtonColors(storedButtonColors);
         setBookings(data);
       } catch (error) {
         console.error("Error fetching bookings:", error);
@@ -60,9 +63,16 @@ function UserBooking() {
     fetchBookings();
   }, []);
 
-  const handleButtonClick = () => {
-    setButtonColor(buttonColor === "success" ? "danger" : "success");
-  };
+  const handleButtonClick = (bookingId: number) => {
+    setButtonColors(prevButtonColors => {
+      const newButtonColors = {
+        ...prevButtonColors,
+        [bookingId]: prevButtonColors[bookingId] === "success" ? "danger" : "success"
+      };
+      localStorage.setItem("buttonColors", JSON.stringify(newButtonColors));
+      return newButtonColors;
+    });
+  };  
 
   return (
     <Container
@@ -113,6 +123,9 @@ function UserBooking() {
                       ? booking.room.roomType.name
                       : "Unknown"}
                     <br />
+                    <strong>Room Number:</strong>{" "}
+                    {booking.room.roomNumber}
+                    <br />
                     <strong>Check-In Date:</strong>{" "}
                     {new Date(booking.checkInDate).toLocaleDateString()}
                     <br />
@@ -120,11 +133,11 @@ function UserBooking() {
                     {new Date(booking.checkOutDate).toLocaleDateString()}
                   </Card.Text>
                   <Button
-                    variant={buttonColor}
-                    onClick={handleButtonClick}
+                    variant={buttonColors[booking.id] || "danger"} 
+                    onClick={() => handleButtonClick(booking.id)}
                     style={{ width: "10%" }}
                   >
-                    {buttonColor === "success" ? "Unlock" : "Lock"}
+                    {buttonColors[booking.id] === "success" ? "Unlocked" : "Locked"}
                   </Button>
                 </Card.Body>
               </Card>
