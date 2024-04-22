@@ -6,6 +6,7 @@ import '../../styles/login.css';
 interface UserDto {
   userName?: string;
   id?: number;
+  role?: string;
 }
 
 export default function Login() {
