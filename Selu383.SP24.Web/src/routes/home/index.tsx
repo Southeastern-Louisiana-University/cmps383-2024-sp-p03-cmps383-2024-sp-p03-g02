@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Card, Col, Container, Row } from "react-bootstrap";
 
 
+
 interface HotelDto {
   id: number;
   name: string;
@@ -34,7 +35,7 @@ const HotelSearchBar: React.FC = () => {
 
   return (
 
-        <Container       className="mt-4"
+        <Container className="mt-4"
       style={{
         border: "1px solid #dddddd",
         borderRadius: "8px",

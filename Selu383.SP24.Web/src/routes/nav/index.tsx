@@ -5,6 +5,7 @@ import { Button, Navbar } from 'react-bootstrap';
 interface UserDto {
     userName?: string;
     id?: number;
+    role?: string; // Include role in UserDto interface
 }
 
 export default function NavbarLayout() {
@@ -26,10 +27,10 @@ export default function NavbarLayout() {
         <>
             <Navbar className="navbar navbar-light bg-light">
 
-            <Link to={'/'}><span style={{ color: '#FDBA74' }} className="navbar-brand mb-0 h1">EnStay</span></Link>
-            
-            <Link to={'/Hotels'}><Button style={{ border: "1px solid black"} } className="btn-light">Hotels</Button></Link>
-            
+                <Link to={'/'}><span style={{ color: '#FDBA74' }} className="navbar-brand mb-0 h1">EnStay</span></Link>
+
+                <Link to={'/Hotels'}><Button style={{ border: "1px solid black"} } className="btn-light">Hotels</Button></Link>
+
                 <div className="d-flex justify-content-center align-items-center flex-grow-1">
                     <input
                         id="search"
@@ -52,6 +53,11 @@ export default function NavbarLayout() {
                     <li className="nav-item">
                         {user !== null ? (
                             <div>
+                                {user.role === 'admin' && (
+                                    <Link to={'/admin-dashboard'}>
+                                        <Button style={{ backgroundColor: '#FDBA74', color: "#FFFFFF" }} className="btn-light">Admin Dash</Button>
+                                    </Link>
+                                )}
                                 <Link to={'/userbooking'}>
                                     <Button style={{ backgroundColor: '#FDBA74', color: "#FFFFFF" }} className="btn-light">Bookings</Button>
                                 </Link>
@@ -66,7 +72,7 @@ export default function NavbarLayout() {
                         )}
                     </li>
                 </ul>
-        </Navbar>
+            </Navbar>
 
             <Outlet />
         </>
