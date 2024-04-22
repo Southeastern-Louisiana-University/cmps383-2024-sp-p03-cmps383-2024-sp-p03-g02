@@ -337,24 +337,6 @@ public class RoomsController : ControllerBase
         }
     }
 
-    [HttpDelete("cancelReservation/{id:int}")]
-    [Authorize]
-    public async Task<IActionResult> CancelReservationAsync(int id)
-    {
-        var user = await userManager.FindByNameAsync(User.Identity?.Name);
-
-        var reservation = reservations.FirstOrDefault(r => r.Id == id && r.UserId == user.Id);
-        if (reservation == null)
-        {
-            return NotFound("Reservation not found.");
-        }
-
-        reservations.Remove(reservation);
-        _dataContext.SaveChanges();
-
-        return Ok("Reservation cancelled successfully.");
-    }
-
     [HttpGet("rtype/{id}")]
     public async Task<ActionResult<IEnumerable<RTypeDto>>> GetRTypesByHotel(int id)
     {

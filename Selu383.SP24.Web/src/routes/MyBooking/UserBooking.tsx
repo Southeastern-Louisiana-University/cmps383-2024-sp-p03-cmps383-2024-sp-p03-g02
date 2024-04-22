@@ -72,28 +72,7 @@ function UserBooking() {
       localStorage.setItem("buttonColors", JSON.stringify(newButtonColors));
       return newButtonColors;
     });
-  };
-
-  const cancelReservation = async (id: number) => {
-    try {
-      const response = await fetch(`/api/cancelReservation/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Authorization": "Bearer your_access_token_here"
-        }
-      });
-      if (!response.ok) {
-        throw new Error("Failed to cancel reservation");
-      }
-      // Remove the cancelled reservation from the UI
-      setBookings(prevBookings => prevBookings.filter(booking => booking.id !== id));
-    } catch (error) {
-      console.error("Error cancelling reservation:", error);
-      setError("Failed to cancel reservation. Please try again.");
-    }
-  };
-
-  
+  };  
 
   return (
     <Container
@@ -160,7 +139,6 @@ function UserBooking() {
                   >
                     {buttonColors[booking.id] === "success" ? "Unlocked" : "Locked"}
                   </Button>
-                  <Button onClick={() => cancelReservation(booking.id)}>Cancel Reservation</Button>
                 </Card.Body>
               </Card>
             </Col>
