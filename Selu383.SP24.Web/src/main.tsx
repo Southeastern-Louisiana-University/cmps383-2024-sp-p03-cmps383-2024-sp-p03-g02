@@ -12,6 +12,7 @@ import BookingPage from "./routes/Booking/BookingPage.tsx";
 import SearchHotels from "./routes/hotels/SearchHotels.tsx";
 import ReserveRoomForm from "./routes/Booking/CreateBookingPage.tsx";
 import UserBooking from "./routes/MyBooking/UserBooking.tsx";
+import AdminDashboard from "./routes/AdminDash/index.tsx";
 
 const router = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
       {
         path: "/UserBooking",
         element: <UserBooking />,
+      },
+      {
+        path: "/admin-dashboard",
+        element: <AdminDashboard />,
       },
     ],
   },
