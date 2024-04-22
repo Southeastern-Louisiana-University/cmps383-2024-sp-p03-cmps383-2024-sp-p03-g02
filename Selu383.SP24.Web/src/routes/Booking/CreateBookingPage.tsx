@@ -30,7 +30,7 @@ const ReserveRoomForm = () => {
         }),
       }).then(async x => {
         if(x.status == 200){
-          navigate('/');
+          navigate('/userbooking');
           window.location.reload();
         }else{
           throw new Error('Failed to make reservation');

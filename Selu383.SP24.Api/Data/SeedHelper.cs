@@ -171,6 +171,11 @@ public static class SeedHelper
     {
         var rooms = dataContext.Set<Room>();
 
+        if (await rooms.AnyAsync())
+        {
+            return;
+        }
+
         var hotels = await dataContext.Set<Hotel>().ToListAsync();
 
         foreach (var hotel in hotels)

@@ -246,12 +246,15 @@ namespace Selu383.SP24.Api.Controllers
 
             return Ok(allBookings);
         }
-       
+
         private bool IsRoomAvailable(int roomId, DateTime checkInDate, DateTime checkOutDate)
         {
             return !reservations.Any(r =>
                 r.RoomId == roomId &&
-                (checkInDate < r.CheckOutDate && checkOutDate > r.CheckInDate));
+                ((checkInDate <= r.CheckOutDate && checkOutDate >= r.CheckInDate) ||
+                 (checkInDate >= r.CheckInDate && checkInDate <= r.CheckOutDate) ||
+                 (checkOutDate >= r.CheckInDate && checkOutDate <= r.CheckOutDate) ||
+                 (checkInDate == r.CheckInDate || checkOutDate == r.CheckOutDate)));
         }
     }
 }
